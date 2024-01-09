@@ -14,7 +14,6 @@ export default function AppHeader(props: PropsWithChildren) {
                         <Nav className="ml-auto">
                             <Nav.Link href="#home">Home</Nav.Link>
                             <Nav.Link href="#link">Link</Nav.Link>
-
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
