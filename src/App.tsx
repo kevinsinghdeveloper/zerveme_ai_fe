@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import {ErrorBoundary} from 'react-error-boundary'
-import LandingPage from "./components/pages/landing/LandingPage"
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {ErrorBoundary} from 'react-error-boundary';
+import LandingPage from "./components/pages/landing/LandingPage";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
@@ -10,7 +10,7 @@ export default function App() {
         <ErrorBoundary FallbackComponent={AppFallback}>
             <BrowserRouter basename="/">
                 <Routes>
-                    <Route path="/" element={<LandingPage/>}/>
+                    <Route path="*" element={<LandingPage/>}/>
                 </Routes>
             </BrowserRouter>
         </ErrorBoundary>
