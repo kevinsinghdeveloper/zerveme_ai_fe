@@ -1,14 +1,7 @@
 import {PropsWithChildren} from "react";
 import {Container, Nav, Navbar} from "react-bootstrap";
-import Any = jasmine.Any;
 
-
-type AppHeaderProps = {
-    styleName: Any
-
-}
-
-export default function AppHeader(props: PropsWithChildren<{ className?: string }>) {
+export default function AppHeader(props: PropsWithChildren<{ className?: string, style?: string }>) {
 // TODO Add props to this so we can specify the stlyes below
     return (
         <header style={{width: '90%'}} className="ml-auto mr-auto">
