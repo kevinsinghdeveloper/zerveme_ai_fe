@@ -1,10 +1,9 @@
 import {PropsWithChildren} from "react";
 import {Container, Nav, Navbar} from "react-bootstrap";
 
-export default function AppHeader(props: PropsWithChildren<{ className?: string, style?: string }>) {
-// TODO Add props to this so we can specify the stlyes below
+export default function AppHeader(props: PropsWithChildren<{ className?: any, style?: any }>) {
     return (
-        <header style={{width: '90%'}} className="ml-auto mr-auto">
+        <header style={props.style} className={props.className}>
 
             <Navbar expand="xl" className="bg-body-tertiary">
                 <Container fluid>
