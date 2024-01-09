@@ -9,6 +9,7 @@ module.exports = {
         "../superwind/**/*.{tsx,ts}",
         "../react-utils/*.{tsx,ts}",
         "../app-builder/src/**/*.{tsx,ts}",
+        "./src/**/*.{js,jsx,ts,tsx}",
     ],
     darkMode: "class",
     theme: {
