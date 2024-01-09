@@ -1,26 +1,26 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-
-function App() {
+import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom'
+import { ErrorBoundary } from 'react-error-boundary'
+import LandingPage from "./components/pages/landing/LandingPage"
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <ErrorBoundary FallbackComponent={AppFallback}>
+          <BrowserRouter basename="/">
+            <Routes>
+                <Route path="/" element={<LandingPage />} />
+            </Routes>
+          </BrowserRouter>
+      </ErrorBoundary>
   );
 }
 
-export default App;
+
+function AppFallback() {
+    return (
+        <div className="w-full h-full pt-48">
+            <h1>The Explore App ran into an unexpected error!</h1>
+        </div>
+    )
+}
