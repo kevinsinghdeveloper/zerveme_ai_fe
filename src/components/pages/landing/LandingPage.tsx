@@ -1,9 +1,12 @@
 import { PropsWithChildren } from "react";
-
+import AppHeader from '../../shared/header/AppHeader'
 
 export default function LandingPage(props: PropsWithChildren) {
 
     return (
-        <h1>hellow world</h1>
+        <>
+            <AppHeader></AppHeader>
+            <body>hellow world</body>
+        </>
     )
 }
