@@ -6,7 +6,7 @@ export default function HomePage(props: PropsWithChildren) {
         <Container fluid className="w-96">
             <Row className="py-4 py-xl-5">
                 <Container fluid>
-                    <Row className="rounded border-0 border-dark overflow-hidden">
+                    <Row className="rounded border-0 border-dark overflow-hidden" style={{maxHeight: 1100}}>
                         <Container className="p-0">
                             <Row>
                                 <Col md={6} className="order-first p-0">
@@ -15,8 +15,9 @@ export default function HomePage(props: PropsWithChildren) {
                                             <Carousel.Item>
                                                 <img
                                                     className="d-block w-100"
-                                                    src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"
-                                                    alt="First slide"
+                                                    src="https://cdn.pixabay.com/photo/2017/12/13/16/01/brain-3017071_1280.png"
+                                                    alt="Third slide"
+                                                    style={{maxHeight: 1100}}
                                                 />
                                                 <Carousel.Caption>
                                                     <h5>First slide label</h5>
@@ -27,7 +28,8 @@ export default function HomePage(props: PropsWithChildren) {
                                                 <img
                                                     className="d-block w-100"
                                                     src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"
-                                                    alt="Second slide"
+                                                    alt="Third slide"
+                                                    style={{maxHeight: 1100}}
                                                 />
                                                 <Carousel.Caption>
                                                     <h5>Second slide label</h5>
@@ -38,7 +40,7 @@ export default function HomePage(props: PropsWithChildren) {
                                                 <img
                                                     className="d-block w-100"
                                                     src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"
-                                                    alt="Third slide"
+                                                    alt="Third slide" style={{maxHeight: 1100}}
                                                 />
                                                 <Carousel.Caption>
                                                     <h5>Third slide label</h5>
