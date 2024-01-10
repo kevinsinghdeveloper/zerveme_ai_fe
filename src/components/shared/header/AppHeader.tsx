@@ -7,7 +7,9 @@ export default function AppHeader(props: PropsWithChildren<{ className?: any, st
 
             <Navbar expand="xl">
                 <Container fluid>
-                    <Navbar.Brand href="/">ZerveMeData</Navbar.Brand>
+                    <Navbar.Brand href="/">
+                        <section className="text-2xl">ZerveMeData</section>
+                    </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ml-auto text-xl">
