@@ -48,7 +48,7 @@ export default function HomePage(props: PropsWithChildren) {
                                                         className="d-block w-100"
                                                         src={item.src}
                                                         alt={item.alt}
-                                                        style={{maxHeight: 700}}
+                                                        style={{height: 700, width: 700}}
                                                     />
                                                     <Carousel.Caption>
                                                         <h5>{item.caption.title}</h5>
