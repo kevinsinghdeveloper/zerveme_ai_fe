@@ -8,7 +8,7 @@ import {
     Carousel,
     CarouselItem,
     Col,
-    Container,
+    Container, Image,
     Row
 } from "react-bootstrap";
 
@@ -61,7 +61,7 @@ export default function HomePage(props: PropsWithChildren) {
                                         <Carousel data-bs-theme="dark">
                                             {items.map((item, index) => (
                                                 <CarouselItem key={index}>
-                                                    <img
+                                                    <Image
                                                         className="d-block w-100 object-contain"
                                                         src={item.src}
                                                         alt={item.alt}
@@ -79,8 +79,8 @@ export default function HomePage(props: PropsWithChildren) {
                                 <Col md={6} className="order-md-last p-0">
                                     <div className="relative w-full h-full overflow-hidden">
                                         {/* Blurred Image */}
-                                        <img className="w-full h-full object-cover blur-xl" alt="error"
-                                             src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"/>
+                                        <Image className="w-full h-full object-cover blur-xl" alt="error"
+                                               src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"/>
                                         <div
                                             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-black">
                                             <h2 className="fw-bold text-black m-3">Unleash Insights: Explore Fascinating
