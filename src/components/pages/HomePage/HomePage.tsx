@@ -29,14 +29,11 @@ export default function HomePage(props: PropsWithChildren) {
                                             journey of discovery, where every dataset is an opportunity to uncover
                                             something
                                             extraordinary.</p>
-                                        <div className="my-3">
-                                            {/* Your additional content goes here */}
-                                        </div>
                                     </div>
                                 </Col>
                                 <Col md={6} className="order-md-last">
-                                    <div className="zoom">
-                                        <img className="w-fit d-block" alt="error"
+                                    <div className="w-100 h-100">
+                                        <img className="w-100 h-100 d-block" alt="error"
                                              src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"/>
                                     </div>
                                 </Col>
@@ -45,10 +42,10 @@ export default function HomePage(props: PropsWithChildren) {
                     </Row>
                 </Container>
             </Row>
-            <section className="mt-20">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-4">
+            <Row className="mt-20">
+                <Container fluid>
+                    <Row>
+                        <Col md={4}>
                             <div className="card w-100">
                                 <div className="card-header bg-transparent border-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
@@ -65,8 +62,8 @@ export default function HomePage(props: PropsWithChildren) {
                                         extract key insights.</p>
                                 </div>
                             </div>
-                        </div>
-                        <div className="col-md-4">
+                        </Col>
+                        <Col md={4}>
                             <div className="card w-100">
                                 <div className="card-header bg-transparent border-0">
                                     <svg className="text-9xl" xmlns="http://www.w3.org/2000/svg" width="1em"
@@ -85,8 +82,8 @@ export default function HomePage(props: PropsWithChildren) {
                                         load data.&nbsp;<br/></p>
                                 </div>
                             </div>
-                        </div>
-                        <div className="col-md-4">
+                        </Col>
+                        <Col md={4}>
                             <div className="card w-100">
                                 <div className="card-header bg-transparent border-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -64 640 640" width="1em"
@@ -100,10 +97,10 @@ export default function HomePage(props: PropsWithChildren) {
                                     <p className="card-text">APIs to retrieve / update data on a database</p>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                        </Col>
+                    </Row>
+                </Container>
+            </Row>
         </Container>
     )
 }
