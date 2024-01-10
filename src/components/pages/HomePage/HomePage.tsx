@@ -36,7 +36,7 @@ export default function HomePage(props: PropsWithChildren) {
         <Container fluid className="w-96">
             <Row className="py-4 py-xl-5">
                 <Container fluid>
-                    <Row className="rounded border-0 border-dark overflow-hidden" style={{maxHeight: 900}}>
+                    <Row className="rounded border-0 border-dark overflow-hidden" style={{maxHeight: 700}}>
                         <Container className="p-0">
                             <Row>
                                 <Col md={6} className="order-first p-0">
@@ -105,8 +105,8 @@ export default function HomePage(props: PropsWithChildren) {
                                 <div className="card-header bg-transparent border-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
                                          viewBox="0 0 16 16" className="bi bi-graph-up text-9xl">
-                                        <path fill-rule="evenodd"
-                                              d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"></path>
+                                        <path
+                                            d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"></path>
                                     </svg>
                                 </div>
                                 <div className="card-body">
@@ -126,8 +126,7 @@ export default function HomePage(props: PropsWithChildren) {
                                          fill="none">
                                         <path
                                             d="M4 7V17C4 19.2091 7.58172 21 12 21C16.4183 21 20 19.2091 20 17V7M4 7C4 9.20914 7.58172 11 12 11C16.4183 11 20 9.20914 20 7M4 7C4 4.79086 7.58172 3 12 3C16.4183 3 20 4.79086 20 7M20 12C20 14.2091 16.4183 16 12 16C7.58172 16 4 14.2091 4 12"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round"></path>
+                                            stroke="currentColor"></path>
                                     </svg>
                                 </div>
                                 <div className="card-body">
