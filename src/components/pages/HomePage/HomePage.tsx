@@ -13,21 +13,27 @@ type HomeCarouselItems = {
 export default function HomePage(props: PropsWithChildren) {
     const items: HomeCarouselItems[] = [
         {
-            src: "https://cdn.pixabay.com/photo/2017/12/13/16/01/brain-3017071_1280.png",
-            alt: "First slide",
-            caption: {title: "First slide label", text: "Nulla vitae elit libero, a pharetra augue mollis interdum."}
-        },
-        {
-            src: "https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png",
-            alt: "Second slide",
-            caption: {title: "Second slide label", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."}
-        },
-        {
-            src: "https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png",
-            alt: "Third slide",
+            src: "https://open.fda.gov/img/l_openFDA.png",
+            alt: "FDA",
             caption: {
-                title: "Third slide label",
-                text: "Praesent commodo cursus magna, vel scelerisque nisl consectetur."
+                title: "FDA",
+                text: "By leveraging the OpenFDA API, we can extract information from diverse sources, comprising of data related to drug and food recall."
+            }
+        },
+        {
+            src: "https://upload.wikimedia.org/wikipedia/commons/0/06/Muq55HrN_400x400.png",
+            alt: "Data.gov",
+            caption: {
+                title: "Data.gov",
+                text: "By leveraging the data.gov API, we are able to access a vast array of datasets on a wide range of topics. This includes data related to climate, energy, health, and many other important areas of interest. With this API, we can easily query and extract the relevant data needed to gain insights and make informed decisions."
+            }
+        },
+        {
+            src: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Seal_of_the_United_States_Congress.svg/1200px-Seal_of_the_United_States_Congress.svg.png",
+            alt: "Congress",
+            caption: {
+                title: "Congress",
+                text: "By utilizing the Congress Lobbying API, we can access a vast array of data on lobbying activity, including information on lobbyists, lobbying firms, clients, and issues."
             }
         },
     ];
@@ -45,12 +51,12 @@ export default function HomePage(props: PropsWithChildren) {
                                             {items.map((item, index) => (
                                                 <CarouselItem key={index}>
                                                     <img
-                                                        className="d-block w-100"
+                                                        className="d-block w-100 object-contain"
                                                         src={item.src}
                                                         alt={item.alt}
                                                         style={{height: 700, width: 700}}
                                                     />
-                                                    <Carousel.Caption>
+                                                    <Carousel.Caption className="bg-white rounded">
                                                         <h5>{item.caption.title}</h5>
                                                         <p>{item.caption.text}</p>
                                                     </Carousel.Caption>
