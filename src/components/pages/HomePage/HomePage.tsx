@@ -10,8 +10,8 @@ export default function HomePage(props: PropsWithChildren) {
                         <Container className="p-0">
                             <Row>
                                 <Col md={6} className="order-first p-0">
-                                    <div className="h-100 w-100">
-                                        <Carousel data-bs-theme="dark" className="w-100 h-100">
+                                    <div>
+                                        <Carousel data-bs-theme="dark">
                                             <Carousel.Item>
                                                 <img
                                                     className="d-block w-100"
