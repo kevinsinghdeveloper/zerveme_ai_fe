@@ -1,54 +1,67 @@
 import {PropsWithChildren} from "react";
-import {Carousel, Col, Container, Row} from "react-bootstrap";
+import {Carousel, CarouselItem, Col, Container, Row} from "react-bootstrap";
+
+type HomeCarouselItems = {
+    src: string;
+    alt: string;
+    caption: {
+        title: string;
+        text: string;
+    };
+};
 
 export default function HomePage(props: PropsWithChildren) {
+    const items: HomeCarouselItems[] = [
+        {
+            src: "https://open.fda.gov/img/l_openFDA.png",
+            alt: "FDA",
+            caption: {
+                title: "FDA",
+                text: "By leveraging the OpenFDA API, we can extract information from diverse sources, comprising of data related to drug and food recall."
+            }
+        },
+        {
+            src: "https://upload.wikimedia.org/wikipedia/commons/0/06/Muq55HrN_400x400.png",
+            alt: "Data.gov",
+            caption: {
+                title: "Data.gov",
+                text: "By leveraging the data.gov API, we are able to access a vast array of datasets on a wide range of topics. This includes data related to climate, energy, health, and many other important areas of interest. With this API, we can easily query and extract the relevant data needed to gain insights and make informed decisions."
+            }
+        },
+        {
+            src: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Seal_of_the_United_States_Congress.svg/1200px-Seal_of_the_United_States_Congress.svg.png",
+            alt: "Congress",
+            caption: {
+                title: "Congress",
+                text: "By utilizing the Congress Lobbying API, we can access a vast array of data on lobbying activity, including information on lobbyists, lobbying firms, clients, and issues."
+            }
+        },
+    ];
+
     return (
         <Container fluid className="w-96">
             <Row className="py-4 py-xl-5">
                 <Container fluid>
-                    <Row className="rounded border-0 border-dark overflow-hidden" style={{maxHeight: 1100}}>
+                    <Row className="rounded border-0 border-dark overflow-hidden" style={{maxHeight: 700}}>
                         <Container className="p-0">
                             <Row>
                                 <Col md={6} className="order-first p-0">
                                     <div>
                                         <Carousel data-bs-theme="dark">
-                                            <Carousel.Item>
-                                                <img
-                                                    className="d-block w-100"
-                                                    src="https://cdn.pixabay.com/photo/2017/12/13/16/01/brain-3017071_1280.png"
-                                                    alt="Third slide"
-                                                    style={{maxHeight: 1100}}
-                                                />
-                                                <Carousel.Caption>
-                                                    <h5>First slide label</h5>
-                                                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                                                </Carousel.Caption>
-                                            </Carousel.Item>
-                                            <Carousel.Item>
-                                                <img
-                                                    className="d-block w-100"
-                                                    src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"
-                                                    alt="Third slide"
-                                                    style={{maxHeight: 1100}}
-                                                />
-                                                <Carousel.Caption>
-                                                    <h5>Second slide label</h5>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                                </Carousel.Caption>
-                                            </Carousel.Item>
-                                            <Carousel.Item>
-                                                <img
-                                                    className="d-block w-100"
-                                                    src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"
-                                                    alt="Third slide" style={{maxHeight: 1100}}
-                                                />
-                                                <Carousel.Caption>
-                                                    <h5>Third slide label</h5>
-                                                    <p>
-                                                        Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-                                                    </p>
-                                                </Carousel.Caption>
-                                            </Carousel.Item>
+                                            {items.map((item, index) => (
+                                                <CarouselItem key={index}>
+                                                    <img
+                                                        className="d-block w-100 object-contain"
+                                                        src={item.src}
+                                                        alt={item.alt}
+                                                        style={{height: 700, width: 700}}
+                                                    />
+                                                    <Carousel.Caption className="bg-white rounded">
+                                                        <h5>{item.caption.title}</h5>
+                                                        <p>{item.caption.text}</p>
+                                                    </Carousel.Caption>
+                                                </CarouselItem>
+                                            ))}
                                         </Carousel>
                                     </div>
                                 </Col>
@@ -98,8 +111,8 @@ export default function HomePage(props: PropsWithChildren) {
                                 <div className="card-header bg-transparent border-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
                                          viewBox="0 0 16 16" className="bi bi-graph-up text-9xl">
-                                        <path fill-rule="evenodd"
-                                              d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"></path>
+                                        <path
+                                            d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"></path>
                                     </svg>
                                 </div>
                                 <div className="card-body">
@@ -119,8 +132,7 @@ export default function HomePage(props: PropsWithChildren) {
                                          fill="none">
                                         <path
                                             d="M4 7V17C4 19.2091 7.58172 21 12 21C16.4183 21 20 19.2091 20 17V7M4 7C4 9.20914 7.58172 11 12 11C16.4183 11 20 9.20914 20 7M4 7C4 4.79086 7.58172 3 12 3C16.4183 3 20 4.79086 20 7M20 12C20 14.2091 16.4183 16 12 16C7.58172 16 4 14.2091 4 12"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round"></path>
+                                            stroke="currentColor"></path>
                                     </svg>
                                 </div>
                                 <div className="card-body">
