@@ -1,54 +1,61 @@
 import {PropsWithChildren} from "react";
-import {Carousel, Col, Container, Row} from "react-bootstrap";
+import {Carousel, CarouselItem, Col, Container, Row} from "react-bootstrap";
+
+type HomeCarouselItems = {
+    src: string;
+    alt: string;
+    caption: {
+        title: string;
+        text: string;
+    };
+};
 
 export default function HomePage(props: PropsWithChildren) {
+    const items: HomeCarouselItems[] = [
+        {
+            src: "https://cdn.pixabay.com/photo/2017/12/13/16/01/brain-3017071_1280.png",
+            alt: "First slide",
+            caption: {title: "First slide label", text: "Nulla vitae elit libero, a pharetra augue mollis interdum."}
+        },
+        {
+            src: "https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png",
+            alt: "Second slide",
+            caption: {title: "Second slide label", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."}
+        },
+        {
+            src: "https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png",
+            alt: "Third slide",
+            caption: {
+                title: "Third slide label",
+                text: "Praesent commodo cursus magna, vel scelerisque nisl consectetur."
+            }
+        },
+    ];
+
     return (
         <Container fluid className="w-96">
             <Row className="py-4 py-xl-5">
                 <Container fluid>
-                    <Row className="rounded border-0 border-dark overflow-hidden" style={{maxHeight: 1100}}>
+                    <Row className="rounded border-0 border-dark overflow-hidden" style={{maxHeight: 900}}>
                         <Container className="p-0">
                             <Row>
                                 <Col md={6} className="order-first p-0">
                                     <div>
                                         <Carousel data-bs-theme="dark">
-                                            <Carousel.Item>
-                                                <img
-                                                    className="d-block w-100"
-                                                    src="https://cdn.pixabay.com/photo/2017/12/13/16/01/brain-3017071_1280.png"
-                                                    alt="Third slide"
-                                                    style={{maxHeight: 1100}}
-                                                />
-                                                <Carousel.Caption>
-                                                    <h5>First slide label</h5>
-                                                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                                                </Carousel.Caption>
-                                            </Carousel.Item>
-                                            <Carousel.Item>
-                                                <img
-                                                    className="d-block w-100"
-                                                    src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"
-                                                    alt="Third slide"
-                                                    style={{maxHeight: 1100}}
-                                                />
-                                                <Carousel.Caption>
-                                                    <h5>Second slide label</h5>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                                </Carousel.Caption>
-                                            </Carousel.Item>
-                                            <Carousel.Item>
-                                                <img
-                                                    className="d-block w-100"
-                                                    src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"
-                                                    alt="Third slide" style={{maxHeight: 1100}}
-                                                />
-                                                <Carousel.Caption>
-                                                    <h5>Third slide label</h5>
-                                                    <p>
-                                                        Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-                                                    </p>
-                                                </Carousel.Caption>
-                                            </Carousel.Item>
+                                            {items.map((item, index) => (
+                                                <CarouselItem>
+                                                    <img
+                                                        className="d-block w-100"
+                                                        src={item.src}
+                                                        alt={item.alt}
+                                                        style={{maxHeight: 700}}
+                                                    />
+                                                    <Carousel.Caption>
+                                                        <h5>{item.caption.title}</h5>
+                                                        <p>{item.caption.text}</p>
+                                                    </Carousel.Caption>
+                                                </CarouselItem>
+                                            ))}
                                         </Carousel>
                                     </div>
                                 </Col>
