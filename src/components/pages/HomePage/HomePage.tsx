@@ -6,7 +6,7 @@ export default function HomePage(props: PropsWithChildren) {
         <Container fluid className="w-96">
             <Row className="py-4 py-xl-5">
                 <Container fluid>
-                    <Row className="bg-dark rounded border-0 border-dark overflow-hidden">
+                    <Row className="bg-blue-400 rounded border-0 border-dark overflow-hidden">
                         <Container className="p-0">
                             <Row>
                                 <Col md={6} className="order-first">
@@ -32,9 +32,36 @@ export default function HomePage(props: PropsWithChildren) {
                                     </div>
                                 </Col>
                                 <Col md={6} className="order-md-last">
-                                    <div className="w-100 h-100">
-                                        <img className="w-100 h-100 d-block" alt="error"
+                                    <div className="relative w-full h-full overflow-hidden">
+                                        {/* Blurred Image */}
+                                        <img className="w-full h-full object-cover blur-xl" alt="error"
                                              src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"/>
+                                        <div
+                                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-black">
+                                            <h2 className="fw-bold text-black m-3">Unleash Insights: Explore Fascinating
+                                                Datasets on Our Platform</h2>
+                                            <p className="m-3 text-lg">Welcome to our platform, where you can explore
+                                                a
+                                                wealth of
+                                                fascinating datasets that will unlock a world of insights and
+                                                possibilities!
+                                                Our
+                                                custom-built ELT/ETLs have transformed our data sets into something
+                                                truly
+                                                remarkable, providing you with a seamless and enjoyable data experience.
+                                                And
+                                                the
+                                                best part? Our data sets are completely free to access and use! But
+                                                that's
+                                                not
+                                                all - we also offer custom transformations and unlimited data exports to
+                                                take
+                                                your data analysis to the next level. So come and join us on an
+                                                exhilarating
+                                                journey of discovery, where every dataset is an opportunity to uncover
+                                                something
+                                                extraordinary.</p>
+                                        </div>
                                     </div>
                                 </Col>
                             </Row>
