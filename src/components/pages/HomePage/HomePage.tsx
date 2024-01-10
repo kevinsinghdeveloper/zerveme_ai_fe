@@ -1,37 +1,56 @@
 import {PropsWithChildren} from "react";
-import {Col, Container, Row} from "react-bootstrap";
+import {Carousel, Col, Container, Row} from "react-bootstrap";
 
 export default function HomePage(props: PropsWithChildren) {
     return (
         <Container fluid className="w-96">
             <Row className="py-4 py-xl-5">
                 <Container fluid>
-                    <Row className="bg-blue-400 rounded border-0 border-dark overflow-hidden">
+                    <Row className="rounded border-0 border-dark overflow-hidden">
                         <Container className="p-0">
                             <Row>
-                                <Col md={6} className="order-first">
-                                    <div className="text-white p-4 p-md-5">
-                                        <h2 className="fw-bold text-white m-3">Unleash Insights: Explore Fascinating
-                                            Datasets on Our Platform</h2>
-                                        <p className="m-3 text-lg">Welcome to our platform, where you can explore
-                                            a
-                                            wealth of
-                                            fascinating datasets that will unlock a world of insights and possibilities!
-                                            Our
-                                            custom-built ELT/ETLs have transformed our data sets into something truly
-                                            remarkable, providing you with a seamless and enjoyable data experience. And
-                                            the
-                                            best part? Our data sets are completely free to access and use! But that's
-                                            not
-                                            all - we also offer custom transformations and unlimited data exports to
-                                            take
-                                            your data analysis to the next level. So come and join us on an exhilarating
-                                            journey of discovery, where every dataset is an opportunity to uncover
-                                            something
-                                            extraordinary.</p>
+                                <Col md={6} className="order-first p-0">
+                                    <div className="h-100 w-100">
+                                        <Carousel data-bs-theme="dark" className="w-100 h-100">
+                                            <Carousel.Item>
+                                                <img
+                                                    className="d-block w-100"
+                                                    src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"
+                                                    alt="First slide"
+                                                />
+                                                <Carousel.Caption>
+                                                    <h5>First slide label</h5>
+                                                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                                                </Carousel.Caption>
+                                            </Carousel.Item>
+                                            <Carousel.Item>
+                                                <img
+                                                    className="d-block w-100"
+                                                    src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"
+                                                    alt="Second slide"
+                                                />
+                                                <Carousel.Caption>
+                                                    <h5>Second slide label</h5>
+                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                </Carousel.Caption>
+                                            </Carousel.Item>
+                                            <Carousel.Item>
+                                                <img
+                                                    className="d-block w-100"
+                                                    src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"
+                                                    alt="Third slide"
+                                                />
+                                                <Carousel.Caption>
+                                                    <h5>Third slide label</h5>
+                                                    <p>
+                                                        Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+                                                    </p>
+                                                </Carousel.Caption>
+                                            </Carousel.Item>
+                                        </Carousel>
                                     </div>
                                 </Col>
-                                <Col md={6} className="order-md-last">
+                                <Col md={6} className="order-md-last p-0">
                                     <div className="relative w-full h-full overflow-hidden">
                                         {/* Blurred Image */}
                                         <img className="w-full h-full object-cover blur-xl" alt="error"
