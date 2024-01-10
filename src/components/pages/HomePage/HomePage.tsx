@@ -43,7 +43,7 @@ export default function HomePage(props: PropsWithChildren) {
                                     <div>
                                         <Carousel data-bs-theme="dark">
                                             {items.map((item, index) => (
-                                                <CarouselItem>
+                                                <CarouselItem key={index}>
                                                     <img
                                                         className="d-block w-100"
                                                         src={item.src}
