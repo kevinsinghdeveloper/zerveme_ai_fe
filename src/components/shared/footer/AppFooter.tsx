@@ -7,7 +7,7 @@ export default function AppFooter(props: PropsWithChildren<{ className?: any, st
             <Container fluid className="p-2">
                 <Row>
                     <Col md={5}>
-                        <p>@ 2024 ZerveMeData</p>
+                        <p>@ 2024 ZerveMe</p>
                     </Col>
                     <Col md={2}>
                         <p className="text-center font-bold">We Zerve Data</p>
