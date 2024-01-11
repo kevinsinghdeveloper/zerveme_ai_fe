@@ -83,31 +83,25 @@ export default function HomePage(props: PropsWithChildren) {
                                                src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"/>
                                         <div
                                             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-black">
-                                            <h2 className="fw-bold text-black m-3">Unleash Insights: Explore Fascinating
-                                                Datasets on Our Platform</h2>
-                                            <p className="m-3 text-lg">Welcome to our platform, where you can explore
-                                                a
-                                                wealth of
-                                                fascinating datasets that will unlock a world of insights and
-                                                possibilities!
-                                                Our
+                                            <h2 className="fw-bold text-black m-3 sm:m-6 md:m-8 lg:m-10 xl:m-12 2xl:m-16">
+                                                Unleash Insights: Explore Fascinating Datasets on Our Platform
+                                            </h2>
+                                            <p className="m-3 text-lg sm:m-4 md:m-6 lg:m-8 xl:m-10 2xl:m-12">
+                                                Welcome to our platform, where you can explore a wealth of fascinating
+                                                datasets that will unlock a world of insights and possibilities! Our
                                                 custom-built ELT/ETLs have transformed our data sets into something
-                                                truly
-                                                remarkable, providing you with a seamless and enjoyable data experience.
-                                                And
-                                                the
-                                                best part? Our data sets are completely free to access and use! But
-                                                that's
-                                                not
-                                                all - we also offer custom transformations and unlimited data exports to
-                                                take
-                                                your data analysis to the next level. So come and join us on an
-                                                exhilarating
-                                                journey of discovery, where every dataset is an opportunity to uncover
-                                                something
-                                                extraordinary.</p>
+                                                truly remarkable, providing you with a seamless and enjoyable data
+                                                experience. And the best part? Our data sets are completely free to
+                                                access and use! But that's not all - we also offer custom
+                                                transformations and unlimited data exports to take your data analysis to
+                                                the next level. So come and join us on an exhilarating journey of
+                                                discovery, where every dataset is an opportunity to uncover something
+                                                extraordinary.
+                                            </p>
                                         </div>
                                     </div>
+
+
                                 </Col>
                             </Row>
                         </Container>

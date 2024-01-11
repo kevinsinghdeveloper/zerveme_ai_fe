@@ -6,11 +6,14 @@ export default function AppFooter(props: PropsWithChildren<{ className?: any, st
         <footer className={props.className} style={props.style}>
             <Container fluid className="p-2">
                 <Row>
-                    <Col md={6}>
-                        <p className="float-right">@ 2024 ZerveMeData</p>
+                    <Col md={5}>
+                        <p>@ 2024 ZerveMeData</p>
                     </Col>
-                    <Col md={6}>
-                        <p>ZerveMeData.com</p>
+                    <Col md={2}>
+                        <p className="text-center font-bold">We Zerve Data</p>
+                    </Col>
+                    <Col md={5}>
+                        <p className="float-right">ZerveMeData.com</p>
                     </Col>
                 </Row>
             </Container>
