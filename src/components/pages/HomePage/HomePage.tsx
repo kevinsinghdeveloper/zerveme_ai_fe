@@ -62,7 +62,7 @@ export default function HomePage(props: PropsWithChildren) {
                                             {items.map((item, index) => (
                                                 <CarouselItem key={index}>
                                                     <Image
-                                                        className="d-block w-100 object-contain"
+                                                        className="d-block object-contain ml-auto mr-auto"
                                                         src={item.src}
                                                         alt={item.alt}
                                                         style={{height: 500, width: 500}}
