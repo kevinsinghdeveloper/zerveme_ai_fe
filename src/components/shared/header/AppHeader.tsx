@@ -1,10 +1,27 @@
-import {PropsWithChildren} from "react";
+import {PropsWithChildren, useState} from "react";
 import {Container, Nav, Navbar} from "react-bootstrap";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faHome, faPhone, faEarth} from '@fortawesome/free-solid-svg-icons'
 
 export default function AppHeader(props: PropsWithChildren<{ className?: any, style?: any }>) {
+    const [iconToShow, setIconToShow] = useState(null);
+
+    const links = [
+        {href: '/', text: 'Home', icon: faHome},
+        {href: '/contactus', text: 'Contact Us', icon: faPhone},
+        {href: '/explore', text: 'Explore', icon: faEarth},
+    ];
+
+    const handleMouseOver = (icon: any) => {
+        setIconToShow(icon);
+    };
+
+    const handleMouseOut = () => {
+        setIconToShow(null);
+    };
+
     return (
         <header style={props.style} className={props.className}>
-
             <Navbar expand="xl">
                 <Container fluid>
                     <Navbar.Brand href="/">
@@ -13,14 +30,20 @@ export default function AppHeader(props: PropsWithChildren<{ className?: any, st
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ml-auto text-xl">
-                            <Nav.Link href="/">Home</Nav.Link>
-                            <Nav.Link href="/contactus">Contact Us</Nav.Link>
-                            <Nav.Link href="/explore">Explore</Nav.Link>
+                            {links.map((link, index) => (
+                                <Nav.Link
+                                    key={index}
+                                    href={link.href}
+                                    onMouseOver={() => handleMouseOver(link.icon)}
+                                    onMouseOut={handleMouseOut}
+                                >
+                                    {iconToShow === link.icon && <FontAwesomeIcon icon={iconToShow}/>} {link.text}
+                                </Nav.Link>
+                            ))}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-
         </header>
-    )
+    );
 }
