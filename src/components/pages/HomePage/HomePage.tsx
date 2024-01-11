@@ -22,6 +22,7 @@ type HomeCarouselItems = {
 };
 
 export default function HomePage(props: PropsWithChildren) {
+
     const items: HomeCarouselItems[] = [
         {
             src: "https://open.fda.gov/img/l_openFDA.png",
@@ -169,3 +170,18 @@ export default function HomePage(props: PropsWithChildren) {
         </Container>
     )
 }
+
+/*
+const fetchData = async () => {
+        const response = await fetch('https://jsonplaceholder.typicode.com/users');
+        const data = await response.json();
+
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(data);
+            }, 500);
+        });
+    };
+    <SpinnerWrapper fetchData={}></SpinnerWrapper>
+
+ */
