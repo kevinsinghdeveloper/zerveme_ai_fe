@@ -1,7 +1,7 @@
 import {PropsWithChildren, useState} from "react";
 import {Container, Nav, Navbar} from "react-bootstrap";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faHome, faPhone, faEarth} from '@fortawesome/free-solid-svg-icons'
+import {faHome, faPhone, faEarth, faRightToBracket} from '@fortawesome/free-solid-svg-icons'
 
 export default function AppHeader(props: PropsWithChildren<{ className?: any, style?: any }>) {
     const [iconToShow, setIconToShow] = useState(null);
@@ -10,6 +10,7 @@ export default function AppHeader(props: PropsWithChildren<{ className?: any, st
         {href: '/', text: 'Home', icon: faHome},
         {href: '/contactus', text: 'Contact Us', icon: faPhone},
         {href: '/explore', text: 'Explore', icon: faEarth},
+        {href: '/account', text: 'Account', icon: faRightToBracket},
     ];
 
     const handleMouseOver = (icon: any) => {
