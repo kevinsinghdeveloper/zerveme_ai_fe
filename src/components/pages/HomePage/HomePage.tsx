@@ -65,9 +65,9 @@ export default function HomePage(props: PropsWithChildren) {
                                                         className="d-block w-100 object-contain"
                                                         src={item.src}
                                                         alt={item.alt}
-                                                        style={{height: 700, width: 700}}
+                                                        style={{height: 500, width: 500}}
                                                     />
-                                                    <Carousel.Caption className="bg-white rounded">
+                                                    <Carousel.Caption className="bg-white rounded opacity-85">
                                                         <h5>{item.caption.title}</h5>
                                                         <p>{item.caption.text}</p>
                                                     </Carousel.Caption>
