@@ -65,7 +65,7 @@ export default function HomePage(props: PropsWithChildren) {
                                                         className="d-block object-contain ml-auto mr-auto"
                                                         src={item.src}
                                                         alt={item.alt}
-                                                        style={{height: 500, width: 500}}
+                                                        style={{height: 700, width: 700}}
                                                     />
                                                     <Carousel.Caption className="bg-white rounded opacity-85">
                                                         <h5>{item.caption.title}</h5>
