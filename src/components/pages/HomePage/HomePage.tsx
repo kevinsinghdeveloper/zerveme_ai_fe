@@ -57,7 +57,7 @@ export default function HomePage(props: PropsWithChildren) {
                     <Row className="rounded border-0 border-dark overflow-hidden" style={{maxHeight: 700}}>
                         <Container className="p-0">
                             <Row>
-                                <Col md={6} className="order-first p-0">
+                                <Col md={12} lg={6} className="order-first p-0">
                                     <div>
                                         <Carousel data-bs-theme="dark">
                                             {items.map((item, index) => (
@@ -77,7 +77,7 @@ export default function HomePage(props: PropsWithChildren) {
                                         </Carousel>
                                     </div>
                                 </Col>
-                                <Col md={6} className="order-md-last p-0">
+                                <Col md={12} lg={6} className="order-md-last p-0">
                                     <Container fluid>
                                         <Row className="h-100 align-items-center">
                                             <Col md={12}
