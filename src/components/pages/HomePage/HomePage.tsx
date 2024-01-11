@@ -77,7 +77,7 @@ export default function HomePage(props: PropsWithChildren) {
                                     </div>
                                 </Col>
                                 <Col md={6} className="order-md-last p-0">
-                                    <div className="relative w-full h-full overflow-hidden">
+                                    <div className="relative w-full h-full overflow-hidden rounded">
                                         {/* Blurred Image */}
                                         <Image className="w-full h-full object-cover blur-xl" alt="error"
                                                src="https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png"/>
@@ -118,7 +118,7 @@ export default function HomePage(props: PropsWithChildren) {
                 <Container fluid>
                     <Row>
                         <Col md={4}>
-                            <Card className="w-100">
+                            <Card className="w-100 h-100">
                                 <CardHeader className="bg-transparent border-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
                                          viewBox="0 0 16 16" className="bi bi-graph-up text-9xl mr-auto">
@@ -136,7 +136,7 @@ export default function HomePage(props: PropsWithChildren) {
                             </Card>
                         </Col>
                         <Col md={4}>
-                            <Card className="w-100">
+                            <Card className="w-100 h-100">
                                 <CardHeader className="bg-transparent border-0">
                                     <svg className="text-9xl" xmlns="http://www.w3.org/2000/svg" width="1em"
                                          height="1em" viewBox="0 0 24 24"
@@ -155,7 +155,7 @@ export default function HomePage(props: PropsWithChildren) {
                             </Card>
                         </Col>
                         <Col md={4}>
-                            <Card className="w-100">
+                            <Card className="w-100 h-100">
                                 <CardHeader className="bg-transparent border-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -64 640 640" width="1em"
                                          height="1em" fill="currentColor" className="text-9xl">
