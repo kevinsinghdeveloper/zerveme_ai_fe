@@ -54,10 +54,10 @@ export default function HomePage(props: PropsWithChildren) {
         <Container fluid className="w-96">
             <Row className="py-4 py-xl-5">
                 <Container fluid>
-                    <Row className="rounded border-0 border-dark overflow-hidden" style={{maxHeight: 700}}>
+                    <Row className="rounded border-0 border-dark overflow-hidden">
                         <Container className="p-0">
                             <Row>
-                                <Col md={12} lg={6} className="order-first p-0">
+                                <Col md={12} lg={6} className="order-first p-0" style={{maxHeight: 700}}>
                                     <div>
                                         <Carousel data-bs-theme="dark">
                                             {items.map((item, index) => (
@@ -77,7 +77,7 @@ export default function HomePage(props: PropsWithChildren) {
                                         </Carousel>
                                     </div>
                                 </Col>
-                                <Col md={12} lg={6} className="order-md-last p-0">
+                                <Col md={12} lg={6} className="order-md-last p-0" style={{maxHeight: 700}}>
                                     <Container fluid>
                                         <Row className="h-100 align-items-center">
                                             <Col md={12}
@@ -91,6 +91,7 @@ export default function HomePage(props: PropsWithChildren) {
                                                          background: 'url("https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png") center / cover no-repeat',
                                                          filter: 'blur(8px)',
                                                          height: '100%',
+                                                         maxHeight: 700
                                                      }}>
                                                 </div>
                                                 <div className="position-relative mt-52">
@@ -119,7 +120,7 @@ export default function HomePage(props: PropsWithChildren) {
                     </Row>
                 </Container>
             </Row>
-            <Row className="!mt-24">
+            <Row className="!mt-20">
                 <Container fluid>
                     <Row>
                         <Col md={4}>
