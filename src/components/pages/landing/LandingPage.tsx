@@ -3,17 +3,21 @@ import AppHeader from '../../shared/header/AppHeader'
 import {Route, Routes} from "react-router-dom";
 import ContactUsPage from "../contactus/ContactUsPage";
 import HomePage from "../HomePage/HomePage";
+import AppFooter from "../../shared/footer/AppFooter";
+
 
 export default function LandingPage(props: PropsWithChildren) {
+
     return (
         <>
-            <AppHeader style={{width: '90%'}} className="ml-auto mr-auto mt-4"></AppHeader>
+            <AppHeader style={{width: '90%'}} className="ml-auto mr-auto mt-4 border-b-2"/>
             <div style={{width: '90%'}} className="ml-auto mr-auto">
                 <Routes>
                     <Route path="/contactus" element={<ContactUsPage/>}/>
                     <Route path="*" element={<HomePage/>}/>
                 </Routes>
             </div>
+            <AppFooter style={{width: '90%'}} className="ml-auto mr-auto mt-20 border-t-2"/>
         </>
     )
 }
