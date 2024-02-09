@@ -89,7 +89,7 @@ export default function HomePage(props: PropsWithChildren) {
                                                 <div className="position-absolute top-0 left-0 w-full h-full"
                                                      style={{
                                                          background: 'url("https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png") center / cover no-repeat',
-                                                         filter: 'blur(8px)',
+                                                         filter: 'blur(16px)',
                                                          height: '100%',
                                                          maxHeight: 700
                                                      }}>
