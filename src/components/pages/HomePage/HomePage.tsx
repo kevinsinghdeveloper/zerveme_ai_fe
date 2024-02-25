@@ -1,5 +1,6 @@
 import {PropsWithChildren} from "react";
 import {
+    Button,
     Card,
     CardBody,
     CardHeader,
@@ -22,7 +23,6 @@ type HomeCarouselItems = {
 };
 
 export default function HomePage(props: PropsWithChildren) {
-
     const items: HomeCarouselItems[] = [
         {
             src: "https://open.fda.gov/img/l_openFDA.png",
@@ -57,27 +57,23 @@ export default function HomePage(props: PropsWithChildren) {
                     <Row className="rounded border-0 border-dark overflow-hidden">
                         <Container className="p-0">
                             <Row>
-                                <Col md={12} lg={6} className="order-first p-0" style={{maxHeight: 700}}>
-                                    <div>
-                                        <Carousel data-bs-theme="dark">
-                                            {items.map((item, index) => (
-                                                <CarouselItem key={index}>
-                                                    <Image
-                                                        className="d-block object-contain ml-auto mr-auto"
-                                                        src={item.src}
-                                                        alt={item.alt}
-                                                        style={{height: 700, width: 700}}
-                                                    />
-                                                    <Carousel.Caption className="bg-white rounded opacity-85">
-                                                        <h5>{item.caption.title}</h5>
-                                                        <p>{item.caption.text}</p>
-                                                    </Carousel.Caption>
-                                                </CarouselItem>
-                                            ))}
-                                        </Carousel>
-                                    </div>
+                                <Col lg={5} className="order-first p-0" style={{maxHeight: 700}}>
+                                    <Container fluid>
+                                        <Row className="h-100 align-items-center">
+                                            <div className="h-100 pt-44">
+                                                <h1 className="text-white text-6xl">
+                                                    Explore business data from <span
+                                                    style={{color: '#B660FE'}}>Zerve Me Data</span>
+                                                </h1>
+                                                <p className="text-white">Zerve Me Data provides secure and reliable
+                                                    Data For your business and information</p>
+
+                                                <Button style={{background: '#B660FE'}}>Explore More</Button>
+                                            </div>
+                                        </Row>
+                                    </Container>
                                 </Col>
-                                <Col md={12} lg={6} className="order-md-last p-0" style={{maxHeight: 700}}>
+                                <Col lg={7} className="order-md-last p-0" style={{maxHeight: 700}}>
                                     <Container fluid>
                                         <Row className="h-100 align-items-center">
                                             <Col md={12}
