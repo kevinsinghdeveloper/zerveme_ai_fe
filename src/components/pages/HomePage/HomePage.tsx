@@ -13,7 +13,7 @@ import {
     Row
 } from "react-bootstrap";
 
-import previewdataexplore from '../../../assets/previewdataexplore.jpg'
+import previewdataexplore from '../../../assets/previewdataexplore.png'
 
 type HomeCarouselItems = {
     src: string;
@@ -86,7 +86,7 @@ export default function HomePage(props: PropsWithChildren) {
                                                  }}>
                                                 <div className="position-absolute top-0 left-0 w-full h-full"
                                                      style={{
-                                                         background: `url(${previewdataexplore}) center / cover no-repeat`,
+                                                         background: `url(${previewdataexplore}) center / contain no-repeat`,
                                                          height: '100%',
                                                          maxHeight: 700
                                                      }}>
