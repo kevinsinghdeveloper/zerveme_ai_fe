@@ -13,6 +13,8 @@ import {
     Row
 } from "react-bootstrap";
 
+import previewdataexplore from '../../../assets/previewdataexplore.jpg'
+
 type HomeCarouselItems = {
     src: string;
     alt: string;
@@ -84,28 +86,10 @@ export default function HomePage(props: PropsWithChildren) {
                                                  }}>
                                                 <div className="position-absolute top-0 left-0 w-full h-full"
                                                      style={{
-                                                         background: 'url("https://cdn.pixabay.com/photo/2017/05/14/03/45/data-2311261_1280.png") center / cover no-repeat',
-                                                         filter: 'blur(16px)',
+                                                         background: `url(${previewdataexplore}) center / cover no-repeat`,
                                                          height: '100%',
                                                          maxHeight: 700
                                                      }}>
-                                                </div>
-                                                <div className="position-relative mt-52">
-                                                    <h2 className="fw-bold m-3 m-md-6 m-lg-8 m-xl-10 m-xxl-12">
-                                                        Unleash Insights: Explore Fascinating Datasets on Our Platform
-                                                    </h2>
-                                                    <p className="text-lg m-3 m-sm-4 m-md-6 m-lg-8 m-xl-10 m-xxl-12">
-                                                        Welcome to our platform, where you can explore a wealth of
-                                                        fascinating datasets that will unlock a world of insights and
-                                                        possibilities! Our custom-built ELT/ETLs have transformed our
-                                                        data sets into something truly remarkable, providing you with a
-                                                        seamless and enjoyable data experience. And the best part? Our
-                                                        data sets are completely free to access and use! But that's not
-                                                        all - we also offer custom transformations and unlimited data
-                                                        exports to take your data analysis to the next level. So come
-                                                        and join us on an exhilarating journey of discovery, where every
-                                                        dataset is an opportunity to uncover something extraordinary.
-                                                    </p>
                                                 </div>
                                             </Col>
                                         </Row>
