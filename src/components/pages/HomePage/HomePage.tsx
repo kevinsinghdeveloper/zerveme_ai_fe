@@ -6,8 +6,6 @@ import {
     CardHeader,
     CardText,
     CardTitle,
-    Carousel,
-    CarouselItem,
     Col,
     Container, Image,
     Row
@@ -17,42 +15,7 @@ import previewdataexplore from '../../../assets/previewdataexplore.png'
 import chartpng from '../../../assets/chart.png'
 import piechart from '../../../assets/pie_chart.png'
 
-type HomeCarouselItems = {
-    src: string;
-    alt: string;
-    caption: {
-        title: string;
-        text: string;
-    };
-};
-
 export default function HomePage(props: PropsWithChildren) {
-    const items: HomeCarouselItems[] = [
-        {
-            src: "https://open.fda.gov/img/l_openFDA.png",
-            alt: "FDA",
-            caption: {
-                title: "FDA",
-                text: "By leveraging the OpenFDA API, we can extract information from diverse sources, comprising of data related to drug and food recall."
-            }
-        },
-        {
-            src: "https://upload.wikimedia.org/wikipedia/commons/0/06/Muq55HrN_400x400.png",
-            alt: "Data.gov",
-            caption: {
-                title: "Data.gov",
-                text: "By leveraging the data.gov API, we are able to access a vast array of datasets on a wide range of topics. This includes data related to climate, energy, health, and many other important areas of interest. With this API, we can easily query and extract the relevant data needed to gain insights and make informed decisions."
-            }
-        },
-        {
-            src: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Seal_of_the_United_States_Congress.svg/1200px-Seal_of_the_United_States_Congress.svg.png",
-            alt: "Congress",
-            caption: {
-                title: "Congress",
-                text: "By utilizing the Congress Lobbying API, we can access a vast array of data on lobbying activity, including information on lobbyists, lobbying firms, clients, and issues."
-            }
-        },
-    ];
 
     return (
         <Container fluid className="w-96">
