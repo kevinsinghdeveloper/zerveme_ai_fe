@@ -20,18 +20,31 @@ import FrequentQuestionsComponent from "../../shared/components/FrequentQuestion
 export default function HomePage(props: PropsWithChildren) {
     const fa_questions = {
         1: {
-            question: "What is React?",
-            answer: "React is a JavaScriptJavaScriptJavaScriptJavaScriptJavaScriptJavaScriptJavaScriptJavaScript library for building user interfaces."
+            question: "What is ETL?",
+            answer: "ETL stands for Extract, Transform, Load. It refers to the process of extracting data from various sources, transforming it into a usable format, and loading it into a destination database or data warehouse."
         },
         2: {
-            question: "What is JSX?",
-            answer: "JSX is a syntax extension for JavaScript used with React to describedescribedescribedescribedescribedescribedescribedescribedescribedescribedescribedescribedescribedescribedescribe what the UI should look like."
+            question: "What types of data sources can your ETL solution handle?",
+            answer: "Our ETL solution can handle a wide range of data sources including relational databases, flat files (such as CSV, Excel), cloud storage (like Amazon S3, Google Cloud Storage), APIs, and streaming data."
         },
         3: {
-            question: "What is the virtual DOM?",
-            answer: "The virtual DOM is a lightweight copy of the actual DOM that React keeps in memory for performance optimization."
+            question: "How does your ETL solution ensure data quality?",
+            answer: "We employ various techniques to ensure data quality including data profiling, cleansing, validation, and enrichment. Additionally, we provide monitoring and error handling mechanisms to identify and rectify any issues during the ETL process."
+        },
+        4: {
+            question: "What scalability options does your ETL solution offer?",
+            answer: "Our ETL solution is designed to scale horizontally and vertically based on the volume and complexity of data processing needs. It can seamlessly handle large volumes of data and accommodate increasing workload demands."
+        },
+        5: {
+            question: "Can your ETL solution integrate with existing data systems?",
+            answer: "Yes, our ETL solution is highly interoperable and can integrate with a wide range of existing data systems including data lakes, data warehouses, business intelligence tools, and enterprise applications. We provide flexible integration options to suit your specific requirements."
+        },
+        6: {
+            question: "What analytics capabilities are available with your ETL environment?",
+            answer: "Our ETL environment offers robust analytics capabilities including data visualization, reporting, ad-hoc querying, and predictive analytics. It empowers businesses to derive actionable insights from their transformed data for informed decision-making."
         }
     };
+
 
     return (
         <Container fluid className="w-96">

@@ -26,7 +26,7 @@ export function FrequentQuestionsItem({question, answer}: FrequentQuestionsItemP
                     borderRadius: "10px",
                     minHeight: "100px"
                 }} className="ml-auto mr-auto p-4 text-white">
-                    <h2 className="bg-inherit">Q.&nbsp;&nbsp;{question}</h2>
+                    <h4 className="bg-inherit mb-4">Q.&nbsp;&nbsp;{question}</h4>
                     <Collapse in={open}>
                         <p className="ml-12 bg-inherit" style={{wordWrap: "break-word"}}>
                             {answer}
