@@ -2,12 +2,16 @@ import React, {ReactElement, useState} from 'react';
 import xmark from "../../../assets/xmark.png";
 import {Col, Container, Image, Row} from "react-bootstrap";
 
-interface FrequentQuestionsItemComponentProps {
+interface FrequentQuestionsItemProps {
     question?: string;
     answer?: string;
 }
 
-export function FrequentQuestionsItemComponent({question, answer}: FrequentQuestionsItemComponentProps) {
+interface FrequentQuestionsComponentProps {
+    fa_questions?: { [key: number]: { question: string; answer: string } };
+}
+
+export function FrequentQuestionsItem({question, answer}: FrequentQuestionsItemProps) {
     const [isParagraphVisible, setIsParagraphVisible] = useState(true);
 
     const toggleParagraphVisibility = () => {
@@ -37,9 +41,15 @@ export function FrequentQuestionsItemComponent({question, answer}: FrequentQuest
     )
 }
 
-export default function FrequentQuestionsComponent() {
+export default function FrequentQuestionsComponent({fa_questions}: FrequentQuestionsComponentProps) {
     // You can use FrequentQuestionsItemComponent here like this:
     return (
-        <p></p>
-    )
+        <div>
+            <h2>Frequent Questions</h2>
+            {fa_questions &&
+                Object.values(fa_questions).map((qna, index) => (
+                    <FrequentQuestionsItem key={index} question={qna.question} answer={qna.answer}/>
+                ))}
+        </div>
+    );
 }
