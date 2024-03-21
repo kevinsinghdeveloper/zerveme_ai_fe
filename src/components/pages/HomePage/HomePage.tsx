@@ -15,6 +15,7 @@ import previewdataexplore from '../../../assets/previewdataexplore.png'
 import chartpng from '../../../assets/chart.png'
 import piechart from '../../../assets/pie_chart.png'
 import previewexplorecomp from '../../../assets/previewexplorecomp.png'
+import xmark from '../../../assets/xmark.png'
 
 export default function HomePage(props: PropsWithChildren) {
 
@@ -134,6 +135,61 @@ export default function HomePage(props: PropsWithChildren) {
                                 <p>So we are making it super simple to access any computer you want to get your work
                                     done at the most reasonable prices.</p>
                             </p>
+                        </Col>
+                    </Row>
+                </Container>
+            </Row>
+            <Row className="!mt-60">
+                <Container fluid>
+                    <Row>
+                        <Col lg={12}>
+                            <h1 className="text-center text-white">
+                                <b>Frequently Asked Questions</b>
+                            </h1>
+                        </Col>
+                    </Row>
+                    <Row className="!mt-20">
+                        <Col lg={12}>
+                            <div style={{backgroundColor: "#110C15", width: "70%", borderRadius: "10px"}}
+                                 className="h-24 ml-auto mr-auto p-2">
+                                Test
+                                <Image src={xmark} className="relative"
+                                       style={{right: "-98%", top: "-25%", height: "20px"}}></Image>
+
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row className="!mt-20">
+                        <Col lg={12}>
+                            <div style={{backgroundColor: "#110C15", width: "70%", borderRadius: "10px"}}
+                                 className="h-24 ml-auto mr-auto p-2">
+                                Test
+                                <Image src={xmark} className="relative"
+                                       style={{right: "-98%", top: "-25%", height: "20px"}}></Image>
+
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row className="!mt-20">
+                        <Col lg={12}>
+                            <div style={{backgroundColor: "#110C15", width: "70%", borderRadius: "10px"}}
+                                 className="h-24 ml-auto mr-auto p-2">
+                                Test
+                                <Image src={xmark} className="relative"
+                                       style={{right: "-98%", top: "-25%", height: "20px"}}></Image>
+
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row className="!mt-20">
+                        <Col lg={12}>
+                            <div style={{backgroundColor: "#110C15", width: "70%", borderRadius: "10px"}}
+                                 className="h-24 ml-auto mr-auto p-2">
+                                Test
+                                <Image src={xmark} className="relative"
+                                       style={{right: "-98%", top: "-25%", height: "20px"}}></Image>
+
+                            </div>
                         </Col>
                     </Row>
                 </Container>
