@@ -14,6 +14,7 @@ import {
 import previewdataexplore from '../../../assets/previewdataexplore.png'
 import chartpng from '../../../assets/chart.png'
 import piechart from '../../../assets/pie_chart.png'
+import previewexplorecomp from '../../../assets/previewexplorecomp.png'
 
 export default function HomePage(props: PropsWithChildren) {
 
@@ -65,7 +66,7 @@ export default function HomePage(props: PropsWithChildren) {
                     </Row>
                 </Container>
             </Row>
-            <Row className="!mt-20">
+            <Row className="!mt-60">
                 <Container fluid>
                     <Row>
                         <Col md={4}>
@@ -117,6 +118,22 @@ export default function HomePage(props: PropsWithChildren) {
                                         database</CardText>
                                 </CardBody>
                             </Card>
+                        </Col>
+                    </Row>
+                </Container>
+            </Row>
+            <Row className="!mt-60">
+                <Container fluid>
+                    <Row>
+                        <Col sm={6}>
+                            <Image src={previewexplorecomp} className="ml-auto mr-14"/>
+                        </Col>
+                        <Col sm={6}>
+                            <p className="mr-auto ml-14 text-white">
+                                <p className="text-4xl">Exlore ALL kinds of data</p>
+                                <p>So we are making it super simple to access any computer you want to get your work
+                                    done at the most reasonable prices.</p>
+                            </p>
                         </Col>
                     </Row>
                 </Container>
