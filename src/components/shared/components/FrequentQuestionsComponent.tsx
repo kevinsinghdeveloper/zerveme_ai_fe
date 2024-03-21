@@ -17,7 +17,7 @@ export function FrequentQuestionsItemComponent({question, answer}: FrequentQuest
                     borderRadius: "10px",
                     minHeight: "100px"
                 }} className="ml-auto mr-auto p-4 text-white">
-                    <h3 className="ml-2 bg-inherit">Q. {question}</h3>
+                    <h3 className="ml-2 bg-inherit">Q.&nbsp;&nbsp;{question}</h3>
                     <p className="ml-12 mr-12 mt-4 bg-inherit" style={{wordWrap: "break-word"}}>
                         {answer}
                     </p>
