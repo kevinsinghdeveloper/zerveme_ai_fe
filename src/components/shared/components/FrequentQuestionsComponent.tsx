@@ -1,6 +1,6 @@
 import React, {ReactElement, useState} from 'react';
 import xmark from "../../../assets/xmark.png";
-import {Col, Container, Image, Row} from "react-bootstrap";
+import {Col, Collapse, Container, Image, Row} from "react-bootstrap";
 
 interface FrequentQuestionsItemProps {
     question?: string;
@@ -12,11 +12,9 @@ interface FrequentQuestionsComponentProps {
 }
 
 export function FrequentQuestionsItem({question, answer}: FrequentQuestionsItemProps) {
-    const [isParagraphVisible, setIsParagraphVisible] = useState(true);
 
-    const toggleParagraphVisibility = () => {
-        setIsParagraphVisible(!isParagraphVisible);
-    };
+    const [open, setOpen] = useState(true);
+
     return (
         <Row className="!mt-14">
             <Col lg={12} style={{position: "relative"}}>
@@ -24,17 +22,17 @@ export function FrequentQuestionsItem({question, answer}: FrequentQuestionsItemP
                     backgroundColor: "#110C15",
                     width: "70%",
                     borderRadius: "10px",
-                    minHeight: "100px",
-                    transition: "height 0.5s ease-in-out" // Add transition effect
+                    minHeight: "100px"
                 }} className="ml-auto mr-auto p-4 text-white">
-                    <h3 className="ml-2 bg-inherit">Q.&nbsp;&nbsp;{question}</h3>
-                    <p className={`ml-12 mr-12 mt-4 bg-inherit ${isParagraphVisible ? 'show' : 'hide'}`}
-                       style={{wordWrap: "break-word"}}>
-                        {answer}
-                    </p>
+                    <h2>Q.&nbsp;&nbsp;{question}</h2>
+                    <Collapse in={open}>
+                        <p className="ml-12" style={{wordWrap: "break-word"}}>
+                            {answer}
+                        </p>
+                    </Collapse>
                     <Image src={xmark} className="absolute"
-                           style={{top: "3%", right: "16%", height: "20px"}}
-                           onClick={toggleParagraphVisibility}/>
+                           style={{top: "3%", right: "16%", height: "20px", cursor: "pointer"}}
+                           onClick={() => setOpen(!open)}/>
                 </Container>
             </Col>
         </Row>

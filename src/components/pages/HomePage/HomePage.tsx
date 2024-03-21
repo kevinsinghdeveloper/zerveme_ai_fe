@@ -6,7 +6,7 @@ import {
     CardHeader,
     CardText,
     CardTitle,
-    Col,
+    Col, Collapse,
     Container, Image,
     Row
 } from "react-bootstrap";
@@ -23,6 +23,8 @@ export default function HomePage(props: PropsWithChildren) {
     const toggleParagraphVisibility = () => {
         setIsParagraphVisible(!isParagraphVisible);
     };
+    const [open, setOpen] = useState(true);
+
     return (
         <Container fluid className="w-96">
             <Row className="py-4 py-xl-5">
@@ -152,7 +154,7 @@ export default function HomePage(props: PropsWithChildren) {
                             </h1>
                         </Col>
                     </Row>
-                    
+
                     <Row className="!mt-14">
                         <Col lg={12} style={{position: "relative"}}>
                             <Container fluid style={{
@@ -216,11 +218,14 @@ export default function HomePage(props: PropsWithChildren) {
                                 minHeight: "100px"
                             }} className="ml-auto mr-auto p-4 text-white">
                                 <h2>Another Question</h2>
-                                <p className="ml-12" style={{wordWrap: "break-word"}}>
-                                    sdfsdfsdfds
-                                </p>
+                                <Collapse in={open}>
+                                    <p className="ml-12" style={{wordWrap: "break-word"}}>
+                                        fdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdfffffff
+                                    </p>
+                                </Collapse>
                                 <Image src={xmark} className="absolute"
-                                       style={{top: "3%", right: "16%", height: "20px"}}/>
+                                       style={{top: "3%", right: "16%", height: "20px", cursor: "pointer"}}
+                                       onClick={() => setOpen(!open)}/>
                             </Container>
                         </Col>
                     </Row>
