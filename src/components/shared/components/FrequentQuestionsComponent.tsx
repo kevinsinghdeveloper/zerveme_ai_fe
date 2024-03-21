@@ -1,6 +1,7 @@
-import React, {ReactElement, useState} from 'react';
+import React, {useState} from 'react';
 import xmark from "../../../assets/xmark.png";
 import {Col, Collapse, Container, Image, Row} from "react-bootstrap";
+import expandicon from "../../../assets/expand.png";
 
 interface FrequentQuestionsItemProps {
     question?: string;
@@ -8,6 +9,7 @@ interface FrequentQuestionsItemProps {
 }
 
 interface FrequentQuestionsComponentProps {
+    fa_title?: string;
     fa_questions?: { [key: number]: { question: string; answer: string } };
 }
 
@@ -24,14 +26,14 @@ export function FrequentQuestionsItem({question, answer}: FrequentQuestionsItemP
                     borderRadius: "10px",
                     minHeight: "100px"
                 }} className="ml-auto mr-auto p-4 text-white">
-                    <h2>Q.&nbsp;&nbsp;{question}</h2>
+                    <h2 className="bg-inherit">Q.&nbsp;&nbsp;{question}</h2>
                     <Collapse in={open}>
-                        <p className="ml-12" style={{wordWrap: "break-word"}}>
+                        <p className="ml-12 bg-inherit" style={{wordWrap: "break-word"}}>
                             {answer}
                         </p>
                     </Collapse>
-                    <Image src={xmark} className="absolute"
-                           style={{top: "3%", right: "16%", height: "20px", cursor: "pointer"}}
+                    <Image src={open ? xmark : expandicon} className="absolute"
+                           style={{top: "9%", right: "16%", height: "20px", cursor: "pointer"}}
                            onClick={() => setOpen(!open)}/>
                 </Container>
             </Col>
@@ -39,15 +41,21 @@ export function FrequentQuestionsItem({question, answer}: FrequentQuestionsItemP
     )
 }
 
-export default function FrequentQuestionsComponent({fa_questions}: FrequentQuestionsComponentProps) {
+export default function FrequentQuestionsComponent({fa_title, fa_questions}: FrequentQuestionsComponentProps) {
     // You can use FrequentQuestionsItemComponent here like this:
     return (
-        <div>
-            <h2>Frequent Questions</h2>
+        <Container fluid>
+            <Row>
+                <Col lg={12}>
+                    <h1 className="text-center text-white">
+                        <b>{fa_title}</b>
+                    </h1>
+                </Col>
+            </Row>
             {fa_questions &&
                 Object.values(fa_questions).map((qna, index) => (
                     <FrequentQuestionsItem key={index} question={qna.question} answer={qna.answer}/>
                 ))}
-        </div>
+        </Container>
     );
 }
