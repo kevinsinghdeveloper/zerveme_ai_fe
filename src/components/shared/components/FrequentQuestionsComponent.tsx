@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import xmark from "../../../assets/xmark.png";
 import {Col, Collapse, Container, Image, Row} from "react-bootstrap";
 import expandicon from "../../../assets/expand.png";
 
 interface FrequentQuestionsItemProps {
+    sortId: number;
     question?: string;
     answer?: string;
 }
@@ -13,7 +14,7 @@ interface FrequentQuestionsComponentProps {
     fa_questions?: { [key: number]: { question: string; answer: string } };
 }
 
-export function FrequentQuestionsItem({question, answer}: FrequentQuestionsItemProps) {
+export function FrequentQuestionsItem({question, answer, sortId}: FrequentQuestionsItemProps) {
 
     const [open, setOpen] = useState(true);
 
@@ -54,7 +55,7 @@ export default function FrequentQuestionsComponent({fa_title, fa_questions}: Fre
             </Row>
             {fa_questions &&
                 Object.values(fa_questions).map((qna, index) => (
-                    <FrequentQuestionsItem key={index} question={qna.question} answer={qna.answer}/>
+                    <FrequentQuestionsItem key={index} sortId={index} question={qna.question} answer={qna.answer}/>
                 ))}
         </Container>
     );
