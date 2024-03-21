@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, useState} from 'react';
 import xmark from "../../../assets/xmark.png";
 import {Col, Container, Image, Row} from "react-bootstrap";
 
@@ -8,6 +8,11 @@ interface FrequentQuestionsItemComponentProps {
 }
 
 export function FrequentQuestionsItemComponent({question, answer}: FrequentQuestionsItemComponentProps) {
+    const [isParagraphVisible, setIsParagraphVisible] = useState(true);
+
+    const toggleParagraphVisibility = () => {
+        setIsParagraphVisible(!isParagraphVisible);
+    };
     return (
         <Row className="!mt-14">
             <Col lg={12} style={{position: "relative"}}>
@@ -15,14 +20,17 @@ export function FrequentQuestionsItemComponent({question, answer}: FrequentQuest
                     backgroundColor: "#110C15",
                     width: "70%",
                     borderRadius: "10px",
-                    minHeight: "100px"
+                    minHeight: "100px",
+                    transition: "height 0.5s ease-in-out" // Add transition effect
                 }} className="ml-auto mr-auto p-4 text-white">
                     <h3 className="ml-2 bg-inherit">Q.&nbsp;&nbsp;{question}</h3>
-                    <p className="ml-12 mr-12 mt-4 bg-inherit" style={{wordWrap: "break-word"}}>
+                    <p className={`ml-12 mr-12 mt-4 bg-inherit ${isParagraphVisible ? 'show' : 'hide'}`}
+                       style={{wordWrap: "break-word"}}>
                         {answer}
                     </p>
                     <Image src={xmark} className="absolute"
-                           style={{top: "3%", right: "16%", height: "20px"}}/>
+                           style={{top: "3%", right: "16%", height: "20px"}}
+                           onClick={toggleParagraphVisibility}/>
                 </Container>
             </Col>
         </Row>

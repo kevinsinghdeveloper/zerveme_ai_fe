@@ -11,3 +11,17 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.show {
+    opacity: 1;
+    height: auto; /* Set height to auto to show content */
+}
+
+.hide {
+    opacity: 0;
+    height: 0; /* Set height to 0 to hide content */
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
