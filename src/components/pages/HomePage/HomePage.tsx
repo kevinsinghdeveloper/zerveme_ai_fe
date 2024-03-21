@@ -1,4 +1,4 @@
-import {PropsWithChildren} from "react";
+import React, {PropsWithChildren} from "react";
 import {
     Button,
     Card,
@@ -148,48 +148,89 @@ export default function HomePage(props: PropsWithChildren) {
                             </h1>
                         </Col>
                     </Row>
-                    <Row className="!mt-20">
-                        <Col lg={12}>
-                            <div style={{backgroundColor: "#110C15", width: "70%", borderRadius: "10px"}}
-                                 className="h-24 ml-auto mr-auto p-2">
-                                Test
-                                <Image src={xmark} className="relative"
-                                       style={{right: "-98%", top: "-25%", height: "20px"}}></Image>
-
-                            </div>
+                    <Row className="!mt-14">
+                        <Col lg={12} style={{position: "relative"}}>
+                            <Container fluid style={{
+                                backgroundColor: "#110C15",
+                                width: "70%",
+                                borderRadius: "10px",
+                                minHeight: "100px"
+                            }} className="ml-auto mr-auto p-4 text-white">
+                                <h3 className="ml-2 bg-inherit">Another Question</h3>
+                                <p className="ml-12 mr-12 mt-4 bg-inherit" style={{wordWrap: "break-word"}}>
+                                    fdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdfffffff
+                                </p>
+                                <Image src={xmark} className="absolute"
+                                       style={{top: "3%", right: "16%", height: "20px"}}/>
+                            </Container>
                         </Col>
                     </Row>
-                    <Row className="!mt-20">
-                        <Col lg={12}>
-                            <div style={{backgroundColor: "#110C15", width: "70%", borderRadius: "10px"}}
-                                 className="h-24 ml-auto mr-auto p-2">
-                                Test
-                                <Image src={xmark} className="relative"
-                                       style={{right: "-98%", top: "-25%", height: "20px"}}></Image>
-
-                            </div>
+                    <Row className="!mt-14">
+                        <Col lg={12} style={{position: "relative"}}>
+                            <Container fluid style={{
+                                backgroundColor: "#110C15",
+                                width: "70%",
+                                borderRadius: "10px",
+                                minHeight: "100px"
+                            }} className="ml-auto mr-auto p-4 text-white">
+                                <h2>Another Question</h2>
+                                <p className="ml-12" style={{wordWrap: "break-word"}}>
+                                    fdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdfffffff
+                                </p>
+                                <Image src={xmark} className="absolute"
+                                       style={{top: "3%", right: "16%", height: "20px"}}/>
+                            </Container>
                         </Col>
                     </Row>
-                    <Row className="!mt-20">
-                        <Col lg={12}>
-                            <div style={{backgroundColor: "#110C15", width: "70%", borderRadius: "10px"}}
-                                 className="h-24 ml-auto mr-auto p-2">
-                                Test
-                                <Image src={xmark} className="relative"
-                                       style={{right: "-98%", top: "-25%", height: "20px"}}></Image>
-
-                            </div>
+                    <Row className="!mt-14">
+                        <Col lg={12} style={{position: "relative"}}>
+                            <Container fluid style={{
+                                backgroundColor: "#110C15",
+                                width: "70%",
+                                borderRadius: "10px",
+                                minHeight: "100px"
+                            }} className="ml-auto mr-auto p-4 text-white">
+                                <h2>Another Question</h2>
+                                <p className="ml-12" style={{wordWrap: "break-word"}}>
+                                    fdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdfffffff
+                                </p>
+                                <Image src={xmark} className="absolute"
+                                       style={{top: "3%", right: "16%", height: "20px"}}/>
+                            </Container>
                         </Col>
                     </Row>
-                    <Row className="!mt-20">
-                        <Col lg={12}>
-                            <div style={{backgroundColor: "#110C15", width: "70%", borderRadius: "10px"}}
-                                 className="h-24 ml-auto mr-auto p-2">
-                                Test
-                                <Image src={xmark} className="relative"
-                                       style={{right: "-98%", top: "-25%", height: "20px"}}></Image>
-
-                            </div>
+                    <Row className="!mt-14">
+                        <Col lg={12} style={{position: "relative"}}>
+                            <Container fluid style={{
+                                backgroundColor: "#110C15",
+                                width: "70%",
+                                borderRadius: "10px",
+                                minHeight: "100px"
+                            }} className="ml-auto mr-auto p-4 text-white">
+                                <h2>Another Question</h2>
+                                <p className="ml-12" style={{wordWrap: "break-word"}}>
+                                    fdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdffffffffdggdfffffff
+                                </p>
+                                <Image src={xmark} className="absolute"
+                                       style={{top: "3%", right: "16%", height: "20px"}}/>
+                            </Container>
+                        </Col>
+                    </Row>
+                    <Row className="!mt-14">
+                        <Col lg={12} style={{position: "relative"}}>
+                            <Container fluid style={{
+                                backgroundColor: "#110C15",
+                                width: "70%",
+                                borderRadius: "10px",
+                                minHeight: "100px"
+                            }} className="ml-auto mr-auto p-4 text-white">
+                                <h2>Another Question</h2>
+                                <p className="ml-12" style={{wordWrap: "break-word"}}>
+                                    sdfsdfsdfds
+                                </p>
+                                <Image src={xmark} className="absolute"
+                                       style={{top: "3%", right: "16%", height: "20px"}}/>
+                            </Container>
                         </Col>
                     </Row>
                 </Container>
