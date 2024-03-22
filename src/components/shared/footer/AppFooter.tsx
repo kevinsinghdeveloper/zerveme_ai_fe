@@ -1,8 +1,9 @@
 import {PropsWithChildren} from "react";
-import {Col, Container, Row} from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap"
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import zervemelogo from "../../../assets/logo/zervemelogo.png";
-//import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-//import {faZ} from '@fortawesome/free-solid-svg-icons'
+
+import {faFacebookSquare, faTwitterSquare, faInstagramSquare, faLinkedin} from '@fortawesome/free-brands-svg-icons';
 
 export default function AppFooter(props: PropsWithChildren<{ className?: any, style?: any }>) {
     return (
@@ -10,8 +11,18 @@ export default function AppFooter(props: PropsWithChildren<{ className?: any, st
             <Container fluid className="p-2">
                 <Row>
                     <Col md={4}>
-                        <Container fluid>
-                            <img src={zervemelogo} alt="Zerveme Logo" style={{width: '100px', height: 'auto'}}/>
+                        <Container fluid className="text-white" style={{marginLeft: "20%"}}>
+                            <img src={zervemelogo} alt="Zerveme Logo" className="pt-2"
+                                 style={{width: '100px', height: 'auto'}}/>
+                            <div className="mt-10">
+                                <p>Copyright @2024 ZerveMe LLC.</p>
+                                <span>
+                                    <i className="pr-2"><FontAwesomeIcon icon={faFacebookSquare}></FontAwesomeIcon></i>
+                                    <i className="pr-2"><FontAwesomeIcon icon={faTwitterSquare}></FontAwesomeIcon></i>
+                                    <i className="pr-2"><FontAwesomeIcon icon={faInstagramSquare}></FontAwesomeIcon></i>
+                                    <i className="pr-2"><FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon></i>
+                                </span>
+                            </div>
                         </Container>
                     </Col>
                     <Col md={8} className="text-white">
