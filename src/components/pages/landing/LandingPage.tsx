@@ -10,7 +10,7 @@ export default function LandingPage(props: PropsWithChildren) {
 
     return (
         <>
-            <AppHeader style={{width: '90%'}} className="ml-auto mr-auto mt-4 border-b-2"/>
+            <AppHeader style={{width: '90%'}} className="ml-auto mr-auto mt-4 bg-black"/>
             <div style={{width: '90%'}} className="ml-auto mr-auto">
                 <Routes>
                     <Route path="/contactus" element={<ContactUsPage/>}/>
