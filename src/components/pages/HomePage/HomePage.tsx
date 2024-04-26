@@ -158,8 +158,9 @@ export default function HomePage(props: PropsWithChildren) {
                         </Col>
                         <Col sm={6}>
                             <p className="mr-auto ml-14 text-white">
-                                <p className="text-4xl">Exlore ALL kinds of data</p>
-                                <p>So we are making it super simple to access any computer you want to get your work
+                                <p className="text-4xl z-1">Explore ALL kinds of data</p>
+                                <p className="z-1">So we are making it super simple to access any computer you want to
+                                    get your work
                                     done at the most reasonable prices.</p>
                             </p>
                         </Col>
@@ -170,6 +171,7 @@ export default function HomePage(props: PropsWithChildren) {
                 <FrequentQuestionsComponent fa_title="Frequenctly Asked Questions" fa_questions={fa_questions}/>
             </Row>
         </Container>
+
     )
 }
 
