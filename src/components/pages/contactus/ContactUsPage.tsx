@@ -12,11 +12,8 @@ import {
     Image,
     Row
 } from "react-bootstrap";
-import previewdataexplore from "../../../assets/previewdataexplore.png";
-import chartpng from "../../../assets/chart.png";
-import piechart from "../../../assets/pie_chart.png";
-import previewexplorecomp from "../../../assets/previewexplorecomp.png";
-import FrequentQuestionsComponent from "../../shared/components/FrequentQuestionsComponent";
+import chat_zerveme from "../../../assets/chat_zerveme.png";
+
 
 export default function ContactUsPage(props: PropsWithChildren) {
     const [formData, setFormData] = useState({
@@ -45,7 +42,8 @@ export default function ContactUsPage(props: PropsWithChildren) {
         <Container fluid className="w-96">
             <Row className="py-4 py-xl-5">
                 <Col sm={6}>
-                    1
+                    <img src={chat_zerveme} alt="Contact us"
+                         className="w-82 h-82 object-cover rounded-md mt-8 ml-auto mr-auto"/>
                 </Col>
                 <Col sm={6}>
                     <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8">
