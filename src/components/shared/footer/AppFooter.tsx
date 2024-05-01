@@ -27,19 +27,19 @@ export default function AppFooter(props: PropsWithChildren<{ className?: any, st
                     </Col>
                     <Col md={8} className="text-white">
                         <Row className="justify-content-end pb-4">
-                            <Col md={3}>
+                            <Col xs={3} sm={3} md={3}>
                                 <Row className="pt-2 pb-2 font-bold">About</Row>
                                 <Row className="pt-2 font-thin">About us</Row>
                                 <Row className="pt-2 font-thin">About Users</Row>
                             </Col>
-                            <Col md={3}>
+                            <Col xs={3} sm={3} md={3}>
                                 <Row className="pt-2 pb-2 font-bold">Links</Row>
                                 <Row className="pt-2 font-thin">Home</Row>
                                 <Row className="pt-2 font-thin">Explore</Row>
                                 <Row className="pt-2 font-thin">Contact Us</Row>
                                 <Row className="pt-2 font-thin">Subscribe</Row>
                             </Col>
-                            <Col md={3}>
+                            <Col xs={3} sm={3} md={3}>
                                 <Row className="pt-2 pb-2 font-bold">Support</Row>
                                 <Row className="pt-2 font-thin">Contact Us</Row>
                                 <Row className="pt-2 font-thin">Privacy & Policy</Row>

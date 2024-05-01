@@ -5,7 +5,6 @@ import ContactUsPage from "../contactus/ContactUsPage";
 import HomePage from "../HomePage/HomePage";
 import AppFooter from "../../shared/footer/AppFooter";
 
-
 export default function LandingPage(props: PropsWithChildren) {
 
     return (
