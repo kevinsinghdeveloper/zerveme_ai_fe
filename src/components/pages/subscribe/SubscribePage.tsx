@@ -20,9 +20,9 @@ import piechart from "../../../assets/pie_chart.png";
 export default function SubscribePage(props: PropsWithChildren) {
 
     return (
-        <Container fluid className="mt-10" style={{width: '80%'}}>
+        <Container fluid className="mt-12" style={{width: '80%'}}>
             <Row>
-                <h2 className="text-center text-white mb-6">Easy and affordable Pricing</h2>
+                <h2 className="text-center text-white mb-10">Easy and affordable Pricing</h2>
             </Row>
             <Row>
                 <Col md={4}>
