@@ -44,3 +44,8 @@
         transform: rotate(360deg);
     }
 }
+
+.custom-bullet {
+    list-style-image: url('assets/sub_bullet.png');
+    /* Adjust the path to the location of your bullet image */
+}
