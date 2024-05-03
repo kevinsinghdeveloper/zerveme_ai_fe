@@ -4,6 +4,7 @@ import {Route, Routes} from "react-router-dom";
 import ContactUsPage from "../contactus/ContactUsPage";
 import HomePage from "../HomePage/HomePage";
 import AppFooter from "../../shared/footer/AppFooter";
+import SubscribePage from "../subscribe/SubscribePage";
 
 export default function LandingPage(props: PropsWithChildren) {
 
@@ -13,6 +14,7 @@ export default function LandingPage(props: PropsWithChildren) {
             <div style={{width: '90%'}} className="ml-auto mr-auto">
                 <Routes>
                     <Route path="/contactus" element={<ContactUsPage/>}/>
+                    <Route path="/subscribe" element={<SubscribePage/>}/>
                     <Route path="*" element={<HomePage/>}/>
                 </Routes>
             </div>

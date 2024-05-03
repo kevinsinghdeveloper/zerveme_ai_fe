@@ -1,7 +1,7 @@
 import {PropsWithChildren, useState} from "react";
 import {Button, Container, Image, Nav, Navbar} from "react-bootstrap";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faHome, faPhone, faEarth, faRightToBracket} from '@fortawesome/free-solid-svg-icons'
+import {faHome, faPhone, faEarth, faRightToBracket, faReceipt} from '@fortawesome/free-solid-svg-icons'
 import zervemelogo from '../../../assets/logo/zervemelogo.png'
 
 export default function AppHeader(props: PropsWithChildren<{ className?: any, style?: any }>) {
@@ -11,7 +11,7 @@ export default function AppHeader(props: PropsWithChildren<{ className?: any, st
         {href: '/', text: 'Home', icon: faHome},
         {href: '/contactus', text: 'Contact Us', icon: faPhone},
         {href: '/explore', text: 'Explore', icon: faEarth},
-        {href: '/account', text: 'Account', icon: faRightToBracket},
+        {href: '/subscribe', text: 'Subscribe', icon: faReceipt},
     ];
 
     const handleMouseOver = (icon: any) => {
