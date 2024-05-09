@@ -44,15 +44,17 @@ interface SidebarProps {
     minWidth: number;
     maxWidth: number;
     children: React.ReactNode;
+    draggable?: boolean; // Add draggable prop
 }
 
 
-const Sidebar: React.FC<SidebarProps> = ({defaultWidth, minWidth, maxWidth, children}) => {
+const Sidebar: React.FC<SidebarProps> = ({defaultWidth, minWidth, maxWidth, draggable = true, children}) => {
     const [sidebarWidth, setSidebarWidth] = useState(defaultWidth);
     const [isResizing, setIsResizing] = useState(false);
     const [dragStartX, setDragStartX] = useState(0);
 
     const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (!draggable) return; // Check if dragging is enabled
         setIsResizing(true);
         setDragStartX(event.clientX);
     };
@@ -72,9 +74,13 @@ const Sidebar: React.FC<SidebarProps> = ({defaultWidth, minWidth, maxWidth, chil
     return (
         <div className="sidebar-container" style={{width: `${sidebarWidth}px`}}>
             <div className="sidebar-content">{children}</div>
-            <div className={`resizer ${isResizing ? 'resizing' : ''}`} onMouseDown={handleMouseDown}/>
-            <div className="overlay" style={{display: isResizing ? 'block' : 'none'}} onMouseMove={handleMouseMove}
-                 onMouseUp={handleMouseUp}/>
+            {draggable && ( // Render resizer and overlay only if dragging is enabled
+                <>
+                    <div className={`resizer ${isResizing ? 'resizing' : ''}`} onMouseDown={handleMouseDown}/>
+                    <div className="overlay" style={{display: isResizing ? 'block' : 'none'}}
+                         onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}/>
+                </>
+            )}
         </div>
     );
 };
@@ -85,7 +91,7 @@ export default function ExplorePage(props: PropsWithChildren) {
         <Container fluid>
             <Row id="content_row">
                 <Col sm={3}>
-                    <Sidebar defaultWidth={250} minWidth={200} maxWidth={400}>
+                    <Sidebar defaultWidth={250} minWidth={200} maxWidth={400} draggable={false}>
                         <ul>
                             <li>Item 1</li>
                             <li>Item 2</li>
@@ -99,13 +105,13 @@ export default function ExplorePage(props: PropsWithChildren) {
                         <Row>
                             {/* First row for displaying data */}
                             <Col>
-                                {/* Add your data visualization component here */}
+                                1
                             </Col>
                         </Row>
                         <Row>
                             {/* Second row for additional controls or information */}
                             <Col>
-                                {/* Add any additional controls or information here */}
+                                2
                             </Col>
                         </Row>
                     </Container>
