@@ -4,7 +4,7 @@ import {
     Button, Card,
     Col, Collapse,
     Container, Dropdown,
-    Form, InputGroup, ListGroup,
+    Form, Image, InputGroup, ListGroup,
     Row
 } from "react-bootstrap";
 import Select from 'react-select';
@@ -12,6 +12,8 @@ import DatePicker from 'react-datepicker';
 import "./ExplorePageStyles.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChartBar, faChartLine, faChartPie, faLineChart} from "@fortawesome/free-solid-svg-icons";
+import xmark from "../../../assets/xmark.png";
+import expandicon from "../../../assets/expand.png";
 
 const dimensionOptions = [
     {value: 'dimension1', label: 'Dimension 1'},
@@ -132,8 +134,11 @@ const Sidebar: React.FC<SidebarProps> = ({
     }
 
     return (
-        <div className="sidebar-container" style={{width: `${sidebarWidth}%`}}>
-            <div className="side-bar-title">{sideBarTitle}</div>
+        <div className="sidebar-container rounded-t-lg" style={{width: `${sidebarWidth}%`}}>
+            <div className="side-bar-title rounded-t-lg">
+                {sideBarTitle}
+                <Image className="float-right" src={xmark}/>
+            </div>
             <div className="sidebar-content">{children}</div>
             {draggable && ( // Render resizer and overlay only if dragging is enabled
                 <>
