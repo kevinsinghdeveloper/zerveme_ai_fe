@@ -92,6 +92,7 @@ const customStyles = {
 //     );
 // };
 interface SidebarProps {
+    sideBarTitle: string,
     defaultWidth: number;
     minWidth: number;
     maxWidth: number;
@@ -100,7 +101,14 @@ interface SidebarProps {
 }
 
 
-const Sidebar: React.FC<SidebarProps> = ({defaultWidth, minWidth, maxWidth, draggable = true, children}) => {
+const Sidebar: React.FC<SidebarProps> = ({
+                                             sideBarTitle,
+                                             defaultWidth,
+                                             minWidth,
+                                             maxWidth,
+                                             draggable = true,
+                                             children
+                                         }) => {
     const [sidebarWidth, setSidebarWidth] = useState(defaultWidth);
     const [isResizing, setIsResizing] = useState(false);
     const [dragStartX, setDragStartX] = useState(0);
@@ -125,6 +133,7 @@ const Sidebar: React.FC<SidebarProps> = ({defaultWidth, minWidth, maxWidth, drag
 
     return (
         <div className="sidebar-container" style={{width: `${sidebarWidth}%`}}>
+            <div className="side-bar-title">{sideBarTitle}</div>
             <div className="sidebar-content">{children}</div>
             {draggable && ( // Render resizer and overlay only if dragging is enabled
                 <>
@@ -152,7 +161,7 @@ export default function ExplorePage(props: PropsWithChildren) {
         <Container fluid>
             <Row id="content_row">
                 <Col sm={3}>
-                    <Sidebar defaultWidth={100} minWidth={200} maxWidth={400} draggable={false}>
+                    <Sidebar sideBarTitle="Filters" defaultWidth={100} minWidth={200} maxWidth={400} draggable={false}>
                         <ul>
                             <li style={{marginBottom: '20px'}}>
                                 <h5>Periods (Make multi, we can select periods to include)</h5>

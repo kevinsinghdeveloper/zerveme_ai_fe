@@ -61,3 +61,18 @@ body {
 .react-datepicker {
     background-color: #a864f4;
 }
+
+.side-bar-title {
+    background-color: #a864f4;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.sidebar-content {
+    padding-top: 0;
+}
+
+.sidebar-container {
+    border-radius: 2%;
+}
