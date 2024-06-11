@@ -55,6 +55,7 @@ const customStyles = {
         ...provided,
         backgroundColor: '#a864f4', // Background color when not hovered or selected
         color: '#fff', // Text color
+        zIndex: 2,
         ':hover': {
             backgroundColor: '#666', // Background color when hovered
             color: '#fff', // Text color
@@ -169,32 +170,37 @@ export default function ExplorePage(props: PropsWithChildren) {
                     <Sidebar sideBarTitle="Filters" defaultWidth={100} minWidth={200} maxWidth={400} draggable={false}>
                         <ul>
                             <li style={{marginBottom: '20px'}}>
-                                <h5>Periods (Make multi, we can select periods to include)</h5>
-                                <InputGroup className="mb-3">
-                                    <DatePicker
-                                        selected={startDate}
-                                        onChange={(date: Date | null) => setStartDate(date)}
-                                        selectsStart
-                                        startDate={startDate}
-                                        endDate={endDate}
-                                        placeholderText="Start Period"
-                                        className="form-control"
-                                    />
-                                    <DatePicker
-                                        selected={endDate}
-                                        onChange={(date: Date | null) => setEndDate(date)}
-                                        selectsEnd
-                                        startDate={startDate}
-                                        endDate={endDate}
-                                        placeholderText="End Period"
-                                        className="form-control"
-                                        minDate={startDate}
-                                    />
+                                <span
+                                    className="side-bar-label">Periods</span>
+                                <InputGroup className="mb-3 d-flex">
+                                    <div className="flex-fill mr-2" style={{width: '25%', height: '25px'}}>
+                                        <DatePicker
+                                            selected={startDate}
+                                            onChange={(date: Date | null) => setStartDate(date)}
+                                            selectsStart
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            placeholderText="Start Period"
+                                            className="form-control"
+                                        />
+                                    </div>
+                                    <div className="flex-fill" style={{width: '25%', height: '25px'}}>
+                                        <DatePicker
+                                            selected={endDate}
+                                            onChange={(date: Date | null) => setEndDate(date)}
+                                            selectsEnd
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            placeholderText="End Period"
+                                            className="form-control"
+                                            minDate={startDate}
+                                        />
+                                    </div>
                                 </InputGroup>
                             </li>
 
                             <li style={{marginBottom: '20px'}}>
-                                <h5 style={{color: '#fff'}}>Dimension Selection</h5>
+                                <span className="side-bar-label" style={{color: '#fff'}}>Dimension Selection</span>
                                 <Select
                                     options={dimensionOptions}
                                     isMulti
@@ -204,7 +210,7 @@ export default function ExplorePage(props: PropsWithChildren) {
                             </li>
 
                             <li style={{marginBottom: '20px'}}>
-                                <h5 style={{color: '#fff'}}>KPI Selection</h5>
+                                <span className="side-bar-label" style={{color: '#fff'}}>KPI Selection</span>
                                 <Select
                                     options={kpiOptions}
                                     isMulti
@@ -214,7 +220,7 @@ export default function ExplorePage(props: PropsWithChildren) {
                             </li>
 
                             <li style={{marginBottom: '20px'}}>
-                                <h5>Visualization Selection</h5>
+                                <span className="side-bar-label">Visualization Selection</span>
                                 <ListGroup horizontal>
                                     <ListGroup.Item
                                         action

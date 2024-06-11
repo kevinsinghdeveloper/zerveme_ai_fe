@@ -17,6 +17,8 @@
     flex-grow: 1;
     padding: 20px;
     color: white;
+    background-color: #211535;
+
 }
 
 .resizer {
@@ -59,4 +61,8 @@
     font-size: 14px;
     font-weight: bold;
     padding: 10px;
+}
+
+.side-bar-label {
+    font-size: 12px;
 }
