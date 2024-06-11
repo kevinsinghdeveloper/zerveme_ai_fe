@@ -8,9 +8,10 @@ import {
     Row
 } from "react-bootstrap";
 import Select from 'react-select';
+import DatePicker from 'react-datepicker';
 import "./ExplorePageStyles.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChartBar, faChartLine, faChartPie} from "@fortawesome/free-solid-svg-icons";
+import {faChartBar, faChartLine, faChartPie, faLineChart} from "@fortawesome/free-solid-svg-icons";
 
 const dimensionOptions = [
     {value: 'dimension1', label: 'Dimension 1'},
@@ -35,23 +36,22 @@ const customStyles = {
     }),
     multiValueLabel: (provided: any) => ({
         ...provided,
-        color: '#851eff'
+        color: '#a864f4'
     }),
     multiValueRemove: (provided: any) => ({
         ...provided,
         ':hover': {
-            backgroundColor: '#851eff',
+            backgroundColor: '#a864f4',
             color: '#fff',
         },
     }),
     input: (provided: any) => ({
         ...provided,
-        color: '#851eff', // Your desired search input text color
-        zIndex: 2, // Ensure input is above other elements
+        color: '#a864f4', // Your desired search input text color
     }),
     option: (provided: any) => ({
         ...provided,
-        backgroundColor: '#851eff', // Background color when not hovered or selected
+        backgroundColor: '#a864f4', // Background color when not hovered or selected
         color: '#fff', // Text color
         ':hover': {
             backgroundColor: '#666', // Background color when hovered
@@ -139,6 +139,15 @@ const Sidebar: React.FC<SidebarProps> = ({defaultWidth, minWidth, maxWidth, drag
 
 
 export default function ExplorePage(props: PropsWithChildren) {
+    const [selectedVisualization, setSelectedVisualization] = useState('');
+
+    const [startDate, setStartDate] = useState<Date | null>(null);
+    const [endDate, setEndDate] = useState<Date | null>(null);
+
+
+    const handleVisualizationSelect = (visualizationType: any) => {
+        setSelectedVisualization(visualizationType);
+    };
     return (
         <Container fluid>
             <Row id="content_row">
@@ -146,10 +155,27 @@ export default function ExplorePage(props: PropsWithChildren) {
                     <Sidebar defaultWidth={100} minWidth={200} maxWidth={400} draggable={false}>
                         <ul>
                             <li style={{marginBottom: '20px'}}>
-                                <h5>Date Range</h5>
+                                <h5>Periods (Make multi, we can select periods to include)</h5>
                                 <InputGroup className="mb-3">
-                                    <Form.Control type="text" placeholder="Start Period"/>
-                                    <Form.Control type="text" placeholder="End Period"/>
+                                    <DatePicker
+                                        selected={startDate}
+                                        onChange={(date: Date | null) => setStartDate(date)}
+                                        selectsStart
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                        placeholderText="Start Period"
+                                        className="form-control"
+                                    />
+                                    <DatePicker
+                                        selected={endDate}
+                                        onChange={(date: Date | null) => setEndDate(date)}
+                                        selectsEnd
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                        placeholderText="End Period"
+                                        className="form-control"
+                                        minDate={startDate}
+                                    />
                                 </InputGroup>
                             </li>
 
@@ -169,7 +195,6 @@ export default function ExplorePage(props: PropsWithChildren) {
                                     options={kpiOptions}
                                     isMulti
                                     isSearchable
-                                    placeholder="Select KPIs..."
                                     styles={customStyles}
                                 />
                             </li>
@@ -177,16 +202,77 @@ export default function ExplorePage(props: PropsWithChildren) {
                             <li style={{marginBottom: '20px'}}>
                                 <h5>Visualization Selection</h5>
                                 <ListGroup horizontal>
-                                    <ListGroup.Item action>
-                                        <FontAwesomeIcon icon={faChartBar}/> Bar
+                                    <ListGroup.Item
+                                        action
+                                        active={selectedVisualization === 'bar'}
+                                        onClick={() => handleVisualizationSelect('bar')}
+                                        style={{
+                                            cursor: 'pointer',
+                                            textAlign: 'center',
+                                            padding: '0',
+                                            width: '100%', // Ensure the item fills the container width
+                                            height: '100%', // Ensure the item fills the container height
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            backgroundColor: selectedVisualization === 'bar' ? '#a864f4' : 'transparent', // Example background color
+                                        }}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faChartBar}
+                                            size="3x" // Adjust icon size as needed
+                                            style={{color: '#fff'}} // Example: set icon color
+                                        />
                                     </ListGroup.Item>
-                                    <ListGroup.Item action>
-                                        <FontAwesomeIcon icon={faChartLine}/> Line
+                                    <ListGroup.Item
+                                        action
+                                        active={selectedVisualization === 'line'}
+                                        onClick={() => handleVisualizationSelect('line')}
+                                        style={{
+                                            cursor: 'pointer',
+                                            textAlign: 'center',
+                                            padding: '0',
+                                            width: '100%', // Ensure the item fills the container width
+                                            height: '100%', // Ensure the item fills the container height
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            backgroundColor: selectedVisualization === 'line' ? '#a864f4' : 'transparent', // Example background color
+                                        }}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faLineChart}
+                                            size="3x" // Adjust icon size as needed
+                                            style={{color: '#fff'}} // Example: set icon color
+                                        />
                                     </ListGroup.Item>
-                                    <ListGroup.Item action>
-                                        <FontAwesomeIcon icon={faChartPie}/> Pie
+                                    <ListGroup.Item
+                                        action
+                                        active={selectedVisualization === 'pie'}
+                                        onClick={() => handleVisualizationSelect('pie')}
+                                        style={{
+                                            cursor: 'pointer',
+                                            textAlign: 'center',
+                                            padding: '0',
+                                            width: '100%', // Ensure the item fills the container width
+                                            height: '100%', // Ensure the item fills the container height
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            backgroundColor: selectedVisualization === 'pie' ? '#a864f4' : 'transparent', // Example background color
+                                        }}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faChartPie}
+                                            size="3x" // Adjust icon size as needed
+                                            style={{color: '#fff'}} // Example: set icon color
+                                        />
                                     </ListGroup.Item>
                                 </ListGroup>
+                            </li>
+
+                            <li>
+                                <Button style={{backgroundColor: '#a864f4'}} type="submit">Query</Button>
                             </li>
                         </ul>
                     </Sidebar>
