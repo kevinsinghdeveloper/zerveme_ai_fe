@@ -3,11 +3,63 @@ import {
     Accordion,
     Button, Card,
     Col, Collapse,
-    Container,
+    Container, Dropdown,
+    Form, InputGroup, ListGroup,
     Row
 } from "react-bootstrap";
-import {Resizable} from "react-resizable";
+import Select from 'react-select';
 import "./ExplorePageStyles.css"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChartBar, faChartLine, faChartPie} from "@fortawesome/free-solid-svg-icons";
+
+const dimensionOptions = [
+    {value: 'dimension1', label: 'Dimension 1'},
+    {value: 'dimension2', label: 'Dimension 2'},
+    {value: 'dimension3', label: 'Dimension 3'},
+];
+
+const kpiOptions = [
+    {value: 'kpi1', label: 'KPI 1'},
+    {value: 'kpi2', label: 'KPI 2'},
+    {value: 'kpi3', label: 'KPI 3'},
+];
+
+const customStyles = {
+    control: (provided: any) => ({
+        ...provided,
+        borderColor: '#ccc', // Your desired border color
+        color: '#fff', // Your desired text color
+    }),
+    multiValue: (provided: any) => ({
+        ...provided,
+    }),
+    multiValueLabel: (provided: any) => ({
+        ...provided,
+        color: '#851eff'
+    }),
+    multiValueRemove: (provided: any) => ({
+        ...provided,
+        ':hover': {
+            backgroundColor: '#851eff',
+            color: '#fff',
+        },
+    }),
+    input: (provided: any) => ({
+        ...provided,
+        color: '#851eff', // Your desired search input text color
+        zIndex: 2, // Ensure input is above other elements
+    }),
+    option: (provided: any) => ({
+        ...provided,
+        backgroundColor: '#851eff', // Background color when not hovered or selected
+        color: '#fff', // Text color
+        ':hover': {
+            backgroundColor: '#666', // Background color when hovered
+            color: '#fff', // Text color
+        },
+    })
+};
+
 //
 // const CollapsibleNavigation = () => {
 //     const [open, setOpen] = useState(true);
@@ -72,7 +124,7 @@ const Sidebar: React.FC<SidebarProps> = ({defaultWidth, minWidth, maxWidth, drag
     }
 
     return (
-        <div className="sidebar-container" style={{width: `${sidebarWidth}px`}}>
+        <div className="sidebar-container" style={{width: `${sidebarWidth}%`}}>
             <div className="sidebar-content">{children}</div>
             {draggable && ( // Render resizer and overlay only if dragging is enabled
                 <>
@@ -91,11 +143,51 @@ export default function ExplorePage(props: PropsWithChildren) {
         <Container fluid>
             <Row id="content_row">
                 <Col sm={3}>
-                    <Sidebar defaultWidth={250} minWidth={200} maxWidth={400} draggable={false}>
+                    <Sidebar defaultWidth={100} minWidth={200} maxWidth={400} draggable={false}>
                         <ul>
-                            <li>Item 1</li>
-                            <li>Item 2</li>
-                            <li>Item 3</li>
+                            <li style={{marginBottom: '20px'}}>
+                                <h5>Date Range</h5>
+                                <InputGroup className="mb-3">
+                                    <Form.Control type="text" placeholder="Start Period"/>
+                                    <Form.Control type="text" placeholder="End Period"/>
+                                </InputGroup>
+                            </li>
+
+                            <li style={{marginBottom: '20px'}}>
+                                <h5 style={{color: '#fff'}}>Dimension Selection</h5>
+                                <Select
+                                    options={dimensionOptions}
+                                    isMulti
+                                    isSearchable
+                                    styles={customStyles}
+                                />
+                            </li>
+
+                            <li style={{marginBottom: '20px'}}>
+                                <h5 style={{color: '#fff'}}>KPI Selection</h5>
+                                <Select
+                                    options={kpiOptions}
+                                    isMulti
+                                    isSearchable
+                                    placeholder="Select KPIs..."
+                                    styles={customStyles}
+                                />
+                            </li>
+
+                            <li style={{marginBottom: '20px'}}>
+                                <h5>Visualization Selection</h5>
+                                <ListGroup horizontal>
+                                    <ListGroup.Item action>
+                                        <FontAwesomeIcon icon={faChartBar}/> Bar
+                                    </ListGroup.Item>
+                                    <ListGroup.Item action>
+                                        <FontAwesomeIcon icon={faChartLine}/> Line
+                                    </ListGroup.Item>
+                                    <ListGroup.Item action>
+                                        <FontAwesomeIcon icon={faChartPie}/> Pie
+                                    </ListGroup.Item>
+                                </ListGroup>
+                            </li>
                         </ul>
                     </Sidebar>
                 </Col>
