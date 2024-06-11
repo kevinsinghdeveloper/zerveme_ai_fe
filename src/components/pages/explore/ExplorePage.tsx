@@ -167,8 +167,8 @@ export default function ExplorePage(props: PropsWithChildren) {
         <Container fluid>
             <Row id="content_row">
                 <Col sm={3}>
-                    <Sidebar sideBarTitle="Filters" defaultWidth={100} minWidth={200} maxWidth={400} draggable={false}>
-                        <ul>
+                    <Sidebar sideBarTitle="Filters" defaultWidth={75} minWidth={200} maxWidth={400} draggable={false}>
+                        <ul style={{paddingLeft: '0'}}>
                             <li style={{marginBottom: '20px'}}>
                                 <span
                                     className="side-bar-label">Periods</span>
