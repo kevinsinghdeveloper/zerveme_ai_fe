@@ -65,37 +65,6 @@ const customStyles = {
     })
 };
 
-//
-// const CollapsibleNavigation = () => {
-//     const [open, setOpen] = useState(true);
-//
-//     return (
-//         <Container fluid>
-//             <Row>
-//                 <Col>
-//                     <Button
-//                         onClick={() => setOpen(!open)}
-//                         aria-controls="example-collapse-text"
-//                         aria-expanded={open}
-//                         className="mt-3"
-//                     >
-//                         Toggle Navigation
-//                     </Button>
-//                     <Collapse in={open}>
-//                         <div id="example-collapse-text" className="mt-3">
-//                             {/* Add your navigation links here */}
-//                             <ul>
-//                                 <li><a href="#">Link 1</a></li>
-//                                 <li><a href="#">Link 2</a></li>
-//                                 <li><a href="#">Link 3</a></li>
-//                             </ul>
-//                         </div>
-//                     </Collapse>
-//                 </Col>
-//             </Row>
-//         </Container>
-//     );
-// };
 interface SidebarProps {
     sideBarTitle: string,
     defaultWidth: number;
@@ -170,17 +139,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 
 
 export default function ExplorePage(props: PropsWithChildren) {
-    //const [selectedVisualization, setSelectedVisualization] = useState('');
-
-    //const [selectedDimensions, setSelectedDimensions] = useState<OptionType[]>([]);
-    //const [selectedKPIs, setSelectedKpis] = useState<OptionType[]>([]);
-
-    //const [startDate, setStartDate] = useState<Date | null>(null);
-    //const [endDate, setEndDate] = useState<Date | null>(null);
-
-    //const dimensionOptions: OptionsOrGroups<any, any> | undefined = []; // Define your dimensionOptions array
-    //const kpiOptions: OptionsOrGroups<any, any> | undefined = [{value: 'kpi1', label: 'KPI 1'}]; // Define your kpiOptions array
-
     const handleVisualizationSelect = (visualizationType: any) => {
         setSelectedVisualization(visualizationType);
     };
