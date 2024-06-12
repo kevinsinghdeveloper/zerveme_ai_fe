@@ -14,6 +14,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChartBar, faChartLine, faChartPie, faLineChart} from "@fortawesome/free-solid-svg-icons";
 import xmark from "../../../assets/xmark.png";
 import expandicon from "../../../assets/expand.png";
+import {useExplorerContext} from "../../context_providers/ExplorerContext";
 
 /*
 const dimensionOptions = [
@@ -169,13 +170,13 @@ const Sidebar: React.FC<SidebarProps> = ({
 
 
 export default function ExplorePage(props: PropsWithChildren) {
-    const [selectedVisualization, setSelectedVisualization] = useState('');
+    //const [selectedVisualization, setSelectedVisualization] = useState('');
 
-    const [selectedDimensions, setSelectedDimensions] = useState<OptionType[]>([]);
-    const [selectedKPIs, setSelectedKpis] = useState<OptionType[]>([]);
+    //const [selectedDimensions, setSelectedDimensions] = useState<OptionType[]>([]);
+    //const [selectedKPIs, setSelectedKpis] = useState<OptionType[]>([]);
 
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
+    //const [startDate, setStartDate] = useState<Date | null>(null);
+    //const [endDate, setEndDate] = useState<Date | null>(null);
 
     //const dimensionOptions: OptionsOrGroups<any, any> | undefined = []; // Define your dimensionOptions array
     //const kpiOptions: OptionsOrGroups<any, any> | undefined = [{value: 'kpi1', label: 'KPI 1'}]; // Define your kpiOptions array
@@ -183,39 +184,19 @@ export default function ExplorePage(props: PropsWithChildren) {
     const handleVisualizationSelect = (visualizationType: any) => {
         setSelectedVisualization(visualizationType);
     };
-    const handleFormSubmit = async (event: any) => {
-        event.preventDefault();
-
-        // Construct the data object to be sent to the API
-        const formData = {
-            startDate,
-            endDate,
-            selectedDimensions,
-            selectedKPIs,
-            selectedVisualization
-        };
-        console.log(JSON.stringify(formData))
-        try {
-            const response = await fetch('https://api.example.com/data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Data stored successfully:', data);
-                // Handle successful API response here, if needed
-            } else {
-                console.error('Failed to store data:', response.statusText);
-                // Handle error response from API
-            }
-        } catch (error: any) {
-            console.error('Error storing data:', error.message);
-            // Handle network errors or other exceptions
-        }
-    };
+    const {
+        startDate,
+        setStartDate,
+        endDate,
+        setEndDate,
+        selectedDimensions,
+        setSelectedDimensions,
+        selectedKPIs,
+        setSelectedKpis,
+        selectedVisualization,
+        setSelectedVisualization,
+        handleSubmit,
+    } = useExplorerContext();
     return (
         <Container fluid style={{marginTop: '50px'}}>
             <Row id="content_row">
@@ -353,7 +334,7 @@ export default function ExplorePage(props: PropsWithChildren) {
 
                             <li>
                                 <Button style={{backgroundColor: '#a864f4'}} type="submit"
-                                        onClick={handleFormSubmit}>Query</Button>
+                                        onClick={handleSubmit}>Query</Button>
                             </li>
                         </ul>
                     </Sidebar>
