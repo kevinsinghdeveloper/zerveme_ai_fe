@@ -5,9 +5,9 @@ import {
     Col, Collapse,
     Container, Dropdown,
     Form, Image, InputGroup, ListGroup,
-    Row
+    Row, Table
 } from "react-bootstrap";
-import Select from 'react-select';
+import Select, {GroupBase, OptionsOrGroups} from 'react-select';
 import DatePicker from 'react-datepicker';
 import "./ExplorePageStyles.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -15,6 +15,7 @@ import {faChartBar, faChartLine, faChartPie, faLineChart} from "@fortawesome/fre
 import xmark from "../../../assets/xmark.png";
 import expandicon from "../../../assets/expand.png";
 
+/*
 const dimensionOptions = [
     {value: 'dimension1', label: 'Dimension 1'},
     {value: 'dimension2', label: 'Dimension 2'},
@@ -26,7 +27,7 @@ const kpiOptions = [
     {value: 'kpi2', label: 'KPI 2'},
     {value: 'kpi3', label: 'KPI 3'},
 ];
-
+*/
 const customStyles = {
     control: (provided: any) => ({
         ...provided,
@@ -103,6 +104,20 @@ interface SidebarProps {
     draggable?: boolean; // Add draggable prop
 }
 
+type OptionType = { value: string; label: string };
+
+// Placeholder options for dimensions and KPIs
+const dimensionOptions: OptionsOrGroups<OptionType, GroupBase<OptionType>> = [
+    {value: 'dimension1', label: 'Dimension 1'},
+    {value: 'dimension2', label: 'Dimension 2'},
+    {value: 'dimension3', label: 'Dimension 3'},
+];
+
+const kpiOptions: OptionsOrGroups<OptionType, GroupBase<OptionType>> = [
+    {value: 'kpi1', label: 'KPI 1'},
+    {value: 'kpi2', label: 'KPI 2'},
+    {value: 'kpi3', label: 'KPI 3'},
+];
 
 const Sidebar: React.FC<SidebarProps> = ({
                                              sideBarTitle,
@@ -156,17 +171,55 @@ const Sidebar: React.FC<SidebarProps> = ({
 export default function ExplorePage(props: PropsWithChildren) {
     const [selectedVisualization, setSelectedVisualization] = useState('');
 
+    const [selectedDimensions, setSelectedDimensions] = useState<OptionType[]>([]);
+    const [selectedKPIs, setSelectedKpis] = useState<OptionType[]>([]);
+
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
 
+    //const dimensionOptions: OptionsOrGroups<any, any> | undefined = []; // Define your dimensionOptions array
+    //const kpiOptions: OptionsOrGroups<any, any> | undefined = [{value: 'kpi1', label: 'KPI 1'}]; // Define your kpiOptions array
 
     const handleVisualizationSelect = (visualizationType: any) => {
         setSelectedVisualization(visualizationType);
     };
+    const handleFormSubmit = async (event: any) => {
+        event.preventDefault();
+
+        // Construct the data object to be sent to the API
+        const formData = {
+            startDate,
+            endDate,
+            selectedDimensions,
+            selectedKPIs,
+            selectedVisualization
+        };
+        console.log(JSON.stringify(formData))
+        try {
+            const response = await fetch('https://api.example.com/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Data stored successfully:', data);
+                // Handle successful API response here, if needed
+            } else {
+                console.error('Failed to store data:', response.statusText);
+                // Handle error response from API
+            }
+        } catch (error: any) {
+            console.error('Error storing data:', error.message);
+            // Handle network errors or other exceptions
+        }
+    };
     return (
         <Container fluid style={{marginTop: '50px'}}>
             <Row id="content_row">
-                <Col sm={3}>
+                <Col sm={2}>
                     <Sidebar sideBarTitle="Filters" defaultWidth={75} minWidth={200} maxWidth={400} draggable={false}>
                         <ul style={{paddingLeft: '0'}}>
                             <li style={{marginBottom: '20px'}}>
@@ -205,7 +258,9 @@ export default function ExplorePage(props: PropsWithChildren) {
                                     options={dimensionOptions}
                                     isMulti
                                     isSearchable
+                                    value={selectedDimensions}
                                     styles={customStyles}
+                                    onChange={(selected) => setSelectedDimensions(selected as OptionType[])}
                                 />
                             </li>
 
@@ -215,7 +270,9 @@ export default function ExplorePage(props: PropsWithChildren) {
                                     options={kpiOptions}
                                     isMulti
                                     isSearchable
+                                    value={selectedKPIs}
                                     styles={customStyles}
+                                    onChange={(selected) => setSelectedKpis(selected as OptionType[])}
                                 />
                             </li>
 
@@ -295,24 +352,54 @@ export default function ExplorePage(props: PropsWithChildren) {
                             </li>
 
                             <li>
-                                <Button style={{backgroundColor: '#a864f4'}} type="submit">Query</Button>
+                                <Button style={{backgroundColor: '#a864f4'}} type="submit"
+                                        onClick={handleFormSubmit}>Query</Button>
                             </li>
                         </ul>
                     </Sidebar>
                 </Col>
 
-                <Col sm={9}>
+                <Col sm={10}>
                     <Container fluid>
                         <Row>
                             {/* First row for displaying data */}
                             <Col>
-                                1
+                                viz
                             </Col>
                         </Row>
                         <Row>
                             {/* Second row for additional controls or information */}
                             <Col>
-                                2
+                                <Table responsive>
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Username</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Mark</td>
+                                        <td>Otto</td>
+                                        <td>@mdo</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Jacob</td>
+                                        <td>Thornton</td>
+                                        <td>@fat</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Larry the Bird</td>
+                                        <td>@twitter</td>
+                                        <td>@twitter</td>
+                                    </tr>
+                                    </tbody>
+                                </Table>
                             </Col>
                         </Row>
                     </Container>
