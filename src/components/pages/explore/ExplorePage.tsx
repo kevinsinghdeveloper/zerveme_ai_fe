@@ -164,7 +164,7 @@ export default function ExplorePage(props: PropsWithChildren) {
         setSelectedVisualization(visualizationType);
     };
     return (
-        <Container fluid>
+        <Container fluid style={{marginTop: '50px'}}>
             <Row id="content_row">
                 <Col sm={3}>
                     <Sidebar sideBarTitle="Filters" defaultWidth={75} minWidth={200} maxWidth={400} draggable={false}>
@@ -235,6 +235,7 @@ export default function ExplorePage(props: PropsWithChildren) {
                                             display: 'flex',
                                             justifyContent: 'center',
                                             alignItems: 'center',
+                                            zIndex: 0,
                                             backgroundColor: selectedVisualization === 'bar' ? '#a864f4' : 'transparent', // Example background color
                                         }}
                                     >
@@ -257,6 +258,7 @@ export default function ExplorePage(props: PropsWithChildren) {
                                             display: 'flex',
                                             justifyContent: 'center',
                                             alignItems: 'center',
+                                            zIndex: 0,
                                             backgroundColor: selectedVisualization === 'line' ? '#a864f4' : 'transparent', // Example background color
                                         }}
                                     >
@@ -279,6 +281,7 @@ export default function ExplorePage(props: PropsWithChildren) {
                                             display: 'flex',
                                             justifyContent: 'center',
                                             alignItems: 'center',
+                                            zIndex: 0,
                                             backgroundColor: selectedVisualization === 'pie' ? '#a864f4' : 'transparent', // Example background color
                                         }}
                                     >
