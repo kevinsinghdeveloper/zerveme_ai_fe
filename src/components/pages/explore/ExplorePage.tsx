@@ -15,6 +15,7 @@ import {faChartBar, faChartLine, faChartPie, faLineChart} from "@fortawesome/fre
 import xmark from "../../../assets/xmark.png";
 import expandicon from "../../../assets/expand.png";
 import {useExplorerContext} from "../../context_providers/ExplorerContext";
+import {useAuthContext} from "../../context_providers/AuthContext";
 
 /*
 const dimensionOptions = [

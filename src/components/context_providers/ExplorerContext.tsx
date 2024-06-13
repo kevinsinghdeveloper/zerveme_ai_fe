@@ -1,4 +1,6 @@
 import React, {createContext, useContext, useState, PropsWithChildren, ReactNode} from 'react';
+import {useAuthContext} from "./AuthContext";
+import axios from "axios";
 
 type OptionType = { value: string; label: string };
 
@@ -24,7 +26,11 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
     const [selectedDimensions, setSelectedDimensions] = useState<OptionType[]>([]);
     const [selectedKPIs, setSelectedKpis] = useState<OptionType[]>([]);
     const [selectedVisualization, setSelectedVisualization] = useState<string>('');
-    const handleSubmit = (e: React.FormEvent) => {
+
+    const {token} = useAuthContext();
+
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const formData = {
             startDate,
@@ -33,8 +39,22 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
             kpis: selectedKPIs,
             visualizationType: selectedVisualization,
         };
-        // Make your API call here with formData
-        console.log(formData);
+
+        if (!token) {
+            console.error('No authentication token available');
+            return;
+        }
+
+        try {
+            const response = await axios.post('https://example.com/api/submit', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log('Response:', response.data);
+        } catch (error) {
+            console.error('Submission failed:', error);
+        }
     };
 
     return (
