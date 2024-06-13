@@ -160,11 +160,9 @@ export default function ExplorePage(props: PropsWithChildren) {
 
     useEffect(() => {
         getAllDatasets();
-        if (datasets) {
-            console.log(JSON.stringify(datasets));
-        }
     }, [datasets]);
 
+    // cdc data a3684976-2b07-43cf-b2bb-cd43309fdcff
     return (
         <Container fluid style={{marginTop: '50px'}}>
             <Row id="content_row">
