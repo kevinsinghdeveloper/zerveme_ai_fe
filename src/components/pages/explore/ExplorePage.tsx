@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, ReactNode, useState} from "react";
+import React, {PropsWithChildren, ReactNode, useEffect, useState} from "react";
 import {
     Accordion,
     Button, Card,
@@ -155,7 +155,16 @@ export default function ExplorePage(props: PropsWithChildren) {
         selectedVisualization,
         setSelectedVisualization,
         handleSubmit,
+        getAllDatasets, datasets
     } = useExplorerContext();
+
+    useEffect(() => {
+        getAllDatasets();
+        if (datasets) {
+            console.log(JSON.stringify(datasets));
+        }
+    }, [datasets]);
+
     return (
         <Container fluid style={{marginTop: '50px'}}>
             <Row id="content_row">

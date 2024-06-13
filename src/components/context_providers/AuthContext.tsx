@@ -4,6 +4,7 @@ import credentials from '../../configs/credentials.dev.json';
 
 
 interface AuthContextProps {
+    host: string | null;
     token: string | null;
     login: (username: string, password: string, email: string) => Promise<void>;
 }
@@ -57,7 +58,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
     }, [username, password, email]);
 
     return (
-        <AuthContext.Provider value={{token, login}}>
+        <AuthContext.Provider value={{host, token, login}}>
             {children}
         </AuthContext.Provider>
     );

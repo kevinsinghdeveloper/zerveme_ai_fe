@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useState, PropsWithChildren, ReactNode} from 'react';
+import React, {createContext, useContext, useState, PropsWithChildren, ReactNode, useEffect} from 'react';
 import {useAuthContext} from "./AuthContext";
 import axios from "axios";
 
@@ -16,6 +16,8 @@ interface ExplorerContextProps {
     selectedVisualization: string;
     setSelectedVisualization: React.Dispatch<React.SetStateAction<string>>;
     handleSubmit: (e: React.FormEvent) => void;
+    getAllDatasets: () => Promise<void>;
+    datasets: any[];
 }
 
 const ExplorerContext = createContext<ExplorerContextProps | undefined>(undefined);
@@ -27,8 +29,10 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
     const [selectedKPIs, setSelectedKpis] = useState<OptionType[]>([]);
     const [selectedVisualization, setSelectedVisualization] = useState<string>('');
 
-    const {token} = useAuthContext();
+    const [datasets, setDatasets] = useState<any[]>([]); // Initialize datasets state
 
+
+    const {host, token} = useAuthContext();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -42,7 +46,7 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
 
         if (!token) {
             console.error('No authentication token available');
-            return;
+            return [];
         }
 
         try {
@@ -56,6 +60,37 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
             console.error('Submission failed:', error);
         }
     };
+
+    // Dataset operations
+    // Fetch all datasets function
+    const getAllDatasets = async () => {
+        if (!token) {
+            //console.error('Token is not available');
+            return null;
+        }
+
+        try {
+            const response = await axios.get(`${host}/api/datasets/getall`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data; // Return fetched data
+        } catch (error) {
+            console.error('Data fetch failed:', error);
+            return [];
+        }
+    };
+
+    // Fetch datasets on component mount or when token changes
+    useEffect(() => {
+        const fetchDatasets = async () => {
+            const data = await getAllDatasets();
+            setDatasets(data); // Update datasets state with fetched data
+        };
+
+        fetchDatasets(); // Call the fetch function
+    }, [token]); // Fetch datasets whenever token changes
 
     return (
         <ExplorerContext.Provider
@@ -71,6 +106,8 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
                 selectedVisualization,
                 setSelectedVisualization,
                 handleSubmit,
+                getAllDatasets,
+                datasets
             }}
         >
             {children}
