@@ -155,9 +155,11 @@ export default function ExplorePage(props: PropsWithChildren) {
         selectedVisualization,
         setSelectedVisualization,
         handleSubmit,
-        getAllDatasets, datasets
+        getAllDatasets,
+        datasets
     } = useExplorerContext();
 
+    // TODO remove this and replace with a button click. Maybe view all datasets
     useEffect(() => {
         getAllDatasets();
     }, [datasets]);
