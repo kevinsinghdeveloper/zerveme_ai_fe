@@ -82,6 +82,8 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
         }
     };
 
+    // Querying the dataset -> getData
+
     // Fetch datasets on component mount or when token changes
     useEffect(() => {
         const fetchDatasets = async () => {
