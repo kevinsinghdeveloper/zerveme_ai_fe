@@ -208,7 +208,7 @@ export default function ExplorePage(props: PropsWithChildren) {
     }, [datasets]);
 
     // cdc data a3684976-2b07-43cf-b2bb-cd43309fdcff
-    setSelectedDatasetId('a3684976-2b07-43cf-b2bb-cd43309fdcff')
+    setSelectedDatasetId('57e70b05-3208-4e9b-a281-2ffefc87324b')
 
     // TODO query the above
     return (
