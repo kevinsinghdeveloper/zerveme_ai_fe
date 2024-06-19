@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useState, PropsWithChildren, ReactNode, useEffect} from 'react';
 import {useAuthContext} from "./AuthContext";
 import axios from "axios";
+import {UUID} from "node:crypto";
 
 type OptionType = { value: string; label: string };
 
@@ -15,9 +16,12 @@ interface ExplorerContextProps {
     setSelectedKpis: React.Dispatch<React.SetStateAction<OptionType[]>>;
     selectedVisualization: string;
     setSelectedVisualization: React.Dispatch<React.SetStateAction<string>>;
-    handleSubmit: (e: React.FormEvent) => void;
+    getDataOnSubmit: (e: React.FormEvent) => void;
     getAllDatasets: () => Promise<void>;
     datasets: any[];
+    fetchedData: any;
+    selectedDatasetId: string | null;
+    setSelectedDatasetId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const ExplorerContext = createContext<ExplorerContextProps | undefined>(undefined);
@@ -29,39 +33,15 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
     const [selectedKPIs, setSelectedKpis] = useState<OptionType[]>([]);
     const [selectedVisualization, setSelectedVisualization] = useState<string>('');
 
+    const [selectedDatasetId, setSelectedDatasetId] = useState<string | null>(null);
     const [datasets, setDatasets] = useState<any[]>([]); // Initialize datasets state
 
 
     const {host, token} = useAuthContext();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const formData = {
-            startDate,
-            endDate,
-            dimensions: selectedDimensions,
-            kpis: selectedKPIs,
-            visualizationType: selectedVisualization,
-        };
-
-        if (!token) {
-            console.error('No authentication token available');
-            return [];
-        }
-
-        try {
-            const response = await axios.post('https://example.com/api/submit', formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            console.log('Response:', response.data);
-        } catch (error) {
-            console.error('Submission failed:', error);
-        }
-    };
-
     // Dataset operations
+    const [fetchedData, setFetchedData] = useState<any>(null);
+
     // Fetch all datasets function
     const getAllDatasets = async () => {
         if (!token) {
@@ -83,6 +63,54 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
     };
 
     // Querying the dataset -> getData
+    /*
+    const getData = async (datasetId: string) => {
+        try {
+            const response = await axios.get(`${host}/api/datasets/getdata?id=${datasetId}&rowLimit=50`);
+            const parsedData = JSON.parse(response.data.token);
+            setFetchedData(parsedData);
+        } catch (error) {
+            console.error('Data fetch failed:', error);
+        }
+    };
+
+     */
+
+    const getDataOnSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const formData = {
+            startDate,
+            endDate,
+            dimensions: selectedDimensions,
+            kpis: selectedKPIs,
+            visualizationType: selectedVisualization,
+        };
+
+        if (!token) {
+            console.error('No authentication token available');
+            return [];
+        }
+
+        if (!selectedDatasetId) {
+            console.error('No dataset selected');
+            return [];
+        }
+
+        try {
+            const response = await axios.get(`${host}/api/datasets/getdata?id=${selectedDatasetId}&rowLimit=50`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const parsedData = response.data.data;
+            setFetchedData(parsedData);
+
+            console.log('Response:', response.data);
+        } catch (error) {
+            console.error('Submission failed:', error);
+        }
+    };
+
 
     // Fetch datasets on component mount or when token changes
     useEffect(() => {
@@ -107,9 +135,12 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
                 setSelectedKpis,
                 selectedVisualization,
                 setSelectedVisualization,
-                handleSubmit,
+                getDataOnSubmit,
                 getAllDatasets,
-                datasets
+                datasets,
+                fetchedData,
+                selectedDatasetId,
+                setSelectedDatasetId
             }}
         >
             {children}

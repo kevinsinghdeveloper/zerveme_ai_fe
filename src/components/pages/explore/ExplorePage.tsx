@@ -138,6 +138,48 @@ const Sidebar: React.FC<SidebarProps> = ({
     );
 };
 
+const DataTable = () => {
+    const {fetchedData} = useExplorerContext();
+    const [columns, setColumns] = useState<string[]>([]);
+
+    useEffect(() => {
+        console.log(fetchedData);
+        if (fetchedData && fetchedData.length > 0) {
+            console.log(fetchedData)
+            const columnNames = Object.keys(fetchedData[0]);
+            setColumns(columnNames);
+        }
+    }, [fetchedData]);
+
+    return (
+        <Table responsive>
+            <thead>
+            <tr>
+                <th>#</th>
+                {columns.map((column) => (
+                    <th key={column}>{column}</th>
+                ))}
+            </tr>
+            </thead>
+            <tbody>
+            {fetchedData && fetchedData.length > 0 ? (
+                fetchedData.map((item: any, index: any) => (
+                    <tr key={index}>
+                        <td>{index + 1}</td>
+                        {columns.map((column) => (
+                            <td key={column}>{item[column]}</td>
+                        ))}
+                    </tr>
+                ))
+            ) : (
+                <tr>
+                    <td colSpan={columns.length + 1}>No data available</td>
+                </tr>
+            )}
+            </tbody>
+        </Table>
+    );
+};
 
 export default function ExplorePage(props: PropsWithChildren) {
     const handleVisualizationSelect = (visualizationType: any) => {
@@ -154,9 +196,10 @@ export default function ExplorePage(props: PropsWithChildren) {
         setSelectedKpis,
         selectedVisualization,
         setSelectedVisualization,
-        handleSubmit,
+        getDataOnSubmit,
         getAllDatasets,
-        datasets
+        datasets,
+        setSelectedDatasetId
     } = useExplorerContext();
 
     // TODO remove this and replace with a button click. Maybe view all datasets
@@ -165,6 +208,8 @@ export default function ExplorePage(props: PropsWithChildren) {
     }, [datasets]);
 
     // cdc data a3684976-2b07-43cf-b2bb-cd43309fdcff
+    setSelectedDatasetId('a3684976-2b07-43cf-b2bb-cd43309fdcff')
+
     // TODO query the above
     return (
         <Container fluid style={{marginTop: '50px'}}>
@@ -303,7 +348,7 @@ export default function ExplorePage(props: PropsWithChildren) {
 
                             <li>
                                 <Button style={{backgroundColor: '#a864f4'}} type="submit"
-                                        onClick={handleSubmit}>Query</Button>
+                                        onClick={getDataOnSubmit}>Query</Button>
                             </li>
                         </ul>
                     </Sidebar>
@@ -320,36 +365,7 @@ export default function ExplorePage(props: PropsWithChildren) {
                         <Row>
                             {/* Second row for additional controls or information */}
                             <Col>
-                                <Table responsive>
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Username</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Jacob</td>
-                                        <td>Thornton</td>
-                                        <td>@fat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry the Bird</td>
-                                        <td>@twitter</td>
-                                        <td>@twitter</td>
-                                    </tr>
-                                    </tbody>
-                                </Table>
+                                <DataTable/>
                             </Col>
                         </Row>
                     </Container>
