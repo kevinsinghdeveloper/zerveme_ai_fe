@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, ReactNode, useEffect, useState} from "react";
+import React, {PropsWithChildren, ReactNode, useCallback, useEffect, useMemo, useState} from "react";
 import {
     Accordion,
     Button, Card,
@@ -201,13 +201,15 @@ export default function ExplorePage(props: PropsWithChildren) {
         datasets,
         getAllDatasets,
         selectedDatasetId,
-        setSelectedDatasetId
+        setSelectedDatasetId,
+        getDatasetPreview
     } = useExplorerContext();
 
     // Fetch datasets when component mounts
     useEffect(() => {
         getAllDatasets();
     }, [datasets]);
+
 
     // Effect to update dropdown options when datasets change
     useEffect(() => {
@@ -217,13 +219,20 @@ export default function ExplorePage(props: PropsWithChildren) {
     }, [datasets]);
 
     // Handler for dataset selection in dropdown
-    const handleDatasetSelect = (selectedOption: OptionType | null) => {
+    const handleDatasetSelect = useCallback((selectedOption: OptionType | null) => {
         if (selectedOption) {
             setSelectedDatasetId(selectedOption.value);
         } else {
             setSelectedDatasetId('');
         }
-    };
+    }, [setSelectedDatasetId]); // Dependency array includes setSelectedDatasetId
+
+
+    useEffect(() => {
+        if (selectedDatasetId) { // Ensure datasets is not null or undefined
+            getDatasetPreview(); // Call getDatasetPreview when dataset is selected
+        }
+    }, [selectedDatasetId]);
 
     // cdc data a3684976-2b07-43cf-b2bb-cd43309fdcff
     //setSelectedDatasetId('57e70b05-3208-4e9b-a281-2ffefc87324b')
