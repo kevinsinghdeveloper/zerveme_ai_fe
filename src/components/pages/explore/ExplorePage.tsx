@@ -222,18 +222,19 @@ export default function ExplorePage(props: PropsWithChildren) {
     const handleDatasetSelect = useCallback((selectedOption: OptionType | null) => {
         if (selectedOption) {
             setSelectedDatasetId(selectedOption.value);
+            getDatasetPreview();
         } else {
             setSelectedDatasetId('');
         }
-    }, [setSelectedDatasetId]); // Dependency array includes setSelectedDatasetId
+    }, [setSelectedDatasetId, getDatasetPreview]); // Dependency array includes setSelectedDatasetId
 
-
+    /*
     useEffect(() => {
         if (selectedDatasetId) { // Ensure datasets is not null or undefined
             getDatasetPreview(); // Call getDatasetPreview when dataset is selected
         }
     }, [selectedDatasetId]);
-
+    */
     // cdc data a3684976-2b07-43cf-b2bb-cd43309fdcff
     //setSelectedDatasetId('57e70b05-3208-4e9b-a281-2ffefc87324b')
 
