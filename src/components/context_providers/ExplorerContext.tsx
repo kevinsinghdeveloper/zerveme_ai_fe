@@ -21,8 +21,11 @@ interface ExplorerContextProps {
     datasets: any[];
     fetchedData: any;
     selectedDatasetId: string | null;
+    selectedDatasetDomainOptions: any;
     setSelectedDatasetId: React.Dispatch<React.SetStateAction<string | null>>;
     getDatasetPreview: () => Promise<void>;
+    getDatasetDomainOptions: (id: string) => Promise<void>;
+
 }
 
 const ExplorerContext = createContext<ExplorerContextProps | undefined>(undefined);
@@ -35,6 +38,9 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
     const [selectedVisualization, setSelectedVisualization] = useState<string>('');
 
     const [selectedDatasetId, setSelectedDatasetId] = useState<string | null>(null);
+    const [selectedDatasetDomainOptions, setSelectedDatasetDomainOptions] = useState<any>(null);
+
+
     const [datasets, setDatasets] = useState<any[]>([]); // Initialize datasets state
 
 
@@ -47,7 +53,7 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
     const getAllDatasets = async () => {
         if (!token) {
             //console.error('Token is not available');
-            return null;
+            return;
         }
 
         try {
@@ -56,10 +62,12 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            return response.data; // Return fetched data
+            //return response.data; // Return fetched data
+
+            setDatasets(response.data);
         } catch (error) {
             console.error('Data fetch failed:', error);
-            return [];
+            return;
         }
     };
 
@@ -83,6 +91,33 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
             });
             const parsedData = response.data.data;
             setFetchedData(parsedData);
+
+        } catch (error) {
+            console.error('Data fetch failed:', error);
+            return; // Return undefined or nothing if data fetch fails
+        }
+    };
+
+    const getDatasetDomainOptions = async (id: string) => {
+        if (!token) {
+            // Handle case where token is not available
+            console.error('Token is not available');
+            return; // Return undefined or nothing if token is not available
+        }
+
+        if (!selectedDatasetId) {
+            console.error('No dataset selected');
+            return; // Return undefined or nothing if no dataset is selected
+        }
+
+        try {
+            const response = await axios.get(`${host}/api/datasets/getDatasetDomainOptions?id=${selectedDatasetId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const parsedData = response.data.domainData;
+            setSelectedDatasetDomainOptions(parsedData);
 
         } catch (error) {
             console.error('Data fetch failed:', error);
@@ -142,6 +177,7 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
 
 
     // Fetch datasets on component mount or when token changes
+    /*
     useEffect(() => {
         const fetchDatasets = async () => {
             const data = await getAllDatasets();
@@ -150,7 +186,7 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
 
         fetchDatasets(); // Call the fetch function
     }, [token]); // Fetch datasets whenever token changes
-
+    */
     return (
         <ExplorerContext.Provider
             value={{
@@ -170,7 +206,9 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
                 fetchedData,
                 selectedDatasetId,
                 setSelectedDatasetId,
-                getDatasetPreview
+                getDatasetPreview,
+                selectedDatasetDomainOptions,
+                getDatasetDomainOptions
             }}
         >
             {children}

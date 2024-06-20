@@ -202,13 +202,16 @@ export default function ExplorePage(props: PropsWithChildren) {
         getAllDatasets,
         selectedDatasetId,
         setSelectedDatasetId,
-        getDatasetPreview
+        getDatasetPreview,
+        selectedDatasetDomainOptions,
+        getDatasetDomainOptions
     } = useExplorerContext();
 
+    /*
     useEffect(() => {
         getAllDatasets();
     }, [getAllDatasets]);
-
+    */
     useEffect(() => {
         if (datasets) {
             setDatasetOptions(datasets.map((dataset: any) => ({value: dataset.id, label: dataset.name})));
@@ -217,13 +220,29 @@ export default function ExplorePage(props: PropsWithChildren) {
 
     const handleDatasetSelect = useCallback((selectedOption: OptionType | null) => {
         setSelectedDatasetId(selectedOption ? selectedOption.value : '');
-    }, [setSelectedDatasetId]);
 
+    }, [selectedDatasetId]);
+
+    const handlePreview = useCallback(() => {
+        if (selectedDatasetId) {
+            getDatasetPreview()
+        }
+    }, [selectedDatasetId, getDatasetPreview]);
+
+    const handleFetchDatasets = useCallback(() => {
+        if (datasets) {
+            getAllDatasets()
+        }
+    }, [getAllDatasets, datasets]);
+
+    /*
     useEffect(() => {
         if (selectedDatasetId) {
             getDatasetPreview();
+            getDatasetDomainOptions(selectedDatasetId);
         }
     }, [selectedDatasetId, getDatasetPreview]);
+    */
 
     //const handleVisualizationSelect = (visualizationType: string) => {
     //   setSelectedVisualization(visualizationType);
@@ -246,6 +265,9 @@ export default function ExplorePage(props: PropsWithChildren) {
                                     value={datasetOptions.find((option) => option.value === selectedDatasetId)}
                                     onChange={handleDatasetSelect}
                                 />
+                                <Button className="mt-2" onClick={handlePreview}>Preview</Button>
+                                <Button className="mt-2 float-right" onClick={handleFetchDatasets}>Fetch
+                                    Datasets</Button>
                             </li>
                             <li style={{marginBottom: '20px'}}>
                                 <span
