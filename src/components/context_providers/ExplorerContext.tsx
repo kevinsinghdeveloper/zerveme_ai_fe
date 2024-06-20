@@ -24,7 +24,7 @@ interface ExplorerContextProps {
     selectedDatasetDomainOptions: any;
     setSelectedDatasetId: React.Dispatch<React.SetStateAction<string | null>>;
     getDatasetPreview: () => Promise<void>;
-    getDatasetDomainOptions: (id: string) => Promise<void>;
+    getDatasetDomainOptions: () => Promise<void>;
 
 }
 
@@ -98,7 +98,7 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
         }
     };
 
-    const getDatasetDomainOptions = async (id: string) => {
+    const getDatasetDomainOptions = async () => {
         if (!token) {
             // Handle case where token is not available
             console.error('Token is not available');

@@ -11,7 +11,7 @@ import Select, {GroupBase, OptionsOrGroups} from 'react-select';
 import DatePicker from 'react-datepicker';
 import "./ExplorePageStyles.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChartBar, faChartLine, faChartPie, faLineChart} from "@fortawesome/free-solid-svg-icons";
+import {faChartBar, faChartPie, faLineChart, faArrowsSpin} from "@fortawesome/free-solid-svg-icons";
 import xmark from "../../../assets/xmark.png";
 import expandicon from "../../../assets/expand.png";
 import {useExplorerContext} from "../../context_providers/ExplorerContext";
@@ -78,6 +78,7 @@ interface SidebarProps {
 type OptionType = { value: string; label: string };
 
 // Placeholder options for dimensions and KPIs
+/*
 const dimensionOptions: OptionsOrGroups<OptionType, GroupBase<OptionType>> = [
     {value: 'dimension1', label: 'Dimension 1'},
     {value: 'dimension2', label: 'Dimension 2'},
@@ -89,7 +90,7 @@ const kpiOptions: OptionsOrGroups<OptionType, GroupBase<OptionType>> = [
     {value: 'kpi2', label: 'KPI 2'},
     {value: 'kpi3', label: 'KPI 3'},
 ];
-
+*/
 const Sidebar: React.FC<SidebarProps> = ({
                                              sideBarTitle,
                                              defaultWidth,
@@ -185,7 +186,8 @@ export default function ExplorePage(props: PropsWithChildren) {
     };
     //const [selectedDatasetId, setSelectedDatasetId] = useState<string>(''); // State for selected dataset ID
     const [datasetOptions, setDatasetOptions] = useState<OptionType[]>([]); // State for dataset options in dropdown
-
+    const [dimensionOptions, setDimensionOptions] = useState([]);
+    const [kpiOptions, setKpiOptions] = useState([]);
     const {
         startDate,
         setStartDate,
@@ -225,7 +227,7 @@ export default function ExplorePage(props: PropsWithChildren) {
 
     const handlePreview = useCallback(() => {
         if (selectedDatasetId) {
-            getDatasetPreview()
+            getDatasetPreview();
         }
     }, [selectedDatasetId, getDatasetPreview]);
 
@@ -234,6 +236,27 @@ export default function ExplorePage(props: PropsWithChildren) {
             getAllDatasets()
         }
     }, [getAllDatasets, datasets]);
+
+    const handleSelectDataset = useCallback(async () => {
+        if (selectedDatasetId) {
+            await getDatasetDomainOptions();
+
+            if (selectedDatasetDomainOptions) {
+                const kpiOptions = selectedDatasetDomainOptions.kpi_cols.map((kpi: string) => ({
+                    value: kpi,
+                    label: kpi.charAt(0).toUpperCase() + kpi.slice(1).replace(/_/g, ' ')
+                }));
+                const dimensionOptions = selectedDatasetDomainOptions.attr_cols.map((attr: string) => ({
+                    value: attr,
+                    label: attr.charAt(0).toUpperCase() + attr.slice(1).replace(/_/g, ' ')
+                }));
+
+                setKpiOptions(kpiOptions);
+                setDimensionOptions(dimensionOptions);
+            }
+        }
+    }, [getDatasetDomainOptions, selectedDatasetId, selectedDatasetDomainOptions]);
+
 
     /*
     useEffect(() => {
@@ -265,9 +288,13 @@ export default function ExplorePage(props: PropsWithChildren) {
                                     value={datasetOptions.find((option) => option.value === selectedDatasetId)}
                                     onChange={handleDatasetSelect}
                                 />
-                                <Button className="mt-2" onClick={handlePreview}>Preview</Button>
-                                <Button className="mt-2 float-right" onClick={handleFetchDatasets}>Fetch
-                                    Datasets</Button>
+                                <Button className="mt-2" style={{backgroundColor: '#a864f4'}}
+                                        onClick={handlePreview}>Preview</Button>
+                                <Button className="mt-2 ml-2" style={{backgroundColor: '#a864f4'}}
+                                        onClick={handleSelectDataset}>Target Dataset</Button>
+                                <Button className="mt-2 float-right" style={{backgroundColor: '#a864f4'}}
+                                        onClick={handleFetchDatasets}><FontAwesomeIcon icon={faArrowsSpin}
+                                /></Button>
                             </li>
                             <li style={{marginBottom: '20px'}}>
                                 <span
