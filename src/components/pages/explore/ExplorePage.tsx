@@ -207,17 +207,16 @@ export default function ExplorePage(props: PropsWithChildren) {
 
     useEffect(() => {
         getAllDatasets();
+    }, [getAllDatasets]);
+
+    useEffect(() => {
         if (datasets) {
             setDatasetOptions(datasets.map((dataset: any) => ({value: dataset.id, label: dataset.name})));
         }
     }, [datasets]);
 
     const handleDatasetSelect = useCallback((selectedOption: OptionType | null) => {
-        if (selectedOption) {
-            setSelectedDatasetId(selectedOption.value);
-        } else {
-            setSelectedDatasetId('');
-        }
+        setSelectedDatasetId(selectedOption ? selectedOption.value : '');
     }, [setSelectedDatasetId]);
 
     useEffect(() => {
@@ -225,6 +224,10 @@ export default function ExplorePage(props: PropsWithChildren) {
             getDatasetPreview();
         }
     }, [selectedDatasetId, getDatasetPreview]);
+
+    //const handleVisualizationSelect = (visualizationType: string) => {
+    //   setSelectedVisualization(visualizationType);
+    //};
 
 
     // TODO query the above
