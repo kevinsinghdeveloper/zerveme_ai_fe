@@ -22,6 +22,7 @@ interface ExplorerContextProps {
     fetchedData: any;
     selectedDatasetId: string | null;
     setSelectedDatasetId: React.Dispatch<React.SetStateAction<string | null>>;
+    getDatasetPreview: () => Promise<void>;
 }
 
 const ExplorerContext = createContext<ExplorerContextProps | undefined>(undefined);
@@ -50,7 +51,7 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
         }
 
         try {
-            const response = await axios.get(`${host}/api/datasets/getall`, {
+            const response = await axios.get(`${host}/api/datasets/getAllDatasetNames`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -61,6 +62,34 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
             return [];
         }
     };
+
+    const getDatasetPreview = async () => {
+        if (!token) {
+            // Handle case where token is not available
+            console.error('Token is not available');
+            return; // Return undefined or nothing if token is not available
+        }
+
+        if (!selectedDatasetId) {
+            console.error('No dataset selected');
+            return; // Return undefined or nothing if no dataset is selected
+        }
+
+        try {
+            const response = await axios.get(`${host}/api/datasets/getdata?id=${selectedDatasetId}&rowLimit=50`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const parsedData = response.data.data;
+            setFetchedData(parsedData);
+
+        } catch (error) {
+            console.error('Data fetch failed:', error);
+            return; // Return undefined or nothing if data fetch fails
+        }
+    };
+
 
     // Querying the dataset -> getData
     /*
@@ -140,7 +169,8 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
                 datasets,
                 fetchedData,
                 selectedDatasetId,
-                setSelectedDatasetId
+                setSelectedDatasetId,
+                getDatasetPreview
             }}
         >
             {children}

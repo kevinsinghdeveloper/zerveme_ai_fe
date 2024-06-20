@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, ReactNode, useEffect, useState} from "react";
+import React, {PropsWithChildren, ReactNode, useCallback, useEffect, useMemo, useState} from "react";
 import {
     Accordion,
     Button, Card,
@@ -143,9 +143,7 @@ const DataTable = () => {
     const [columns, setColumns] = useState<string[]>([]);
 
     useEffect(() => {
-        console.log(fetchedData);
         if (fetchedData && fetchedData.length > 0) {
-            console.log(fetchedData)
             const columnNames = Object.keys(fetchedData[0]);
             setColumns(columnNames);
         }
@@ -185,6 +183,9 @@ export default function ExplorePage(props: PropsWithChildren) {
     const handleVisualizationSelect = (visualizationType: any) => {
         setSelectedVisualization(visualizationType);
     };
+    //const [selectedDatasetId, setSelectedDatasetId] = useState<string>(''); // State for selected dataset ID
+    const [datasetOptions, setDatasetOptions] = useState<OptionType[]>([]); // State for dataset options in dropdown
+
     const {
         startDate,
         setStartDate,
@@ -197,18 +198,44 @@ export default function ExplorePage(props: PropsWithChildren) {
         selectedVisualization,
         setSelectedVisualization,
         getDataOnSubmit,
-        getAllDatasets,
         datasets,
-        setSelectedDatasetId
+        getAllDatasets,
+        selectedDatasetId,
+        setSelectedDatasetId,
+        getDatasetPreview
     } = useExplorerContext();
 
-    // TODO remove this and replace with a button click. Maybe view all datasets
+    // Fetch datasets when component mounts
     useEffect(() => {
         getAllDatasets();
     }, [datasets]);
 
+
+    // Effect to update dropdown options when datasets change
+    useEffect(() => {
+        if (datasets) { // Ensure datasets is not null or undefined
+            setDatasetOptions(datasets.map((dataset: any) => ({value: dataset.id, label: dataset.name})));
+        }
+    }, [datasets]);
+
+    // Handler for dataset selection in dropdown
+    const handleDatasetSelect = useCallback((selectedOption: OptionType | null) => {
+        if (selectedOption) {
+            setSelectedDatasetId(selectedOption.value);
+        } else {
+            setSelectedDatasetId('');
+        }
+    }, [setSelectedDatasetId]); // Dependency array includes setSelectedDatasetId
+
+
+    useEffect(() => {
+        if (selectedDatasetId) { // Ensure datasets is not null or undefined
+            getDatasetPreview(); // Call getDatasetPreview when dataset is selected
+        }
+    }, [selectedDatasetId]);
+
     // cdc data a3684976-2b07-43cf-b2bb-cd43309fdcff
-    setSelectedDatasetId('57e70b05-3208-4e9b-a281-2ffefc87324b')
+    //setSelectedDatasetId('57e70b05-3208-4e9b-a281-2ffefc87324b')
 
     // TODO query the above
     return (
@@ -217,6 +244,16 @@ export default function ExplorePage(props: PropsWithChildren) {
                 <Col sm={2}>
                     <Sidebar sideBarTitle="Filters" defaultWidth={75} minWidth={200} maxWidth={400} draggable={false}>
                         <ul style={{paddingLeft: '0'}}>
+                            <li style={{marginBottom: '20px'}}>
+                                <span className="side-bar-label">Dataset Selection</span>
+                                <Select
+                                    options={datasetOptions}
+                                    isSearchable
+                                    styles={customStyles}
+                                    value={datasetOptions.find((option) => option.value === selectedDatasetId)}
+                                    onChange={handleDatasetSelect}
+                                />
+                            </li>
                             <li style={{marginBottom: '20px'}}>
                                 <span
                                     className="side-bar-label">Periods</span>
@@ -350,6 +387,7 @@ export default function ExplorePage(props: PropsWithChildren) {
                                 <Button style={{backgroundColor: '#a864f4'}} type="submit"
                                         onClick={getDataOnSubmit}>Query</Button>
                             </li>
+
                         </ul>
                     </Sidebar>
                 </Col>
