@@ -208,12 +208,7 @@ export default function ExplorePage(props: PropsWithChildren) {
     // Fetch datasets when component mounts
     useEffect(() => {
         getAllDatasets();
-    }, [datasets]);
-
-
-    // Effect to update dropdown options when datasets change
-    useEffect(() => {
-        if (datasets) { // Ensure datasets is not null or undefined
+        if (datasets) {
             setDatasetOptions(datasets.map((dataset: any) => ({value: dataset.id, label: dataset.name})));
         }
     }, [datasets]);
@@ -228,15 +223,6 @@ export default function ExplorePage(props: PropsWithChildren) {
         }
     }, [setSelectedDatasetId, getDatasetPreview]); // Dependency array includes setSelectedDatasetId
 
-    /*
-    useEffect(() => {
-        if (selectedDatasetId) { // Ensure datasets is not null or undefined
-            getDatasetPreview(); // Call getDatasetPreview when dataset is selected
-        }
-    }, [selectedDatasetId]);
-    */
-    // cdc data a3684976-2b07-43cf-b2bb-cd43309fdcff
-    //setSelectedDatasetId('57e70b05-3208-4e9b-a281-2ffefc87324b')
 
     // TODO query the above
     return (
