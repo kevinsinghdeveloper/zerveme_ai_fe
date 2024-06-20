@@ -205,7 +205,6 @@ export default function ExplorePage(props: PropsWithChildren) {
         getDatasetPreview
     } = useExplorerContext();
 
-    // Fetch datasets when component mounts
     useEffect(() => {
         getAllDatasets();
         if (datasets) {
@@ -213,15 +212,19 @@ export default function ExplorePage(props: PropsWithChildren) {
         }
     }, [datasets]);
 
-    // Handler for dataset selection in dropdown
     const handleDatasetSelect = useCallback((selectedOption: OptionType | null) => {
         if (selectedOption) {
             setSelectedDatasetId(selectedOption.value);
-            getDatasetPreview();
         } else {
             setSelectedDatasetId('');
         }
-    }, [setSelectedDatasetId, getDatasetPreview]); // Dependency array includes setSelectedDatasetId
+    }, [setSelectedDatasetId]);
+
+    useEffect(() => {
+        if (selectedDatasetId) {
+            getDatasetPreview();
+        }
+    }, [selectedDatasetId, getDatasetPreview]);
 
 
     // TODO query the above
