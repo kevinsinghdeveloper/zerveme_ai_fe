@@ -50,7 +50,7 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
         }
 
         try {
-            const response = await axios.get(`${host}/api/datasets/getall`, {
+            const response = await axios.get(`${host}/api/datasets/getAllDatasetNames`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
