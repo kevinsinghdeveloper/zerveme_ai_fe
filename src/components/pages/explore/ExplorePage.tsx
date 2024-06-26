@@ -245,7 +245,7 @@ export default function ExplorePage(props: PropsWithChildren) {
         }
     }, [getDatasetDomainOptions, selectedDatasetId]);
 
-    useEffect(() => {
+    useMemo(() => {
         if (selectedDatasetDomainOptions) {
             const kpiOptions = selectedDatasetDomainOptions.kpi_cols.map((kpi: string) => ({
                 value: kpi,
