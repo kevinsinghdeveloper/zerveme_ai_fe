@@ -28,6 +28,14 @@ interface ExplorerContextProps {
 
 }
 
+interface DomainOptionsResults {
+    kpi_cols: string [] | null;
+    attr_cols: string [] | null;
+    period_start: string | null;
+    period_end: string | null;
+    num_rows: number | null;
+}
+
 const ExplorerContext = createContext<ExplorerContextProps | undefined>(undefined);
 
 export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
@@ -38,8 +46,8 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
     const [selectedVisualization, setSelectedVisualization] = useState<string>('');
 
     const [selectedDatasetId, setSelectedDatasetId] = useState<string | null>(null);
-    const [selectedDatasetDomainOptions, setSelectedDatasetDomainOptions] = useState<any>(null);
-
+    //const [selectedDatasetDomainOptions, setSelectedDatasetDomainOptions] = useState<any>(null);
+    const [selectedDatasetDomainOptions, setSelectedDatasetDomainOptions] = useState<DomainOptionsResults | null>(null)
 
     const [datasets, setDatasets] = useState<any[]>([]); // Initialize datasets state
 
@@ -117,28 +125,22 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
                 }
             });
             const parsedData = response.data.domainData;
-            setSelectedDatasetDomainOptions(parsedData);
+
+            setSelectedDatasetDomainOptions(prevOptions => ({
+                ...prevOptions,
+                kpi_cols: parsedData.kpi_cols,
+                attr_cols: parsedData.attr_cols,
+                period_start: parsedData.period_start,
+                period_end: parsedData.period_end,
+                num_rows: parsedData.num_rows
+            }));
+
 
         } catch (error) {
             console.error('Data fetch failed:', error);
             return; // Return undefined or nothing if data fetch fails
         }
     };
-
-
-    // Querying the dataset -> getData
-    /*
-    const getData = async (datasetId: string) => {
-        try {
-            const response = await axios.get(`${host}/api/datasets/getdata?id=${datasetId}&rowLimit=50`);
-            const parsedData = JSON.parse(response.data.token);
-            setFetchedData(parsedData);
-        } catch (error) {
-            console.error('Data fetch failed:', error);
-        }
-    };
-
-     */
 
     const getDataOnSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

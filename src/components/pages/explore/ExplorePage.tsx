@@ -188,6 +188,8 @@ export default function ExplorePage(props: PropsWithChildren) {
     const [datasetOptions, setDatasetOptions] = useState<OptionType[]>([]); // State for dataset options in dropdown
     const [dimensionOptions, setDimensionOptions] = useState([]);
     const [kpiOptions, setKpiOptions] = useState([]);
+    const [periodStart, setPeriodStart] = useState<Date | null>(null);
+    const [periodEnd, setPeriodEnd] = useState<Date | null>(null);
     const {
         startDate,
         setStartDate,
@@ -240,36 +242,27 @@ export default function ExplorePage(props: PropsWithChildren) {
     const handleSelectDataset = useCallback(async () => {
         if (selectedDatasetId) {
             await getDatasetDomainOptions();
-
-            if (selectedDatasetDomainOptions) {
-                const kpiOptions = selectedDatasetDomainOptions.kpi_cols.map((kpi: string) => ({
-                    value: kpi,
-                    label: kpi.charAt(0).toUpperCase() + kpi.slice(1).replace(/_/g, ' ')
-                }));
-                const dimensionOptions = selectedDatasetDomainOptions.attr_cols.map((attr: string) => ({
-                    value: attr,
-                    label: attr.charAt(0).toUpperCase() + attr.slice(1).replace(/_/g, ' ')
-                }));
-
-                setKpiOptions(kpiOptions);
-                setDimensionOptions(dimensionOptions);
-            }
         }
-    }, [getDatasetDomainOptions, selectedDatasetId, selectedDatasetDomainOptions]);
+    }, [getDatasetDomainOptions, selectedDatasetId]);
 
-
-    /*
     useEffect(() => {
-        if (selectedDatasetId) {
-            getDatasetPreview();
-            getDatasetDomainOptions(selectedDatasetId);
-        }
-    }, [selectedDatasetId, getDatasetPreview]);
-    */
+        if (selectedDatasetDomainOptions) {
+            const kpiOptions = selectedDatasetDomainOptions.kpi_cols.map((kpi: string) => ({
+                value: kpi,
+                label: kpi.charAt(0).toUpperCase() + kpi.slice(1).replace(/_/g, ' ')
+            }));
+            const dimensionOptions = selectedDatasetDomainOptions.attr_cols.map((attr: string) => ({
+                value: attr,
+                label: attr.charAt(0).toUpperCase() + attr.slice(1).replace(/_/g, ' ')
+            }));
 
-    //const handleVisualizationSelect = (visualizationType: string) => {
-    //   setSelectedVisualization(visualizationType);
-    //};
+            setKpiOptions(kpiOptions);
+            setDimensionOptions(dimensionOptions);
+            setPeriodStart(selectedDatasetDomainOptions.period_start);
+            setPeriodEnd(selectedDatasetDomainOptions.period_end);
+        }
+
+    }, [selectedDatasetDomainOptions]);
 
 
     // TODO query the above
@@ -302,18 +295,20 @@ export default function ExplorePage(props: PropsWithChildren) {
                                 <InputGroup className="mb-3 d-flex">
                                     <div className="flex-fill mr-2" style={{width: '25%', height: '25px'}}>
                                         <DatePicker
-                                            selected={startDate}
+                                            selected={periodStart}
                                             onChange={(date: Date | null) => setStartDate(date)}
                                             selectsStart
                                             startDate={startDate}
                                             endDate={endDate}
                                             placeholderText="Start Period"
                                             className="form-control"
+                                            minDate={periodStart}
+                                            maxDate={periodEnd}
                                         />
                                     </div>
                                     <div className="flex-fill" style={{width: '25%', height: '25px'}}>
                                         <DatePicker
-                                            selected={endDate}
+                                            selected={periodEnd}
                                             onChange={(date: Date | null) => setEndDate(date)}
                                             selectsEnd
                                             startDate={startDate}
@@ -321,6 +316,7 @@ export default function ExplorePage(props: PropsWithChildren) {
                                             placeholderText="End Period"
                                             className="form-control"
                                             minDate={startDate}
+                                            maxDate={periodEnd}
                                         />
                                     </div>
                                 </InputGroup>
