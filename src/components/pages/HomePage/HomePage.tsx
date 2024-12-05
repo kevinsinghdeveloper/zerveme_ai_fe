@@ -57,15 +57,15 @@ export default function HomePage(props: PropsWithChildren) {
                                     <Container fluid>
                                         <Row className="h-100 align-items-center">
                                             <div className="h-100 pt-44">
-                                                <h1 className="text-white text-6xl">
-                                                    Explore business data from <span
-                                                    style={{color: '#B660FE'}}>Zerve Me Data</span>
+                                                <h1 className="text-white text-5xl">
+                                                    AI is the future of web discovery - it’s how customers find products
+                                                    and services.<br/>
+                                                    Let <span style={{color: '#B660FE'}}> ZerveMeData </span>
+                                                    help you stand out.<br/><br/>Optimize your AI search ranking today.
                                                 </h1>
-                                                <p className="text-white">Zerve Me Data provides secure and reliable
-                                                    Data For your business and information</p>
-
-                                                <Button style={{background: '#B660FE'}}>Explore More</Button>
+                                                <Button style={{background: '#B660FE'}}>Join Now!</Button>
                                             </div>
+
                                         </Row>
                                     </Container>
                                 </Col>
