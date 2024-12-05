@@ -30,21 +30,19 @@ export default function AppHeader(props: PropsWithChildren<{ className?: any, st
                         <Image src={zervemelogo} alt="Zerveme Logo" style={{width: '150px', height: 'auto'}}/>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="ml-auto text-xl">
+                    <Navbar.Collapse id="basic-navbar-nav" className="justify-between">
+                        <Nav className="ml-5 text-xl">
                             {links.map((link, index) => (
                                 <Nav.Link
                                     className="text-white p-1 mr-4"
                                     key={index}
                                     href={link.href}
-                                    onMouseOver={() => handleMouseOver(link.icon)}
-                                    onMouseOut={handleMouseOut}
                                 >
-                                    {iconToShow === link.icon && <FontAwesomeIcon icon={iconToShow}/>} {link.text}
+                                    {link.text}
                                 </Nav.Link>
                             ))}
                         </Nav>
-                        <Button className="ml-8" style={{background: '#B660FE'}}>Explore Now!</Button>
+                        <Button className="ml-auto" style={{background: '#B660FE'}}>Register!</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
