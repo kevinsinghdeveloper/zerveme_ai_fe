@@ -6,6 +6,7 @@ import HomePage from "../HomePage/HomePage";
 import AppFooter from "../../shared/footer/AppFooter";
 import SubscribePage from "../subscribe/SubscribePage";
 import ExplorePage from "../explore/ExplorePage";
+import LoginPage from "../login/LoginPage";
 
 export default function LandingPage(props: PropsWithChildren) {
 
@@ -17,6 +18,7 @@ export default function LandingPage(props: PropsWithChildren) {
                     <Route path="/contactus" element={<ContactUsPage/>}/>
                     <Route path="/subscribe" element={<SubscribePage/>}/>
                     <Route path="/explore" element={<ExplorePage/>}/>
+                    <Route path="/login" element={<LoginPage/>}/>
                     <Route path="*" element={<HomePage/>}/>
                 </Routes>
             </div>
