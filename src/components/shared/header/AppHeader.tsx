@@ -1,26 +1,15 @@
-import {PropsWithChildren, useState} from "react";
+import {PropsWithChildren} from "react";
 import {Button, Container, Image, Nav, Navbar} from "react-bootstrap";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faHome, faPhone, faEarth, faRightToBracket, faReceipt} from '@fortawesome/free-solid-svg-icons'
+import {faHome, faPhone, faEarth, faReceipt} from '@fortawesome/free-solid-svg-icons'
 import zervemelogo from '../../../assets/logo/zervemelogo.png'
 
 export default function AppHeader(props: PropsWithChildren<{ className?: any, style?: any }>) {
-    const [iconToShow, setIconToShow] = useState(null);
-
     const links = [
         {href: '/', text: 'Home', icon: faHome},
         {href: '/contactus', text: 'Contact Us', icon: faPhone},
         {href: '/explore', text: 'Explore', icon: faEarth},
         {href: '/subscribe', text: 'Subscribe', icon: faReceipt},
     ];
-
-    const handleMouseOver = (icon: any) => {
-        setIconToShow(icon);
-    };
-
-    const handleMouseOut = () => {
-        setIconToShow(null);
-    };
 
     return (
         <header style={props.style} className={props.className}>
