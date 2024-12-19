@@ -31,8 +31,9 @@ export default function LoginPage(props: PropsWithChildren) {
     };
 
     return (
-        <Container fluid className="d-flex justify-content-center align-items-center" style={{minHeight: '100vh'}}>
-            <Row className="w-100 justify-content-center">
+        <Container fluid className="d-flex justify-content-center align-items-center"
+                   style={{minHeight: '70vh'}}>
+            <Row className="w-50 justify-content-center">
                 <Col md={6} lg={4} className="bg-gray-900 p-8 rounded-lg shadow-2xl">
                     <h2 className="text-center text-white mb-6 text-3xl font-bold">Login</h2>
 

@@ -42,8 +42,8 @@ export default function AppHeader(props: PropsWithChildren<{ className?: any, st
                                 </Nav.Link>
                             ))}
                         </Nav>
-                        <Button className="ml-auto" style={{background: '#B660FE'}}>Register!</Button>
-                        <Button className="ml-2" style={{background: '#7b6df6'}}>Login!</Button>
+                        <Button className="ml-auto" style={{background: '#B660FE'}} href="/subscribe">Register!</Button>
+                        <Button className="ml-2" style={{background: '#7b6df6'}} href="/login">Login!</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
