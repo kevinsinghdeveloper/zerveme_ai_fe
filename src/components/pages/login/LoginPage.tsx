@@ -43,7 +43,7 @@ export default function LoginPage(props: PropsWithChildren) {
                         </Alert>
                     )}
 
-                    <Form onSubmit={handleSubmit}>
+                    <Form onSubmit={handleSubmit} className="p-2">
                         <Form.Group className="mb-4">
                             <Form.Label className="text-white">Email address</Form.Label>
                             <Form.Control
@@ -100,7 +100,7 @@ export default function LoginPage(props: PropsWithChildren) {
                         <div className="text-center mt-4">
                             <span className="text-white">
                                 Don't have an account? {' '}
-                                <a href="/signup" className="text-purple-400 hover:text-purple-300">
+                                <a href="/subscribe" className="text-purple-400 hover:text-purple-300">
                                     Sign Up
                                 </a>
                             </span>
