@@ -27,7 +27,7 @@ export default function AppHeader(props: PropsWithChildren<{ className?: any, st
             <Navbar expand="xl">
                 <Container fluid>
                     <Navbar.Brand href="/">
-                        <Image src={zervemelogo} alt="Zerveme Logo" style={{width: '150px', height: 'auto'}}/>
+                        <Image src={zervemelogo} alt="Zerveme Logo" style={{width: '125px', height: 'auto'}}/>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-between">
@@ -43,6 +43,7 @@ export default function AppHeader(props: PropsWithChildren<{ className?: any, st
                             ))}
                         </Nav>
                         <Button className="ml-auto" style={{background: '#B660FE'}}>Register!</Button>
+                        <Button className="ml-2" style={{background: '#7b6df6'}}>Login!</Button>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
