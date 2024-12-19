@@ -5,7 +5,7 @@ import zervemelogo from '../../../assets/logo/zervemelogo.png'
 
 export default function AppHeader(props: PropsWithChildren<{ className?: any, style?: any }>) {
     const links = [
-        {href: '/', text: 'Home', icon: faHome},
+        //{href: '/', text: 'Home', icon: faHome},
         {href: '/contactus', text: 'Contact Us', icon: faPhone},
         {href: '/explore', text: 'Explore', icon: faEarth},
         {href: '/subscribe', text: 'Subscribe', icon: faReceipt},
