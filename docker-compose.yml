@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  react-app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend # if you have a backend service running, remove if not needed
+
+  backend: # Optional: Example for backend service (if any)
+    image: your-backend-image
+    ports:
+      - "4000:4000"
+    environment:
+      - BACKEND_ENV=development
+    volumes:
+      - ./backend:/app
