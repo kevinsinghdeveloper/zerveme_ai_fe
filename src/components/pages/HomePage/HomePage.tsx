@@ -1,21 +1,16 @@
 import React, {PropsWithChildren} from "react";
 import {
     Button,
-    Card,
-    CardBody,
-    CardHeader,
-    CardText,
-    CardTitle,
     Col,
     Container, Image,
     Row
 } from "react-bootstrap";
 
 import homepage_dash from '../../../assets/homepage_dash.png'
-import chartpng from '../../../assets/chart.png'
-import piechart from '../../../assets/pie_chart.png'
-import previewexplorecomp from '../../../assets/previewexplorecomp.png'
-import FrequentQuestionsComponent from "../../shared/components/FrequentQuestionsComponent";
+// import chartpng from '../../../assets/chart.png'
+// import piechart from '../../../assets/pie_chart.png'
+// import previewexplorecomp from '../../../assets/previewexplorecomp.png'
+// import FrequentQuestionsComponent from "../../shared/components/FrequentQuestionsComponent";
 
 export default function HomePage(props: PropsWithChildren) {
 

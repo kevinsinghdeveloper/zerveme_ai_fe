@@ -1,6 +1,6 @@
 import {PropsWithChildren} from "react";
 import {Button, Container, Image, Nav, Navbar} from "react-bootstrap";
-import {faHome, faPhone, faEarth, faReceipt} from '@fortawesome/free-solid-svg-icons'
+import {faPhone, faEarth, faReceipt} from '@fortawesome/free-solid-svg-icons'
 import zervemelogo from '../../../assets/logo/zervemelogo.png'
 
 export default function AppHeader(props: PropsWithChildren<{ className?: any, style?: any }>) {

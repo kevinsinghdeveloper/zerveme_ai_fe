@@ -9,3 +9,7 @@ services:
       - .:/app
     environment:
       - NODE_ENV=development
+    deploy:
+      resources:
+        limits:
+          memory: 20g

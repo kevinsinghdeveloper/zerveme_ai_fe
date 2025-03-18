@@ -1,24 +1,30 @@
 # Step 1: Use an official Node.js runtime as a parent image
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Step 2: Set the working directory inside the container
 WORKDIR /app
 
-# Step 3: Install dependencies first to leverage Docker cache
-# Copy package.json and package-lock.json
+# Step 3: Copy package files first to optimize caching
 COPY package.json package-lock.json ./
 
-# Step 4: Install project dependencies using npm ci (for clean installs)
+# Step 4: Clean up and install dependencies
+RUN rm -rf node_modules package-lock.json && npm install
+
+# Step 5: Install project dependencies using npm ci for consistency
 RUN npm ci
 
-# Step 5: Copy the rest of the project files into the container
+# Step 6: Copy the rest of the project files into the container
 COPY . .
 
-# Step 6: Build the React app for production
-RUN npm run build || tail -n 50 /app/npm-debug.log
+# Step 7: Build the React app for production
+RUN npm run build
 
-# Step 7: Expose the port that React app will run on
+# Step 8: Expose the port that React app will run on
 EXPOSE 3000
 
-# Step 8: Define the command to start the React app
+# Step 9: Use a non-root user for security
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+# Step 10: Start the React app
 CMD ["npm", "start"]

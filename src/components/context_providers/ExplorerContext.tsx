@@ -1,7 +1,6 @@
-import React, {createContext, useContext, useState, PropsWithChildren, ReactNode, useEffect} from 'react';
+import React, {createContext, useContext, useState, PropsWithChildren} from 'react';
 import {useAuthContext} from "./AuthContext";
 import axios from "axios";
-import {UUID} from "node:crypto";
 
 type OptionType = { value: string; label: string };
 
@@ -144,13 +143,13 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
 
     const getDataOnSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const formData = {
-            startDate,
-            endDate,
-            dimensions: selectedDimensions,
-            kpis: selectedKPIs,
-            visualizationType: selectedVisualization,
-        };
+        // const formData = {
+        //     startDate,
+        //     endDate,
+        //     dimensions: selectedDimensions,
+        //     kpis: selectedKPIs,
+        //     visualizationType: selectedVisualization,
+        // };
 
         if (!token) {
             console.error('No authentication token available');

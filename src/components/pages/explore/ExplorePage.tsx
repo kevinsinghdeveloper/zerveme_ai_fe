@@ -1,21 +1,20 @@
 import React, {PropsWithChildren, ReactNode, useCallback, useEffect, useMemo, useState} from "react";
 import {
-    Accordion,
-    Button, Card,
-    Col, Collapse,
-    Container, Dropdown,
-    Form, Image, InputGroup, ListGroup,
+    Button,
+    Col,
+    Container,
+    Image, InputGroup, ListGroup,
     Row, Table
 } from "react-bootstrap";
-import Select, {GroupBase, OptionsOrGroups} from 'react-select';
+import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import "./ExplorePageStyles.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChartBar, faChartPie, faLineChart, faArrowsSpin} from "@fortawesome/free-solid-svg-icons";
 import xmark from "../../../assets/xmark.png";
-import expandicon from "../../../assets/expand.png";
+// import expandicon from "../../../assets/expand.png";
 import {useExplorerContext} from "../../context_providers/ExplorerContext";
-import {useAuthContext} from "../../context_providers/AuthContext";
+// import {useAuthContext} from "../../context_providers/AuthContext";
 
 /*
 const dimensionOptions = [
