@@ -302,8 +302,8 @@ export default function ExplorePage(props: PropsWithChildren) {
                                             endDate={endDate}
                                             placeholderText="Start Period"
                                             className="form-control"
-                                            minDate={periodStart}
-                                            maxDate={periodEnd}
+                                            minDate={periodStart ?? undefined}
+                                            maxDate={periodEnd ?? undefined}
                                         />
                                     </div>
                                     <div className="flex-fill" style={{width: '25%', height: '25px'}}>
@@ -315,8 +315,8 @@ export default function ExplorePage(props: PropsWithChildren) {
                                             endDate={endDate}
                                             placeholderText="End Period"
                                             className="form-control"
-                                            minDate={startDate}
-                                            maxDate={periodEnd}
+                                            minDate={startDate ?? undefined}
+                                            maxDate={periodEnd ?? undefined}
                                         />
                                     </div>
                                 </InputGroup>

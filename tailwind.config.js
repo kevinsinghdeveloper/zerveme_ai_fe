@@ -1,8 +1,6 @@
-/** @prettier */
 const defaultTheme = require("tailwindcss/defaultTheme");
 const colors = require("tailwindcss/colors");
 
-/** @type {import('@tailwindcss').config} */
 module.exports = {
     content: [
         "../*/src/**/*.{tsx,html}",
@@ -43,9 +41,5 @@ module.exports = {
             },
         },
     },
-    plugins: [
-        require("@tailwindcss/line-clamp"),
-        require("@tailwindcss/forms"),
-        require("@tailwindcss/typography"),
-    ],
+    plugins: [],
 };

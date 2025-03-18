@@ -1,5 +1,5 @@
 # Step 1: Use an official Node.js runtime as a parent image
-FROM node:16-alpine
+FROM node:18-alpine
 
 # Step 2: Set the working directory inside the container
 WORKDIR /app
@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Step 4: Install project dependencies using npm ci (for clean installs)
-RUN npm ci --only=production
+RUN npm ci
 
 # Step 5: Copy the rest of the project files into the container
 COPY . .
