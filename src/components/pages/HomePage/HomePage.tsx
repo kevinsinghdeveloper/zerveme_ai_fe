@@ -2,7 +2,7 @@ import React, {PropsWithChildren} from "react";
 import {
     Button,
     Col,
-    Container, Image,
+    Container,
     Row
 } from "react-bootstrap";
 
