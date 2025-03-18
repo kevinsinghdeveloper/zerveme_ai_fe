@@ -1,6 +1,13 @@
 # Use the latest LTS version of Node.js
 FROM node:18-alpine
 
+# Install Certbot (for Let's Encrypt SSL) and dependencies
+RUN apk add --no-cache \
+    certbot \
+    certbot-nginx \
+    bash \
+    curl
+
 # Set the working directory inside the container
 WORKDIR /app
 
@@ -13,8 +20,8 @@ RUN npm install
 # Copy the rest of your application files
 COPY . .
 
-# Expose the port your app runs on
-EXPOSE 3000
+# Expose port 80 (for Certbot validation) and 443 (for HTTPS)
+EXPOSE 80 443
 
 # Define the command to run your app
 CMD ["npm", "start"]
