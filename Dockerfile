@@ -1,26 +1,20 @@
-# Use an official Node.js runtime as a parent image
-FROM node:20-alpine
+# Use the latest LTS version of Node.js
+FROM node:18-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package files first to optimize caching
-COPY package.json package-lock.json ./
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-# Clean npm cache and install dependencies
-RUN npm cache clean --force && npm ci
+# Install dependencies
+RUN npm install
 
-# Explicitly install the latest Webpack version
-RUN npm install webpack@latest --save-dev
-
-# Copy the rest of the project files into the container
+# Copy the rest of your application files
 COPY . .
 
-# Build the React app for production
-RUN npm run build
-
-# Expose the port that the React app will run on
+# Expose the port your app runs on
 EXPOSE 3000
 
-# Start the React app
+# Define the command to run your app
 CMD ["npm", "start"]
