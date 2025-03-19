@@ -224,7 +224,7 @@ export default function ExplorePage(props: PropsWithChildren) {
     const handleDatasetSelect = useCallback((selectedOption: OptionType | null) => {
         setSelectedDatasetId(selectedOption ? selectedOption.value : '');
 
-    }, [selectedDatasetId]);
+    }, [selectedDatasetId, setSelectedDatasetId]);
 
     const handlePreview = useCallback(() => {
         if (selectedDatasetId) {

@@ -55,7 +55,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         if (username && password && email) {
             login(username, password, email);
         }
-    }, [username, password, email]);
+    }, [username, password, email, login]);
 
     return (
         <AuthContext.Provider value={{host, token, login}}>
