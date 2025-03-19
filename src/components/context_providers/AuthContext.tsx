@@ -21,12 +21,8 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         // Fetch credentials.dev.json file (assuming it's served statically)
         const fetchCredentials = async () => {
             try {
-                //const response = await axios.get(credentials); // Adjust the path as per your setup
-                const {userName, password, host, emailAddress} = credentials.app_api_credentials;
+                const {host} = credentials.app_api_credentials;
                 setHost(host)
-                setUsername(userName);
-                setPassword(password);
-                setEmail(emailAddress);
             } catch (error) {
                 console.error('Error fetching credentials:', error);
             }

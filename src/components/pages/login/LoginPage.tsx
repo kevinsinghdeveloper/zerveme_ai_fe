@@ -7,12 +7,16 @@ import {
     Form,
     Row
 } from "react-bootstrap";
+import {useExplorerContext} from "../../context_providers/ExplorerContext";
+import {AuthContextProvider, useAuthContext} from "../../context_providers/AuthContext";
 
 export default function LoginPage(props: PropsWithChildren) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
+
+    const {login} = useAuthContext();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,6 +32,9 @@ export default function LoginPage(props: PropsWithChildren) {
 
         // TODO: Implement actual login logic
         console.log('Login attempt with:', {email, password});
+
+        login(email, password, email)
+            .catch(err => setError('Login failed. Please check your credentials.'));
     };
 
     return (
