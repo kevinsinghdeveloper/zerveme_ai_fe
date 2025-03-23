@@ -16,7 +16,7 @@ export default function LoginPage(props: PropsWithChildren) {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
 
-    const {login} = useAuthContext();
+    const {login, token} = useAuthContext();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -80,6 +80,7 @@ export default function LoginPage(props: PropsWithChildren) {
                                 >
                                     {showPassword ? "Hide" : "Show"}
                                 </Button>
+
                             </div>
                         </Form.Group>
 
@@ -105,6 +106,7 @@ export default function LoginPage(props: PropsWithChildren) {
                         </Button>
 
                         <div className="text-center mt-4">
+                            {token ?? ""}
                             <span className="text-white">
                                 Don't have an account? {' '}
                                 <a href="/subscribe" className="text-purple-400 hover:text-purple-300">

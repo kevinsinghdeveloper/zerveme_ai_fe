@@ -13,7 +13,7 @@ export default function LandingPage(props: PropsWithChildren) {
     return (
         <>
             <AppHeader style={{width: '90%'}} className="ml-auto mr-auto mt-4 bg-inherit"/>
-            <div style={{width: '90%'}} className="ml-auto mr-auto">
+            <div style={{width: '100%'}} className="ml-auto mr-auto">
                 <Routes>
                     <Route path="/contactus" element={<ContactUsPage/>}/>
                     <Route path="/subscribe" element={<SubscribePage/>}/>
