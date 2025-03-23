@@ -5,6 +5,7 @@ import credentials from '../../configs/credentials.dev.json';
 interface AuthContextProps {
     host: string | null;
     token: string | null;
+    username: string | null;
     isLoading: boolean;
     error: string | null;
     login: (username: string, password: string, email: string, onSuccess?: () => void, onError?: () => void) => Promise<void>;
@@ -58,10 +59,14 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
                 emailAddress: email
             });
 
+            console.log(response)
+
             setToken(response.data.token);
+            setUsername(response.data.userName);
 
             // Store token in localStorage for persistence
             localStorage.setItem('authToken', response.data.token);
+            localStorage.setItem('userName', response.data.userName);
 
             // Call the success callback if provided
             if (onSuccess) {
@@ -106,7 +111,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
     }, [username, password, email]);
 
     return (
-        <AuthContext.Provider value={{host, token, isLoading, error, login, clearError}}>
+        <AuthContext.Provider value={{host, token, username, isLoading, error, login, clearError}}>
             {children}
         </AuthContext.Provider>
     );

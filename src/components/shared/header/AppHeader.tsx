@@ -1,15 +1,24 @@
 import {PropsWithChildren} from "react";
-import {Button, Container, Image, Nav, Navbar} from "react-bootstrap";
+import {Button, Container, Dropdown, Image, Nav, Navbar} from "react-bootstrap";
 import {faPhone, faEarth, faReceipt} from '@fortawesome/free-solid-svg-icons'
 import zervemelogo from '../../../assets/logo/zervemelogo.png'
+import {useAuthContext} from "../../context_providers/AuthContext";
 
 export default function AppHeader(props: PropsWithChildren<{ className?: any, style?: any }>) {
-    const links = [
+    const {token, username} = useAuthContext();
+
+    let links = [
         //{href: '/', text: 'Home', icon: faHome},
         {href: '/contactus', text: 'Contact Us', icon: faPhone},
-        {href: '/explore', text: 'Explore', icon: faEarth},
         {href: '/subscribe', text: 'Subscribe', icon: faReceipt},
     ];
+
+    if (token) {
+        links = [
+            {href: '/support', text: 'Support', icon: faPhone},
+            {href: '/models', text: 'Models', icon: faEarth}
+        ]
+    }
 
     return (
         <header style={props.style} className={props.className}>
@@ -31,8 +40,27 @@ export default function AppHeader(props: PropsWithChildren<{ className?: any, st
                                 </Nav.Link>
                             ))}
                         </Nav>
-                        <Button className="ml-auto" style={{background: '#B660FE'}} href="/subscribe">Register!</Button>
-                        <Button className="ml-2" style={{background: '#7b6df6'}} href="/login">Login!</Button>
+                        {token == null ? (
+                            <>
+                                <Button className="ml-auto" style={{background: '#B660FE'}}
+                                        href="/subscribe">Register!</Button>
+                                <Button className="ml-2" style={{background: '#7b6df6'}} href="/login">Login!</Button>
+                            </>
+                        ) : (
+                            <Dropdown className="ml-auto">
+                                <Dropdown.Toggle style={{background: '#7b6df6'}} id="dropdown-basic">
+                                    {username ? username : "Login"}
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                    <Dropdown.Item href="/profile">Profile</Dropdown.Item>
+                                    <Dropdown.Item href="/settings">Settings</Dropdown.Item>
+                                    <Dropdown.Divider/>
+                                    <Dropdown.Item href="/">Logout</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        )}
+
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
