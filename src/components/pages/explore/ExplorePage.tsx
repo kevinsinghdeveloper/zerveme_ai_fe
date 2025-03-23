@@ -16,8 +16,22 @@ const ExplorePage: React.FC = () => {
     const expandedWidth = 240;
     const collapsedWidth = 64;
 
+    // Filter state that will be shared between components
+    const [filters, setFilters] = useState({
+        dateRange: 'allTime',
+        categories: [] as string[],
+        region: 'all'
+    });
+
     const handleSidebarToggle = () => {
         setOpenSidebar(!openSidebar);
+    };
+
+    const handleFilterChange = (filterName: string, value: any) => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            [filterName]: value
+        }));
     };
 
     return (
@@ -42,15 +56,17 @@ const ExplorePage: React.FC = () => {
 
             {/* Content container as flex with no absolute positioning */}
             <Box sx={{display: 'flex', flexGrow: 1, overflow: 'hidden'}}>
-                {/* Sidebar component */}
+                {/* Sidebar component with filters */}
                 <Sidebar
                     open={openSidebar}
                     expandedWidth={expandedWidth}
                     collapsedWidth={collapsedWidth}
+                    filters={filters}
+                    onFilterChange={handleFilterChange}
                 />
 
-                {/* Dashboard component */}
-                <Dashboard/>
+                {/* Dashboard component receiving filters */}
+                <Dashboard filters={filters}/>
             </Box>
         </Box>
     );
