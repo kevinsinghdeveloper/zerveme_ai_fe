@@ -8,33 +8,49 @@ import {
     Row
 } from "react-bootstrap";
 import {useExplorerContext} from "../../context_providers/ExplorerContext";
-import {AuthContextProvider, useAuthContext} from "../../context_providers/AuthContext";
+import {useAuthContext} from "../../context_providers/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 export default function LoginPage(props: PropsWithChildren) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState('');
+    const [localError, setLocalError] = useState('');
 
-    const {login, token} = useAuthContext();
+    const {login, token, isLoading, error: authError} = useAuthContext();
+    const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // Combine local and auth errors
+    const error = localError || authError;
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Basic validation
         if (!email || !password) {
-            setError('Please fill in all fields');
+            setLocalError('Please fill in all fields');
             return;
         }
 
-        // Reset error
-        setError('');
+        // Reset local error
+        setLocalError('');
 
-        // TODO: Implement actual login logic
-        console.log('Login attempt with:', {email, password});
-
-        login(email, password, email)
-            .catch(err => setError('Login failed. Please check your credentials.'));
+        try {
+            // Call login with email for both username and email parameters
+            // Add navigation callbacks
+            await login(
+                email,  // Using email as username
+                password,
+                email,
+                // Success callback - Navigate to dashboard or home on success
+                () => navigate('/explore'),
+                // Error callback - Error handling is done in the auth context
+                undefined
+            );
+        } catch (err) {
+            // This is a fallback, most errors are handled in the auth context
+            setLocalError('Login failed. Please check your credentials.');
+        }
     };
 
     return (
@@ -101,12 +117,13 @@ export default function LoginPage(props: PropsWithChildren) {
                             variant="primary"
                             type="submit"
                             className="w-full py-2 bg-purple-600 hover:bg-purple-700 transition-colors"
+                            disabled={isLoading}
                         >
-                            Login
+                            {isLoading ? 'Logging in...' : 'Login'}
                         </Button>
 
                         <div className="text-center mt-4">
-                            {token ?? ""}
+                            {token && <div className="text-green-400 mb-2">Authentication successful!</div>}
                             <span className="text-white">
                                 Don't have an account? {' '}
                                 <a href="/subscribe" className="text-purple-400 hover:text-purple-300">
