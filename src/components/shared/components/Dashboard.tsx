@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import {Chart} from "react-chartjs-2";
 import 'chart.js/auto';
+import DataChartGridComponent, {ChartTypes, SizeOptions} from "./DataChartGridComponent";
+import DataTableGridComponent from "./DataTableGridComponent";
 
 interface DashboardProps {
     filters: {
@@ -156,123 +158,77 @@ const Dashboard: React.FC<DashboardProps> = ({filters}) => {
 
                 <Grid container spacing={2}>
                     {/* Big card - twice as wide at every breakpoint */}
-                    <Grid item xs={12} sm={12} md={8} lg={6} xl={4}>
-                        <Card sx={{
-                            p: 2,
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
-                            <Typography variant="h6" sx={{mb: 2}}>Sales Overview Dashboard</Typography>
-                            <Box sx={{flexGrow: 1, minHeight: {xs: '250px', md: '200px'}}}>
-                                <Chart type="bar" data={filteredData}/>
-                            </Box>
-                        </Card>
-                    </Grid>
+                    <DataChartGridComponent
+                        size={SizeOptions.MEDIUM}
+                        chartType={ChartTypes.BAR}
+                        data={filteredData}
+                        title="Sales Overview Dashboard"
+                        minHeight={250}
+                    />
 
                     {/* Regular sized cards */}
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                        <Card sx={{
-                            p: 2,
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
-                            <Typography variant="h6" sx={{mb: 2}}>Sales Table</Typography>
-                            <Box sx={{flexGrow: 1, overflow: 'auto'}}>
-                                <Table size="small">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Month</TableCell>
-                                            <TableCell>Sales</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {filteredData.labels.map((month, index) => (
-                                            <TableRow key={month}>
-                                                <TableCell>{month}</TableCell>
-                                                <TableCell>{filteredData.datasets[0].data[index]}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </Box>
-                        </Card>
-                    </Grid>
+                    <DataTableGridComponent
+                        size={SizeOptions.SMALL}
+                        title="Sales Table"
+                        columns={[
+                            {field: 'month', headerName: 'Month'},
+                            {field: 'sales', headerName: 'Sales'}
+                        ]}
+                        data={filteredData.labels.map((month, index) => ({
+                            month: month,
+                            sales: filteredData.datasets[0].data[index]
+                        }))}
+                    />
 
-                    <Grid item xs={12} sm={6} md={12} lg={10} xl={6}>
-                        <Card sx={{
-                            p: 2,
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
-                            <Typography variant="h6" sx={{mb: 2}}>Monthly Trends</Typography>
-                            <Box sx={{flexGrow: 1}}>
-                                <Chart type="line" data={filteredData}/>
-                            </Box>
-                        </Card>
-                    </Grid>
+                    <DataChartGridComponent
+                        size={SizeOptions.MEDIUM}
+                        chartType={ChartTypes.LINE}
+                        data={filteredData}
+                        title="Monthly Trends"
+                        minHeight={250}
+                    />
 
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                        <Card sx={{
-                            p: 2,
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
-                            <Typography variant="h6" sx={{mb: 2}}>Categories</Typography>
-                            <Box sx={{flexGrow: 1}}>
-                                <Chart type="pie" data={categoriesData}/>
-                            </Box>
-                        </Card>
-                    </Grid>
+                    <DataChartGridComponent
+                        size={SizeOptions.SMALL}
+                        chartType={ChartTypes.PIE}
+                        data={categoriesData}
+                        title="Categories"
+                        minHeight={250}
+                    />
 
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                        <Card sx={{
-                            p: 2,
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
-                            <Typography variant="h6" sx={{mb: 2}}>Performance</Typography>
-                            <Box sx={{flexGrow: 1}}>
-                                <Chart type="doughnut" data={{
-                                    labels: ['Target', 'Actual'],
-                                    datasets: [{
-                                        data: [65, 35],
-                                        backgroundColor: [
-                                            'rgba(54, 162, 235, 0.6)',
-                                            'rgba(255, 99, 132, 0.6)',
-                                        ]
-                                    }]
-                                }}/>
-                            </Box>
-                        </Card>
-                    </Grid>
+                    <DataChartGridComponent
+                        size={SizeOptions.LARGE}
+                        chartType={ChartTypes.DOUGHNUT}
+                        data={{
+                            labels: ['Target', 'Actual'],
+                            datasets: [{
+                                data: [65, 35],
+                                backgroundColor: [
+                                    'rgba(54, 162, 235, 0.6)',
+                                    'rgba(255, 99, 132, 0.6)',
+                                ]
+                            }]
+                        }}
+                        title="Target vs Actual"
+                        minHeight={250}
+                    />
 
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                        <Card sx={{
-                            p: 2,
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
-                            <Typography variant="h6" sx={{mb: 2}}>Regional Data</Typography>
-                            <Box sx={{flexGrow: 1}}>
-                                <Chart type="radar" data={{
-                                    labels: ['North', 'East', 'South', 'West', 'Central'],
-                                    datasets: [{
-                                        label: 'Sales',
-                                        data: [65, 59, 90, 81, 56],
-                                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                        borderColor: 'rgba(54, 162, 235, 1)',
-                                        borderWidth: 1
-                                    }]
-                                }}/>
-                            </Box>
-                        </Card>
-                    </Grid>
+                    <DataChartGridComponent
+                        size={SizeOptions.MEDIUM}
+                        chartType={ChartTypes.RADAR}
+                        data={{
+                            labels: ['North', 'East', 'South', 'West', 'Central'],
+                            datasets: [{
+                                label: 'Regional Data',
+                                data: [65, 59, 90, 81, 56],
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        }}
+                        title="Target vs Actual"
+                        minHeight={250}
+                    />
                 </Grid>
             </Container>
         </Box>

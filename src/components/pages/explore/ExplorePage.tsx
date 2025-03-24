@@ -8,8 +8,9 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import "./ExplorePageStyles.css";
-import Sidebar from "../../shared/components/Sidebar";
+import Sidebar from "../../shared/components/ReusableSidebar";
 import Dashboard from "../../shared/components/Dashboard";
+import DashboardSidebar from "../../shared/components/DashboardSidebar";
 
 const ExplorePage: React.FC = () => {
     const [openSidebar, setOpenSidebar] = useState(true);
@@ -57,10 +58,8 @@ const ExplorePage: React.FC = () => {
             {/* Content container as flex with no absolute positioning */}
             <Box sx={{display: 'flex', flexGrow: 1, overflow: 'hidden'}}>
                 {/* Sidebar component with filters */}
-                <Sidebar
+                <DashboardSidebar
                     open={openSidebar}
-                    expandedWidth={expandedWidth}
-                    collapsedWidth={collapsedWidth}
                     filters={filters}
                     onFilterChange={handleFilterChange}
                 />
