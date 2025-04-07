@@ -7,12 +7,11 @@ import {
     Form,
     Row
 } from "react-bootstrap";
-import {useExplorerContext} from "../../context_providers/ExplorerContext";
 import {useAuthContext} from "../../context_providers/AuthContext";
 import {useNavigate} from "react-router-dom";
 
 export default function LoginPage(props: PropsWithChildren) {
-    const [email, setEmail] = useState('');
+    const [userNameOrEmail, setUserNameOrEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [localError, setLocalError] = useState('');
@@ -27,7 +26,7 @@ export default function LoginPage(props: PropsWithChildren) {
         e.preventDefault();
 
         // Basic validation
-        if (!email || !password) {
+        if (!userNameOrEmail || !password) {
             setLocalError('Please fill in all fields');
             return;
         }
@@ -39,9 +38,8 @@ export default function LoginPage(props: PropsWithChildren) {
             // Call login with email for both username and email parameters
             // Add navigation callbacks
             await login(
-                email,  // Using email as username
+                userNameOrEmail,  // Using email as username
                 password,
-                email,
                 // Success callback - Navigate to dashboard or home on success
                 () => navigate('/explore'),
                 // Error callback - Error handling is done in the auth context
@@ -68,12 +66,12 @@ export default function LoginPage(props: PropsWithChildren) {
 
                     <Form onSubmit={handleSubmit} className="p-2">
                         <Form.Group className="mb-4">
-                            <Form.Label className="text-white">Email address</Form.Label>
+                            <Form.Label className="text-white">Username or Email</Form.Label>
                             <Form.Control
-                                type="email"
-                                placeholder="Enter email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                type="text"
+                                placeholder="Enter username or email"
+                                value={userNameOrEmail}
+                                onChange={(e) => setUserNameOrEmail(e.target.value)}
                                 className="bg-white text-black border-gray-300 focus:ring-2 focus:ring-purple-600"
                             />
                         </Form.Group>

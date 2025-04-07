@@ -6,18 +6,21 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {ExplorerContextProvider} from "./components/context_providers/ExplorerContext";
 import {AuthContextProvider, useAuthContext} from "./components/context_providers/AuthContext";
 import {useContext} from "react";
+import {UserContextProvider} from "./components/context_providers/UserContext";
 
 export default function App() {
     return (
         <ErrorBoundary FallbackComponent={AppFallback}>
             <AuthContextProvider>
-                <ExplorerContextProvider>
-                    <BrowserRouter basename="/">
-                        <Routes>
-                            <Route path="*" element={<LandingPage/>}/>
-                        </Routes>
-                    </BrowserRouter>
-                </ExplorerContextProvider>
+                <UserContextProvider>
+                    <ExplorerContextProvider>
+                        <BrowserRouter basename="/">
+                            <Routes>
+                                <Route path="*" element={<LandingPage/>}/>
+                            </Routes>
+                        </BrowserRouter>
+                    </ExplorerContextProvider>
+                </UserContextProvider>
             </AuthContextProvider>
         </ErrorBoundary>
     );

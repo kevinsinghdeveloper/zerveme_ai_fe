@@ -1,4 +1,4 @@
-import React, {PropsWithChildren} from "react";
+import React, {PropsWithChildren, ReactElement} from "react";
 import AppHeader from '../../shared/header/AppHeader'
 import {Navigate, Outlet, Route, Routes} from "react-router-dom";
 import ContactUsPage from "../contactus/ContactUsPage";
@@ -7,12 +7,48 @@ import AppFooter from "../../shared/footer/AppFooter";
 import SubscribePage from "../subscribe/SubscribePage";
 import ExplorePage from "../explore/ExplorePage";
 import LoginPage from "../login/LoginPage";
+import ProfilePage from "../explore/profile/ProfilePage";
 import {useAuthContext} from "../../context_providers/AuthContext";
 
-// Protected route component
 function ProtectedRoute() {
-    const {token} = useAuthContext();
-    return token ? <Outlet/> : <Navigate to="/login" replace/>;
+    const {token, isLoading} = useAuthContext();
+
+    // Show loading indicator while checking authentication
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    }
+
+    // If no token is found, redirect to login
+    if (!token) {
+        return <Navigate to="/login" replace/>;
+    }
+
+    // If token exists, render the child routes
+    return <Outlet/>;
+}
+
+// Define proper interface for AuthenticatedRedirect props
+interface AuthenticatedRedirectProps {
+    element: ReactElement;
+}
+
+// Redirect to explore if authenticated
+function AuthenticatedRedirect({element}: AuthenticatedRedirectProps) {
+    const {token, isLoading} = useAuthContext();
+
+    // Show loading indicator while checking authentication
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    }
+
+    // If token exists, redirect to explore
+    if (token) {
+        console.log("User is authenticated, redirecting to explore");
+        return <Navigate to="/explore" replace/>;
+    }
+
+    // Otherwise render the specified element
+    return element;
 }
 
 export default function LandingPage(props: PropsWithChildren) {
@@ -24,13 +60,16 @@ export default function LandingPage(props: PropsWithChildren) {
                     <Route path="/contactus" element={<ContactUsPage/>}/>
                     <Route path="/subscribe" element={<SubscribePage/>}/>
 
-                    {/* Protected routes */}
+                    {/* Protected routes - No auto redirect within these routes */}
                     <Route element={<ProtectedRoute/>}>
                         <Route path="/explore" element={<ExplorePage/>}/>
+                        <Route path="/profile" element={<ProfilePage/>}/>
                         {/* Add any other routes that require authentication */}
                     </Route>
 
-                    <Route path="/login" element={<LoginPage/>}/>
+                    {/* Routes that redirect authenticated users */}
+                    <Route path="/login" element={<AuthenticatedRedirect element={<LoginPage/>}/>}/>
+                    <Route path="/" element={<AuthenticatedRedirect element={<HomePage/>}/>}/>
                     <Route path="*" element={<HomePage/>}/>
                 </Routes>
             </div>

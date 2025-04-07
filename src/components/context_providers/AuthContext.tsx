@@ -1,30 +1,59 @@
-import React, {createContext, useContext, useState, PropsWithChildren, useEffect} from 'react';
+import React, {
+    createContext,
+    useContext,
+    useState,
+    PropsWithChildren,
+    useEffect,
+} from 'react';
 import axios from 'axios';
+import {jwtDecode} from "jwt-decode";
 import credentials from '../../configs/credentials.dev.json';
 
 interface AuthContextProps {
     host: string | null;
     token: string | null;
-    username: string | null;
+    userNameOrEmail: string | null;
     isLoading: boolean;
     error: string | null;
-    login: (username: string, password: string, email: string, onSuccess?: () => void, onError?: () => void) => Promise<void>;
+    login: (
+        userNameOrEmail: string,
+        password: string,
+        onSuccess?: () => void,
+        onError?: () => void
+    ) => Promise<void>;
+    logout: (onLogout?: () => void) => void;
     clearError: () => void;
 }
+
+interface DecodedToken {
+    exp: number;
+
+    [key: string]: any;
+}
+
+const isTokenExpired = (token: string): boolean => {
+    try {
+        const decoded: DecodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+        return decoded.exp < currentTime;
+    } catch (err) {
+        console.error('Failed to decode token:', err);
+        return true;
+    }
+};
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
     const [host, setHost] = useState<string | null>(null);
-    const [username, setUsername] = useState<string | null>(null);
+    const [userNameOrEmail, setUserNameOrEmail] = useState<string | null>(null);
     const [password, setPassword] = useState<string | null>(null);
-    const [email, setEmail] = useState<string | null>(null);
     const [token, setToken] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    // Load credentials
     useEffect(() => {
-        // Fetch credentials.dev.json file
         const fetchCredentials = async () => {
             try {
                 const {host} = credentials.app_api_credentials;
@@ -32,10 +61,35 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
             } catch (error) {
                 console.error('Error fetching credentials:', error);
                 setError('Failed to load configuration');
+                setIsLoading(false);
             }
         };
 
         fetchCredentials();
+    }, []);
+
+    // Check stored token and validate expiration
+    useEffect(() => {
+        const checkStoredAuth = () => {
+            const storedToken = localStorage.getItem('authToken');
+            const storedUserName = localStorage.getItem('userName');
+
+            if (storedToken && !isTokenExpired(storedToken)) {
+                setToken(storedToken);
+                if (storedUserName) {
+                    setUserNameOrEmail(storedUserName);
+                }
+            } else {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userName');
+                setToken(null);
+                setUserNameOrEmail(null);
+            }
+
+            setIsLoading(false);
+        };
+
+        checkStoredAuth();
     }, []);
 
     const clearError = () => {
@@ -43,9 +97,8 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
     };
 
     const login = async (
-        username: string,
+        userNameOrEmail: string,
         password: string,
-        email: string,
         onSuccess?: () => void,
         onError?: () => void
     ) => {
@@ -54,31 +107,23 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
 
         try {
             const response = await axios.post(`${host}/api/authentication/authorizeUser`, {
-                userName: username,
-                password: password,
-                emailAddress: email
+                UserNameOrEmail: userNameOrEmail,
+                Password: password,
             });
 
-            console.log(response)
-
             setToken(response.data.token);
-            setUsername(response.data.userName);
+            setUserNameOrEmail(response.data.userName);
 
-            // Store token in localStorage for persistence
             localStorage.setItem('authToken', response.data.token);
             localStorage.setItem('userName', response.data.userName);
 
-            // Call the success callback if provided
             if (onSuccess) {
                 onSuccess();
             }
-
         } catch (error: any) {
             console.error('Login failed:', error);
 
-            // Set appropriate error message
             if (error.response) {
-                // Server responded with an error
                 if (error.response.status === 401) {
                     setError('Invalid username or password');
                 } else if (error.response.status === 404) {
@@ -87,14 +132,11 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
                     setError(`Login failed: ${error.response.data.message || 'Server error'}`);
                 }
             } else if (error.request) {
-                // No response received
                 setError('No response from server. Please check your connection.');
             } else {
-                // Request setup error
                 setError('Login request failed. Please try again.');
             }
 
-            // Call the error callback if provided
             if (onError) {
                 onError();
             }
@@ -103,15 +145,29 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         }
     };
 
-    useEffect(() => {
-        // Automatically log in with credentials from the JSON file
-        if (username && password && email) {
-            login(username, password, email);
+    const logout = (onLogout?: () => void) => {
+        setToken(null);
+        setUserNameOrEmail(null);
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userName');
+        if (onLogout) {
+            onLogout();
         }
-    }, [username, password, email]);
+    };
 
     return (
-        <AuthContext.Provider value={{host, token, username, isLoading, error, login, clearError}}>
+        <AuthContext.Provider
+            value={{
+                host,
+                token,
+                userNameOrEmail,
+                isLoading,
+                error,
+                login,
+                logout,
+                clearError,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );

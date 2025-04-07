@@ -5,7 +5,13 @@ import zervemelogo from '../../../assets/logo/zervemelogo.png'
 import {useAuthContext} from "../../context_providers/AuthContext";
 
 export default function AppHeader(props: PropsWithChildren<{ className?: any, style?: any }>) {
-    const {token, username} = useAuthContext();
+    const {token, userNameOrEmail, logout} = useAuthContext();
+
+    const handleLogout = () => {
+        logout(() => {
+            window.location.href = '/'; // Redirect after logout
+        });
+    };
 
     let links = [
         //{href: '/', text: 'Home', icon: faHome},
@@ -49,14 +55,14 @@ export default function AppHeader(props: PropsWithChildren<{ className?: any, st
                         ) : (
                             <Dropdown className="ml-auto">
                                 <Dropdown.Toggle style={{background: '#7b6df6'}} id="dropdown-basic">
-                                    {username ? username : "Login"}
+                                    {userNameOrEmail ? userNameOrEmail : "Login"}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
                                     <Dropdown.Item href="/profile">Profile</Dropdown.Item>
                                     <Dropdown.Item href="/settings">Settings</Dropdown.Item>
                                     <Dropdown.Divider/>
-                                    <Dropdown.Item href="/">Logout</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         )}

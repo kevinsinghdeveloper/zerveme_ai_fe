@@ -39,7 +39,7 @@ const ExplorePage: React.FC = () => {
         <Box sx={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
             {/* App Bar at the top */}
             <AppBar position="static">
-                <Toolbar>
+                <Toolbar style={{backgroundColor: "#7b6df6"}}>
                     <IconButton
                         color="inherit"
                         aria-label="toggle drawer"
