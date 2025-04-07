@@ -5,7 +5,6 @@ import LandingPage from "./components/pages/landing/LandingPage";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {ExplorerContextProvider} from "./components/context_providers/ExplorerContext";
 import {AuthContextProvider, useAuthContext} from "./components/context_providers/AuthContext";
-import {useContext} from "react";
 import {UserContextProvider} from "./components/context_providers/UserContext";
 
 export default function App() {

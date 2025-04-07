@@ -16,5 +16,8 @@ COPY . .
 # Expose the port your app runs on
 EXPOSE 3000
 
+ENV GENERATE_SOURCEMAP=false
+ENV HTTPS=true
+
 # Define the command to run your app
 CMD ["npm", "start"]
