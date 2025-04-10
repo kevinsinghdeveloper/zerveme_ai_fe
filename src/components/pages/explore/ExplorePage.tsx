@@ -11,9 +11,14 @@ import "./ExplorePageStyles.css";
 import Sidebar from "../../shared/components/ReusableSidebar";
 import Dashboard from "../../shared/components/Dashboard";
 import DashboardSidebar from "../../shared/components/DashboardSidebar";
+import Projects from "../../shared/components/Projects";
+import { useExplorerContext } from '../../context_providers/ExplorerContext';
 
 const ExplorePage: React.FC = () => {
     const [openSidebar, setOpenSidebar] = useState(true);
+    const [activeItem, setActiveItem] = useState('Dashboard');
+    const { focusedReport } = useExplorerContext();
+
     const expandedWidth = 240;
     const collapsedWidth = 64;
 
@@ -35,6 +40,18 @@ const ExplorePage: React.FC = () => {
         }));
     };
 
+    const renderComponent = () => {
+        console.log("Current activeItem:", activeItem);
+        switch (activeItem) {
+            case 'Dashboard':
+                return <Dashboard filters={filters}/>
+            case 'Projects':
+                return <Projects/>;
+            default:
+                return <div>No matching component: {activeItem}</div>;
+        }
+    };
+
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
             {/* App Bar at the top */}
@@ -50,7 +67,7 @@ const ExplorePage: React.FC = () => {
                         <MenuIcon/>
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        Dashboard
+                        {focusedReport ? focusedReport.Name : 'Dashboard'}
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -62,10 +79,13 @@ const ExplorePage: React.FC = () => {
                     open={openSidebar}
                     filters={filters}
                     onFilterChange={handleFilterChange}
+                    activeItem={activeItem}
+                    setActiveItem={setActiveItem}
                 />
 
                 {/* Dashboard component receiving filters */}
-                <Dashboard filters={filters}/>
+                {/*<Dashboard filters={filters}/>*/}
+                {renderComponent()}
             </Box>
         </Box>
     );

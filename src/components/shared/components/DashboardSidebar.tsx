@@ -25,6 +25,8 @@ interface DashboardSidebarProps {
         region: string;
     };
     onFilterChange: (filterName: string, value: any) => void;
+    activeItem: string | null;
+    setActiveItem: (item: string) => void;
 }
 
 const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
@@ -32,7 +34,9 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                                                                expandedWidth = 240,
                                                                collapsedWidth = 64,
                                                                filters,
-                                                               onFilterChange
+                                                               onFilterChange,
+                                                               activeItem,
+                                                               setActiveItem
                                                            }) => {
     // Handle filter changes
     const handleDateRangeChange = (event: SelectChangeEvent) => {
@@ -48,10 +52,22 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     };
 
     // Define menu items
+    // Define menu items
     const dashboardMenuItems: SidebarMenuItem[] = [
-        {icon: <DashboardIcon/>, text: 'Dashboard'},
-        {icon: <BarChartIcon/>, text: 'Charts'},
-        {icon: <TableChartIcon/>, text: 'Tables'},
+        {
+            icon: <DashboardIcon/>,
+            text: 'Dashboard',
+            onClick: () => {
+                setActiveItem('Dashboard');
+            }
+        },
+        {
+            icon: <TableChartIcon/>,
+            text: 'Projects',
+            onClick: () => {
+                setActiveItem('Projects');
+            }
+        },
         {icon: <FilterListIcon/>, text: 'Filters'}
     ];
 
