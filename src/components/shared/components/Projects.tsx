@@ -389,6 +389,24 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
                 return `Unknown (${job.JobStatusType})`;
         }
     };
+    const getStatusClass = (status: string) => {
+        switch (status) {
+            case 'Queued':
+                return 'bg-yellow-100 text-yellow-800';
+            case 'Running':
+                return 'bg-blue-100 text-blue-800';
+            case 'Completed':
+                return 'bg-green-100 text-green-800';
+            case 'Cancelled':
+                return 'bg-red-100 text-red-800';
+            case 'Not Started':
+                return 'bg-indigo-100 text-indigo-800';
+            case 'No job configured':
+                return 'bg-gray-100 text-gray-700';
+            default:
+                return 'bg-gray-200 text-gray-700';
+        }
+    };
 
     const getJobFrequency = (job: JobInfo | null) => {
         if (!job) return 'No job configured';
@@ -530,7 +548,8 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
                                                 <TableCell>{report.ReportType.Name}</TableCell>
                                                 <TableCell>{formatDate(report.Job?.LastRunDate)}</TableCell>
                                                 <TableCell>{getJobFrequency(report.Job)}</TableCell>
-                                                <TableCell>{getJobStatus(report.Job)}</TableCell>
+                                                <TableCell
+                                                    className={`px-4 py-2 rounded ${getStatusClass(getJobStatus(report.Job))}`}>{getJobStatus(report.Job)}</TableCell>
                                                 <TableCell>
                                                     <Button
                                                         variant="outlined"
