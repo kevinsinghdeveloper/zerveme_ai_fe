@@ -73,6 +73,7 @@ interface JobInfo {
     Created: string;
     Deleted: string | null;
     LastRunDate: string | null;
+    JobStatusType: number;
 }
 
 interface ReportTypeInfo {
@@ -322,7 +323,14 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
     const [deleteReportDialogOpen, setDeleteReportDialogOpen] = useState(false);
     const [selectedReport, setSelectedReport] = useState<Report | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const {setFocusedReport, updateProject, updateReport, getAllProjects, softDeleteProject, softDeleteReport} = useExplorerContext();
+    const {
+        setFocusedReport,
+        updateProject,
+        updateReport,
+        getAllProjects,
+        softDeleteProject,
+        softDeleteReport
+    } = useExplorerContext();
 
     const handleFocusReport = (report: Report) => {
         setFocusedReport({
@@ -355,6 +363,34 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
     };
 
     const getJobStatus = (job: JobInfo | null) => {
+        if (!job) return 'No job configured';
+
+        // Log the entire job object for debugging
+        console.log('Job object:', job);
+
+        // Check if Status is undefined
+        if (job.JobStatusType === undefined) {
+            console.warn('Job status is undefined');
+            return 'Not Started';
+        }
+
+        // Map the status number to text based on the enum values
+        switch (job.JobStatusType) {
+            case 0:
+                return 'Queued';
+            case 1:
+                return 'Running';
+            case 2:
+                return 'Completed';
+            case 3:
+                return 'Cancelled';
+            default:
+                console.warn('Unknown job status value:', job.JobStatusType);
+                return `Unknown (${job.JobStatusType})`;
+        }
+    };
+
+    const getJobFrequency = (job: JobInfo | null) => {
         if (!job) return 'No job configured';
         if (!job.JobFreqType) return 'No frequency set';
         return job.JobFreqType.Name;
@@ -456,7 +492,8 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
                                         <TableCell>Description</TableCell>
                                         <TableCell>Report Type</TableCell>
                                         <TableCell>Last Run</TableCell>
-                                        <TableCell>Job Schedule Status</TableCell>
+                                        <TableCell>Job Frequency</TableCell>
+                                        <TableCell>Job Status</TableCell>
                                         <TableCell>Actions</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -492,6 +529,7 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
                                                 <TableCell>{report.Description}</TableCell>
                                                 <TableCell>{report.ReportType.Name}</TableCell>
                                                 <TableCell>{formatDate(report.Job?.LastRunDate)}</TableCell>
+                                                <TableCell>{getJobFrequency(report.Job)}</TableCell>
                                                 <TableCell>{getJobStatus(report.Job)}</TableCell>
                                                 <TableCell>
                                                     <Button
@@ -506,7 +544,7 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
                                         ))
                                     ) : (
                                         <TableRow>
-                                            <TableCell colSpan={6} align="center">
+                                            <TableCell colSpan={7} align="center">
                                                 No reports found
                                             </TableCell>
                                         </TableRow>
@@ -560,22 +598,24 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
                 <DialogTitle>Delete Report</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Are you sure you want to delete the report "{selectedReport?.Name}"? This action cannot be undone.
+                        Are you sure you want to delete the report "{selectedReport?.Name}"? This action cannot be
+                        undone.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setDeleteReportDialogOpen(false)}>Cancel</Button>
-                    <Button onClick={() => selectedReport && handleDeleteReport(selectedReport)} color="error">Delete</Button>
+                    <Button onClick={() => selectedReport && handleDeleteReport(selectedReport)}
+                            color="error">Delete</Button>
                 </DialogActions>
             </Dialog>
 
-            <Snackbar 
-                open={!!error} 
-                autoHideDuration={6000} 
+            <Snackbar
+                open={!!error}
+                autoHideDuration={6000}
                 onClose={handleCloseError}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                anchorOrigin={{vertical: 'top', horizontal: 'center'}}
             >
-                <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
+                <Alert onClose={handleCloseError} severity="error" sx={{width: '100%'}}>
                     {error}
                 </Alert>
             </Snackbar>
@@ -880,13 +920,13 @@ const Projects: React.FC = () => {
     return (
         <Container maxWidth="lg"
                    sx={{mt: 4, mb: 4, height: 'calc(100vh - 100px)', display: 'flex', flexDirection: 'column'}}>
-            <Snackbar 
-                open={!!error} 
-                autoHideDuration={6000} 
+            <Snackbar
+                open={!!error}
+                autoHideDuration={6000}
                 onClose={() => setError(null)}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                anchorOrigin={{vertical: 'top', horizontal: 'center'}}
             >
-                <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
+                <Alert onClose={() => setError(null)} severity="error" sx={{width: '100%'}}>
                     {error}
                 </Alert>
             </Snackbar>

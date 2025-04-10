@@ -24,6 +24,7 @@ interface JobInfo {
     Created: string;
     Deleted: string | null;
     LastRunDate: string | null;
+    JobStatusType: number; // 0: Queued, 1: Running, 2: Completed, 3: Cancelled
 }
 
 interface ReportInfo {
