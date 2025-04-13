@@ -4,9 +4,20 @@ import axios from "axios";
 
 type OptionType = { value: string; label: string };
 
+interface ReportConfigField {
+    FieldName: string;
+    PossibleOptions: string[];
+    FieldType: 0 | 1; // 0 for single value, 1 for dropdown
+}
+
+interface ReportConfig {
+    Fields: ReportConfigField[];
+}
+
 interface ReportTypeInfo {
     Id: string;
     Name: string;
+    ReportConfig: ReportConfig;
 }
 
 interface JobFreqTypeInfo {

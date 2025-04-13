@@ -76,9 +76,20 @@ interface JobInfo {
     JobStatusType: number;
 }
 
+interface ReportConfigField {
+    FieldName: string;
+    PossibleOptions: string[];
+    FieldType: 0 | 1; // 0 for single value, 1 for dropdown
+}
+
+interface ReportConfig {
+    Fields: ReportConfigField[];
+}
+
 interface ReportTypeInfo {
     Id: string;
     Name: string;
+    ReportConfig: ReportConfig;
 }
 
 interface Report {
@@ -87,6 +98,12 @@ interface Report {
     Description: string;
     ProjectId: string;
     ReportType: ReportTypeInfo;
+    ReportConfig?: {
+        Fields: {
+            FieldName: string;
+            Value: string | string[];
+        }[];
+    };
     Job: JobInfo | null;
 }
 
@@ -212,6 +229,9 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
     const [nameError, setNameError] = useState('');
     const {jobFreqTypes, reportTypes} = useExplorerContext();
 
+    // Get current report type config
+    const selectedReportType = reportTypes.find(type => type.Id === reportTypeId);
+
     const validateForm = () => {
         let isValid = true;
         if (!name.trim()) {
@@ -289,6 +309,38 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                         ))}
                     </Select>
                 </FormControl>
+
+                {/* Dynamic Config Fields */}
+                {selectedReportType?.ReportConfig.Fields.map((field) => (
+                    <FormControl fullWidth margin="normal" key={field.FieldName}>
+                        {field.FieldType === 0 ? (
+                            // Dropdown field (FieldType 0)
+                            <>
+                                <InputLabel id={`${field.FieldName}-label`}>{field.FieldName}</InputLabel>
+                                <Select
+                                    labelId={`${field.FieldName}-label`}
+                                    label={field.FieldName}
+                                    value=""
+                                    onChange={() => {}}
+                                >
+                                    {field.PossibleOptions.map((option) => (
+                                        <MenuItem key={option} value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </>
+                        ) : (
+                            // Single value text field (FieldType 1)
+                            <TextField
+                                label={field.FieldName}
+                                value=""
+                                onChange={() => {}}
+                            />
+                        )}
+                    </FormControl>
+                ))}
+
                 <FormControl fullWidth margin="normal">
                     <InputLabel id="job-freq-type-label">Job Frequency</InputLabel>
                     <Select
@@ -299,7 +351,11 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                         onChange={(e) => setJobFreqTypeId(e.target.value)}
                     >
                         {jobFreqTypes.map((type) => (
-                            <MenuItem key={type.Id} value={type.Id}>
+                            <MenuItem
+                                key={type.Id}
+                                value={type.Id}
+                                disabled={type.Name === 'OneOff'}
+                            >
                                 {type.Name}
                             </MenuItem>
                         ))}
@@ -757,6 +813,9 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
         }
     }, [report]);
 
+    // Get current report type config
+    const selectedReportType = reportTypes.find(type => type.Id === reportTypeId);
+
     if (!report) return null;
 
     const validateForm = () => {
@@ -837,6 +896,38 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                         ))}
                     </Select>
                 </FormControl>
+
+                {/* Dynamic Config Fields */}
+                {selectedReportType?.ReportConfig.Fields.map((field) => (
+                    <FormControl fullWidth margin="normal" key={field.FieldName}>
+                        {field.FieldType === 0 ? (
+                            // Dropdown field (FieldType 0)
+                            <>
+                                <InputLabel id={`${field.FieldName}-label`}>{field.FieldName}</InputLabel>
+                                <Select
+                                    labelId={`${field.FieldName}-label`}
+                                    label={field.FieldName}
+                                    value=""
+                                    onChange={() => {}}
+                                >
+                                    {field.PossibleOptions.map((option) => (
+                                        <MenuItem key={option} value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </>
+                        ) : (
+                            // Single value text field (FieldType 1)
+                            <TextField
+                                label={field.FieldName}
+                                value=""
+                                onChange={() => {}}
+                            />
+                        )}
+                    </FormControl>
+                ))}
+
                 <FormControl fullWidth margin="normal">
                     <InputLabel id="job-freq-type-label">Job Frequency</InputLabel>
                     <Select
