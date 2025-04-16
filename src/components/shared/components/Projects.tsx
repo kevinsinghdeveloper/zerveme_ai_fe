@@ -11,11 +11,8 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
     TextField,
-    InputAdornment,
     IconButton,
-    Chip,
     Collapse,
     TablePagination,
     Divider,
@@ -28,40 +25,17 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    FormHelperText,
-    SelectChangeEvent,
     DialogContentText,
     Alert,
     Snackbar, Checkbox, ListItemText
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddIcon from '@mui/icons-material/Add';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import DownloadIcon from '@mui/icons-material/Download';
-import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Modal from '../Modal';
-import CollapsibleTable from '../CollapsibleTable';
-import CollapsibleTableRow from '../CollapsibleTableRow';
 import {useExplorerContext} from '../../context_providers/ExplorerContext';
-
-interface ReportType {
-    Id: string;
-    Name: string;
-    Description: string;
-    Updated: string | null;
-    Created: string;
-    Deleted: string | null;
-}
-
-interface JobFreqTypeInfo {
-    Id: string;
-    Name: string;
-}
 
 interface JobInfo {
     Id: string;
@@ -89,12 +63,6 @@ interface ReportConfigField {
 
 interface ReportConfig {
     Fields: ReportConfigField[];
-}
-
-interface ReportTypeInfo {
-    Id: string;
-    Name: string;
-    ReportConfig: ReportConfig;
 }
 
 interface Report {
@@ -1165,9 +1133,7 @@ const Projects: React.FC = () => {
 
     const {
         projects,
-        reports,
         getAllProjects,
-        getAllReportsForProject,
         createProject,
         createReport
     } = useExplorerContext();
@@ -1180,7 +1146,7 @@ const Projects: React.FC = () => {
             });
             setIsInitialLoad(false);
         }
-    }, [isInitialLoad]);
+    }, [isInitialLoad, getAllProjects]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
