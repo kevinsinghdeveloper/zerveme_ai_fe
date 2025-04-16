@@ -424,27 +424,20 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                                 // Text input field (FieldType 1)
                                 <TextField
                                     label={field.FieldName}
-                                    value={typeof configValues[field.FieldName] === 'string'
-                                        ? configValues[field.FieldName] as string
-                                        : Array.isArray(configValues[field.FieldName])
-                                            ? (configValues[field.FieldName] as string[]).join('\n')
-                                            : ''}
+                                    value={Array.isArray(configValues[field.FieldName])
+                                        ? (configValues[field.FieldName] as string[]).join('\n')
+                                        : configValues[field.FieldName] || ''}
                                     onChange={(e) => {
-                                        console.log(`Text input change for ${field.FieldName}:`, {
-                                            value: e.target.value,
-                                            is_multi: isMulti,
-                                            currentValue: configValues[field.FieldName]
-                                        });
                                         if (isMulti) {
-                                            // For multi-line text input, split by newlines
+                                            // For multi-line text input, split by newlines and filter empty lines
                                             const values = e.target.value.split('\n').filter(v => v.trim());
-                                            console.log(`Multi values for ${field.FieldName}:`, values);
                                             handleConfigChange(field.FieldName, values);
                                         } else {
                                             handleConfigChange(field.FieldName, e.target.value);
                                         }
                                     }}
                                     multiline={isMulti}
+                                    rows={isMulti ? 4 : 1}
                                     placeholder={isMulti ? "Enter multiple values (one per line)" : ""}
                                 />
                             )}
@@ -984,27 +977,20 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                         // Text input field (FieldType 1)
                         <TextField
                             label={field.FieldName}
-                            value={typeof configValues[field.FieldName] === 'string'
-                                ? configValues[field.FieldName] as string
-                                : Array.isArray(configValues[field.FieldName])
-                                    ? (configValues[field.FieldName] as string[]).join('\n')
-                                    : ''}
+                            value={Array.isArray(configValues[field.FieldName])
+                                ? (configValues[field.FieldName] as string[]).join('\n')
+                                : configValues[field.FieldName] || ''}
                             onChange={(e) => {
-                                console.log(`Text input change for ${field.FieldName}:`, {
-                                    value: e.target.value,
-                                    is_multi: isMulti,
-                                    currentValue: configValues[field.FieldName]
-                                });
                                 if (isMulti) {
-                                    // For multi-line text input, split by newlines
+                                    // For multi-line text input, split by newlines and filter empty lines
                                     const values = e.target.value.split('\n').filter(v => v.trim());
-                                    console.log(`Multi values for ${field.FieldName}:`, values);
                                     handleConfigChange(field.FieldName, values);
                                 } else {
                                     handleConfigChange(field.FieldName, e.target.value);
                                 }
                             }}
                             multiline={isMulti}
+                            rows={isMulti ? 4 : 1}
                             placeholder={isMulti ? "Enter multiple values (one per line)" : ""}
                         />
                     )}
