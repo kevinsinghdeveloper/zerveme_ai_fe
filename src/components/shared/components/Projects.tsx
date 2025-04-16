@@ -65,14 +65,18 @@ interface JobFreqTypeInfo {
 
 interface JobInfo {
     Id: string;
-    JobFreqType: JobFreqTypeInfo | null;
-    JobScheduleId: string;
+    JobFreqType: {
+        Id: string;
+        Name: string;
+    };
+    JobScheduleId: string | null;
     UpdatedUserId: string;
     CreatedUserId: string;
-    Updated: string | null;
+    Updated: string;
     Created: string;
     Deleted: string | null;
     LastRunDate: string | null;
+    ReportEntity: any | null;
     JobStatusType: number;
 }
 
@@ -97,14 +101,35 @@ interface Report {
     Name: string;
     Description: string;
     ProjectId: string;
-    ReportType: ReportTypeInfo;
-    ReportConfig?: {
-        Fields: {
-            FieldName: string;
-            Value: string | string[];
-        }[];
+    ReportType: {
+        Id: string;
+        Name: string;
+        Description: string;
+        DatasetId: string | null;
+        DatasetEntity: any | null;
+        ReportConfigurationEntity: any | null;
+        Updated: string | null;
+        Created: string;
+        Deleted: string | null;
     };
-    Job: JobInfo | null;
+    Job: {
+        Id: string;
+        JobFreqType: {
+            Id: string;
+            Name: string;
+        };
+        JobScheduleId: string | null;
+        UpdatedUserId: string;
+        CreatedUserId: string;
+        Updated: string;
+        Created: string;
+        Deleted: string | null;
+        LastRunDate: string | null;
+        ReportEntity: any | null;
+        JobStatusType: number;
+    } | null;
+    ReportConfigurationId: string;
+    DatasetConfig: string | null; // JSON string containing field values
 }
 
 interface Project {
@@ -112,7 +137,7 @@ interface Project {
     Name: string;
     Description: string;
     Reports: Report[];
-    OrganizationId: string;
+    OrganizationId?: string; // Make OrganizationId optional
 }
 
 // New Project Modal Component
@@ -216,6 +241,7 @@ interface NewReportModalProps {
         projectId: string;
         reportTypeId: string;
         jobFreqTypeId: string;
+        datasetConfig: string;
     }) => void;
     projectId: string;
     projectName: string;
@@ -227,10 +253,16 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
     const [reportTypeId, setReportTypeId] = useState('');
     const [jobFreqTypeId, setJobFreqTypeId] = useState('');
     const [nameError, setNameError] = useState('');
+    const [configValues, setConfigValues] = useState<{ [key: string]: string | string[] }>({});
     const {jobFreqTypes, reportTypes} = useExplorerContext();
 
     // Get current report type config
     const selectedReportType = reportTypes.find(type => type.Id === reportTypeId);
+
+    // Reset config values when report type changes
+    useEffect(() => {
+        setConfigValues({});
+    }, [reportTypeId]);
 
     const validateForm = () => {
         let isValid = true;
@@ -250,10 +282,18 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                 description,
                 projectId,
                 reportTypeId,
-                jobFreqTypeId
+                jobFreqTypeId,
+                datasetConfig: JSON.stringify(configValues)
             });
             onClose();
         }
+    };
+
+    const handleConfigChange = (fieldName: string, value: string | string[]) => {
+        setConfigValues(prev => ({
+            ...prev,
+            [fieldName]: value
+        }));
     };
 
     return (
@@ -320,8 +360,8 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                                 <Select
                                     labelId={`${field.FieldName}-label`}
                                     label={field.FieldName}
-                                    value=""
-                                    onChange={() => {}}
+                                    value={configValues[field.FieldName] || ''}
+                                    onChange={(e) => handleConfigChange(field.FieldName, e.target.value)}
                                 >
                                     {field.PossibleOptions.map((option) => (
                                         <MenuItem key={option} value={option}>
@@ -334,8 +374,8 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                             // Single value text field (FieldType 1)
                             <TextField
                                 label={field.FieldName}
-                                value=""
-                                onChange={() => {}}
+                                value={configValues[field.FieldName] || ''}
+                                onChange={(e) => handleConfigChange(field.FieldName, e.target.value)}
                             />
                         )}
                     </FormControl>
@@ -412,6 +452,7 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
         projectId: string;
         reportTypeId: string;
         jobFreqTypeId: string;
+        datasetConfig: string;
     }) => {
         await updateReport(updatedReport);
         await getAllProjects(); // Refresh projects after update
@@ -582,7 +623,9 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
                                                             size="small"
                                                             onClick={() => {
                                                                 setSelectedReport(report);
-                                                                setEditReportModalOpen(true);
+                                                                setTimeout(() => {
+                                                                    setEditReportModalOpen(true);
+                                                                }, 0);
                                                             }}
                                                             sx={{ml: 1}}
                                                         >
@@ -790,6 +833,7 @@ interface EditReportModalProps {
         projectId: string;
         reportTypeId: string;
         jobFreqTypeId: string;
+        datasetConfig: string;
     }) => void;
     report: Report;
     projectName: string;
@@ -801,17 +845,44 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
     const [reportTypeId, setReportTypeId] = useState(report?.ReportType?.Id || '');
     const [jobFreqTypeId, setJobFreqTypeId] = useState(report?.Job?.JobFreqType?.Id || '');
     const [nameError, setNameError] = useState('');
+    const [configValues, setConfigValues] = useState<{ [key: string]: string | string[] }>({});
     const {jobFreqTypes, reportTypes} = useExplorerContext();
 
     // Update local state when report changes
     useEffect(() => {
+        console.log('Report changed:', report);
         if (report) {
             setName(report.Name);
             setDescription(report.Description);
             setReportTypeId(report.ReportType.Id);
             setJobFreqTypeId(report.Job?.JobFreqType?.Id || '');
+            
+            // Parse datasetConfig if it exists
+            if (report.DatasetConfig) {
+                try {
+                    console.log('Parsing dataset config:', report.DatasetConfig);
+                    const parsedConfig = JSON.parse(report.DatasetConfig);
+                    console.log('Parsed config:', parsedConfig);
+                    setConfigValues(parsedConfig);
+                } catch (error) {
+                    console.error('Error parsing dataset config:', error);
+                    setConfigValues({});
+                }
+            } else {
+                console.log('No dataset config found');
+                setConfigValues({});
+            }
         }
-    }, [report]);
+    }, [report, open]); // Add 'open' to dependency array to ensure it runs when modal opens
+
+    // Reset config values when report type changes
+    useEffect(() => {
+        // Only reset config values if the report type has changed from the original report type
+        if (reportTypeId && reportTypeId !== report?.ReportType?.Id) {
+            console.log('Report type changed from original, resetting config values');
+            setConfigValues({});
+        }
+    }, [reportTypeId, report?.ReportType?.Id]);
 
     // Get current report type config
     const selectedReportType = reportTypes.find(type => type.Id === reportTypeId);
@@ -837,10 +908,18 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                 description,
                 projectId: report.ProjectId,
                 reportTypeId,
-                jobFreqTypeId
+                jobFreqTypeId,
+                datasetConfig: JSON.stringify(configValues)
             });
             onClose();
         }
+    };
+
+    const handleConfigChange = (fieldName: string, value: string | string[]) => {
+        setConfigValues(prev => ({
+            ...prev,
+            [fieldName]: value
+        }));
     };
 
     return (
@@ -907,8 +986,8 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                                 <Select
                                     labelId={`${field.FieldName}-label`}
                                     label={field.FieldName}
-                                    value=""
-                                    onChange={() => {}}
+                                    value={configValues[field.FieldName] || ''}
+                                    onChange={(e) => handleConfigChange(field.FieldName, e.target.value)}
                                 >
                                     {field.PossibleOptions.map((option) => (
                                         <MenuItem key={option} value={option}>
@@ -921,8 +1000,8 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                             // Single value text field (FieldType 1)
                             <TextField
                                 label={field.FieldName}
-                                value=""
-                                onChange={() => {}}
+                                value={configValues[field.FieldName] || ''}
+                                onChange={(e) => handleConfigChange(field.FieldName, e.target.value)}
                             />
                         )}
                     </FormControl>
@@ -1012,6 +1091,7 @@ const Projects: React.FC = () => {
         projectId: string;
         reportTypeId: string;
         jobFreqTypeId: string;
+        datasetConfig: string;
     }) => {
         try {
             await createReport({
@@ -1019,8 +1099,11 @@ const Projects: React.FC = () => {
                 description: report.description,
                 projectId: report.projectId,
                 reportTypeId: report.reportTypeId,
-                jobFreqTypeId: report.jobFreqTypeId
+                jobFreqTypeId: report.jobFreqTypeId,
+                datasetConfig: report.datasetConfig
             });
+            // Refresh projects to get the updated report data
+            await getAllProjects();
             setNewReportModalOpen(false);
         } catch (err: any) {
             setError(err.response?.data || 'Failed to create report');

@@ -27,15 +27,19 @@ interface JobFreqTypeInfo {
 
 interface JobInfo {
     Id: string;
-    JobFreqType: JobFreqTypeInfo | null;
-    JobScheduleId: string;
+    JobFreqType: {
+        Id: string;
+        Name: string;
+    };
+    JobScheduleId: string | null;
     UpdatedUserId: string;
     CreatedUserId: string;
-    Updated: string | null;
+    Updated: string;
     Created: string;
     Deleted: string | null;
     LastRunDate: string | null;
-    JobStatusType: number; // 0: Queued, 1: Running, 2: Completed, 3: Cancelled
+    ReportEntity: any | null;
+    JobStatusType: number;
 }
 
 interface ReportInfo {
@@ -43,8 +47,20 @@ interface ReportInfo {
     Name: string;
     Description: string;
     ProjectId: string;
-    ReportType: ReportTypeInfo;
+    ReportType: {
+        Id: string;
+        Name: string;
+        Description: string;
+        DatasetId: string | null;
+        DatasetEntity: any | null;
+        ReportConfigurationEntity: any | null;
+        Updated: string | null;
+        Created: string;
+        Deleted: string | null;
+    };
     Job: JobInfo | null;
+    ReportConfigurationId: string;
+    DatasetConfig: string | null;
 }
 
 interface ProjectInfo {
@@ -52,7 +68,7 @@ interface ProjectInfo {
     Name: string;
     Description: string;
     Reports: ReportInfo[];
-    OrganizationId: string;
+    OrganizationId?: string;
 }
 
 interface CreateProjectRequest {
@@ -74,6 +90,7 @@ interface CreateReportRequest {
     projectId: string;
     reportTypeId: string;
     jobFreqTypeId: string;
+    datasetConfig: string;
 }
 
 interface UpdateReportRequest {
