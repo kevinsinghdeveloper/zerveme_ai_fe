@@ -7,7 +7,8 @@ type OptionType = { value: string; label: string };
 interface ReportConfigField {
     FieldName: string;
     PossibleOptions: string[];
-    FieldType: 0 | 1; // 0 for single value, 1 for dropdown
+    FieldType: 0 | 1; // 0 for dropdown, 1 for text input
+    is_multi?: boolean; // Optional property to indicate if multiple values are allowed
 }
 
 interface ReportConfig {

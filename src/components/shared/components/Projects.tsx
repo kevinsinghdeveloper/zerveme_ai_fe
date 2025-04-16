@@ -83,7 +83,8 @@ interface JobInfo {
 interface ReportConfigField {
     FieldName: string;
     PossibleOptions: string[];
-    FieldType: 0 | 1; // 0 for single value, 1 for dropdown
+    FieldType: 0 | 1; // 0 for dropdown, 1 for text input
+    is_multi?: boolean; // Optional property to indicate if multiple values are allowed
 }
 
 interface ReportConfig {
@@ -290,6 +291,7 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
     };
 
     const handleConfigChange = (fieldName: string, value: string | string[]) => {
+        console.log(`Config change for ${fieldName}:`, value);
         setConfigValues(prev => ({
             ...prev,
             [fieldName]: value
@@ -351,35 +353,91 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                 </FormControl>
 
                 {/* Dynamic Config Fields */}
-                {selectedReportType?.ReportConfig.Fields.map((field) => (
-                    <FormControl fullWidth margin="normal" key={field.FieldName}>
-                        {field.FieldType === 0 ? (
-                            // Dropdown field (FieldType 0)
-                            <>
-                                <InputLabel id={`${field.FieldName}-label`}>{field.FieldName}</InputLabel>
-                                <Select
-                                    labelId={`${field.FieldName}-label`}
+                {useMemo(() => selectedReportType?.ReportConfig.Fields.map((field) => {
+                    // Ensure is_multi is a boolean and default to false if undefined
+                    const isMulti = field.is_multi === true;
+                    
+                    console.log(`Rendering field ${field.FieldName}:`, {
+                        ...field,
+                        is_multi: isMulti,
+                        value: configValues[field.FieldName]
+                    });
+
+                    return (
+                        <FormControl fullWidth margin="normal" key={field.FieldName}>
+                            {field.FieldType === 0 ? (
+                                // Dropdown field (FieldType 0)
+                                <>
+                                    <InputLabel id={`${field.FieldName}-label`}>{field.FieldName}</InputLabel>
+                                    {isMulti ? (
+                                        <Select
+                                            labelId={`${field.FieldName}-label`}
+                                            label={field.FieldName}
+                                            value={Array.isArray(configValues[field.FieldName]) 
+                                                ? configValues[field.FieldName] as string[] 
+                                                : []}
+                                            onChange={(e) => {
+                                                console.log(`Multi-select change for ${field.FieldName}:`, e.target.value);
+                                                handleConfigChange(field.FieldName, e.target.value);
+                                            }}
+                                            multiple
+                                            renderValue={(selected) => (selected as string[]).join(', ')}
+                                        >
+                                            {field.PossibleOptions.map((option) => (
+                                                <MenuItem key={option} value={option}>
+                                                    {option}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    ) : (
+                                        <Select
+                                            labelId={`${field.FieldName}-label`}
+                                            label={field.FieldName}
+                                            value={configValues[field.FieldName] || ''}
+                                            onChange={(e) => {
+                                                console.log(`Single-select change for ${field.FieldName}:`, e.target.value);
+                                                handleConfigChange(field.FieldName, e.target.value);
+                                            }}
+                                        >
+                                            {field.PossibleOptions.map((option) => (
+                                                <MenuItem key={option} value={option}>
+                                                    {option}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    )}
+                                </>
+                            ) : (
+                                // Text input field (FieldType 1)
+                                <TextField
                                     label={field.FieldName}
-                                    value={configValues[field.FieldName] || ''}
-                                    onChange={(e) => handleConfigChange(field.FieldName, e.target.value)}
-                                >
-                                    {field.PossibleOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </>
-                        ) : (
-                            // Single value text field (FieldType 1)
-                            <TextField
-                                label={field.FieldName}
-                                value={configValues[field.FieldName] || ''}
-                                onChange={(e) => handleConfigChange(field.FieldName, e.target.value)}
-                            />
-                        )}
-                    </FormControl>
-                ))}
+                                    value={typeof configValues[field.FieldName] === 'string' 
+                                        ? configValues[field.FieldName] as string
+                                        : Array.isArray(configValues[field.FieldName])
+                                            ? (configValues[field.FieldName] as string[]).join('\n')
+                                            : ''}
+                                    onChange={(e) => {
+                                        console.log(`Text input change for ${field.FieldName}:`, {
+                                            value: e.target.value,
+                                            is_multi: isMulti,
+                                            currentValue: configValues[field.FieldName]
+                                        });
+                                        if (isMulti) {
+                                            // For multi-line text input, split by newlines
+                                            const values = e.target.value.split('\n').filter(v => v.trim());
+                                            console.log(`Multi values for ${field.FieldName}:`, values);
+                                            handleConfigChange(field.FieldName, values);
+                                        } else {
+                                            handleConfigChange(field.FieldName, e.target.value);
+                                        }
+                                    }}
+                                    multiline={isMulti}
+                                    placeholder={isMulti ? "Enter multiple values (one per line)" : ""}
+                                />
+                            )}
+                        </FormControl>
+                    );
+                }), [selectedReportType, configValues])}
 
                 <FormControl fullWidth margin="normal">
                     <InputLabel id="job-freq-type-label">Job Frequency</InputLabel>
@@ -848,6 +906,100 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
     const [configValues, setConfigValues] = useState<{ [key: string]: string | string[] }>({});
     const {jobFreqTypes, reportTypes} = useExplorerContext();
 
+    // Get current report type config
+    const selectedReportType = reportTypes.find(type => type.Id === reportTypeId);
+
+    // Memoize the dynamic fields
+    const dynamicFields = useMemo(() => {
+        if (!selectedReportType?.ReportConfig.Fields) return [];
+        
+        return selectedReportType.ReportConfig.Fields.map((field) => {
+            // Ensure is_multi is a boolean and default to false if undefined
+            const isMulti = field.is_multi === true;
+            
+            console.log(`Rendering field ${field.FieldName}:`, {
+                ...field,
+                is_multi: isMulti,
+                value: configValues[field.FieldName]
+            });
+
+            return (
+                <FormControl fullWidth margin="normal" key={field.FieldName}>
+                    {field.FieldType === 0 ? (
+                        // Dropdown field (FieldType 0)
+                        <>
+                            <InputLabel id={`${field.FieldName}-label`}>{field.FieldName}</InputLabel>
+                            {isMulti ? (
+                                <Select
+                                    labelId={`${field.FieldName}-label`}
+                                    label={field.FieldName}
+                                    value={Array.isArray(configValues[field.FieldName]) 
+                                        ? configValues[field.FieldName] as string[] 
+                                        : []}
+                                    onChange={(e) => {
+                                        console.log(`Multi-select change for ${field.FieldName}:`, e.target.value);
+                                        handleConfigChange(field.FieldName, e.target.value);
+                                    }}
+                                    multiple
+                                    renderValue={(selected) => (selected as string[]).join(', ')}
+                                >
+                                    {field.PossibleOptions.map((option) => (
+                                        <MenuItem key={option} value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            ) : (
+                                <Select
+                                    labelId={`${field.FieldName}-label`}
+                                    label={field.FieldName}
+                                    value={configValues[field.FieldName] || ''}
+                                    onChange={(e) => {
+                                        console.log(`Single-select change for ${field.FieldName}:`, e.target.value);
+                                        handleConfigChange(field.FieldName, e.target.value);
+                                    }}
+                                >
+                                    {field.PossibleOptions.map((option) => (
+                                        <MenuItem key={option} value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            )}
+                        </>
+                    ) : (
+                        // Text input field (FieldType 1)
+                        <TextField
+                            label={field.FieldName}
+                            value={typeof configValues[field.FieldName] === 'string' 
+                                ? configValues[field.FieldName] as string
+                                : Array.isArray(configValues[field.FieldName])
+                                    ? (configValues[field.FieldName] as string[]).join('\n')
+                                    : ''}
+                            onChange={(e) => {
+                                console.log(`Text input change for ${field.FieldName}:`, {
+                                    value: e.target.value,
+                                    is_multi: isMulti,
+                                    currentValue: configValues[field.FieldName]
+                                });
+                                if (isMulti) {
+                                    // For multi-line text input, split by newlines
+                                    const values = e.target.value.split('\n').filter(v => v.trim());
+                                    console.log(`Multi values for ${field.FieldName}:`, values);
+                                    handleConfigChange(field.FieldName, values);
+                                } else {
+                                    handleConfigChange(field.FieldName, e.target.value);
+                                }
+                            }}
+                            multiline={isMulti}
+                            placeholder={isMulti ? "Enter multiple values (one per line)" : ""}
+                        />
+                    )}
+                </FormControl>
+            );
+        });
+    }, [selectedReportType, configValues]);
+
     // Update local state when report changes
     useEffect(() => {
         console.log('Report changed:', report);
@@ -884,9 +1036,6 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
         }
     }, [reportTypeId, report?.ReportType?.Id]);
 
-    // Get current report type config
-    const selectedReportType = reportTypes.find(type => type.Id === reportTypeId);
-
     if (!report) return null;
 
     const validateForm = () => {
@@ -916,6 +1065,7 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
     };
 
     const handleConfigChange = (fieldName: string, value: string | string[]) => {
+        console.log(`Config change for ${fieldName}:`, value);
         setConfigValues(prev => ({
             ...prev,
             [fieldName]: value
@@ -977,35 +1127,7 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                 </FormControl>
 
                 {/* Dynamic Config Fields */}
-                {selectedReportType?.ReportConfig.Fields.map((field) => (
-                    <FormControl fullWidth margin="normal" key={field.FieldName}>
-                        {field.FieldType === 0 ? (
-                            // Dropdown field (FieldType 0)
-                            <>
-                                <InputLabel id={`${field.FieldName}-label`}>{field.FieldName}</InputLabel>
-                                <Select
-                                    labelId={`${field.FieldName}-label`}
-                                    label={field.FieldName}
-                                    value={configValues[field.FieldName] || ''}
-                                    onChange={(e) => handleConfigChange(field.FieldName, e.target.value)}
-                                >
-                                    {field.PossibleOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </>
-                        ) : (
-                            // Single value text field (FieldType 1)
-                            <TextField
-                                label={field.FieldName}
-                                value={configValues[field.FieldName] || ''}
-                                onChange={(e) => handleConfigChange(field.FieldName, e.target.value)}
-                            />
-                        )}
-                    </FormControl>
-                ))}
+                {dynamicFields}
 
                 <FormControl fullWidth margin="normal">
                     <InputLabel id="job-freq-type-label">Job Frequency</InputLabel>
