@@ -32,7 +32,7 @@ import {
     SelectChangeEvent,
     DialogContentText,
     Alert,
-    Snackbar
+    Snackbar, Checkbox, ListItemText
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -356,7 +356,7 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                 {useMemo(() => selectedReportType?.ReportConfig.Fields.map((field) => {
                     // Ensure is_multi is a boolean and default to false if undefined
                     const isMulti = field.is_multi === true;
-                    
+
                     console.log(`Rendering field ${field.FieldName}:`, {
                         ...field,
                         is_multi: isMulti,
@@ -373,19 +373,32 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                                         <Select
                                             labelId={`${field.FieldName}-label`}
                                             label={field.FieldName}
-                                            value={Array.isArray(configValues[field.FieldName]) 
-                                                ? configValues[field.FieldName] as string[] 
-                                                : []}
+                                            multiple={field.is_multi}
+                                            value={
+                                                field.is_multi
+                                                    ? Array.isArray(configValues[field.FieldName])
+                                                        ? configValues[field.FieldName] as string[]
+                                                        : []
+                                                    : configValues[field.FieldName] || ''
+                                            }
                                             onChange={(e) => {
-                                                console.log(`Multi-select change for ${field.FieldName}:`, e.target.value);
-                                                handleConfigChange(field.FieldName, e.target.value);
+                                                const value = e.target.value;
+                                                console.log(`${field.is_multi ? 'Multi' : 'Single'}-select change for ${field.FieldName}:`, value);
+                                                handleConfigChange(field.FieldName, value);
                                             }}
-                                            multiple
-                                            renderValue={(selected) => (selected as string[]).join(', ')}
+                                            renderValue={
+                                                field.is_multi
+                                                    ? (selected) => (selected as string[]).join(', ')
+                                                    : undefined
+                                            }
                                         >
                                             {field.PossibleOptions.map((option) => (
                                                 <MenuItem key={option} value={option}>
-                                                    {option}
+                                                    {field.is_multi && (
+                                                        <Checkbox
+                                                            checked={configValues[field.FieldName]?.includes(option)}/>
+                                                    )}
+                                                    <ListItemText primary={option}/>
                                                 </MenuItem>
                                             ))}
                                         </Select>
@@ -411,7 +424,7 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                                 // Text input field (FieldType 1)
                                 <TextField
                                     label={field.FieldName}
-                                    value={typeof configValues[field.FieldName] === 'string' 
+                                    value={typeof configValues[field.FieldName] === 'string'
                                         ? configValues[field.FieldName] as string
                                         : Array.isArray(configValues[field.FieldName])
                                             ? (configValues[field.FieldName] as string[]).join('\n')
@@ -912,11 +925,11 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
     // Memoize the dynamic fields
     const dynamicFields = useMemo(() => {
         if (!selectedReportType?.ReportConfig.Fields) return [];
-        
+
         return selectedReportType.ReportConfig.Fields.map((field) => {
             // Ensure is_multi is a boolean and default to false if undefined
             const isMulti = field.is_multi === true;
-            
+
             console.log(`Rendering field ${field.FieldName}:`, {
                 ...field,
                 is_multi: isMulti,
@@ -933,8 +946,8 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                                 <Select
                                     labelId={`${field.FieldName}-label`}
                                     label={field.FieldName}
-                                    value={Array.isArray(configValues[field.FieldName]) 
-                                        ? configValues[field.FieldName] as string[] 
+                                    value={Array.isArray(configValues[field.FieldName])
+                                        ? configValues[field.FieldName] as string[]
                                         : []}
                                     onChange={(e) => {
                                         console.log(`Multi-select change for ${field.FieldName}:`, e.target.value);
@@ -971,7 +984,7 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                         // Text input field (FieldType 1)
                         <TextField
                             label={field.FieldName}
-                            value={typeof configValues[field.FieldName] === 'string' 
+                            value={typeof configValues[field.FieldName] === 'string'
                                 ? configValues[field.FieldName] as string
                                 : Array.isArray(configValues[field.FieldName])
                                     ? (configValues[field.FieldName] as string[]).join('\n')
@@ -1008,7 +1021,7 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
             setDescription(report.Description);
             setReportTypeId(report.ReportType.Id);
             setJobFreqTypeId(report.Job?.JobFreqType?.Id || '');
-            
+
             // Parse datasetConfig if it exists
             if (report.DatasetConfig) {
                 try {
