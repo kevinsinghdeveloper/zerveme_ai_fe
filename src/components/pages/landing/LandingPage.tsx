@@ -8,6 +8,7 @@ import SubscribePage from "../subscribe/SubscribePage";
 import ExplorePage from "../explore/ExplorePage";
 import LoginPage from "../login/LoginPage";
 import ProfilePage from "../explore/profile/ProfilePage";
+import ModelsPage from "../explore/models/ModelsPage";
 import {useAuthContext} from "../../context_providers/AuthContext";
 
 function ProtectedRoute() {
@@ -64,6 +65,7 @@ export default function LandingPage(props: PropsWithChildren) {
                     <Route element={<ProtectedRoute/>}>
                         <Route path="/explore" element={<ExplorePage/>}/>
                         <Route path="/profile" element={<ProfilePage/>}/>
+                        <Route path="/models" element={<ModelsPage/>}/>
                         {/* Add any other routes that require authentication */}
                     </Route>
 
