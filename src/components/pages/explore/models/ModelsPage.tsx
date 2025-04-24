@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import {
     Box,
     AppBar,
@@ -6,7 +6,6 @@ import {
     Typography,
     IconButton,
     Card,
-    CardContent,
     Grid,
     Button,
     Table,
@@ -27,122 +26,92 @@ import {
     Select,
     MenuItem,
     SelectChangeEvent,
+    CircularProgress,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
+import { useExplorerContext } from '../../../context_providers/ExplorerContext';
 
 interface Model {
-    id: string;
-    name: string;
-    description: string;
-    modelType: string;
-    createdAt: string;
-    updatedAt: string;
+    Id: string;
+    OrganizationId: string;
+    Name: string;
+    Description: string;
+    ModelConfig: string;
+    ModelType: string;
+    ModelTypeId: string;
 }
 
-const dummyModels: Model[] = [
-    {
-        id: '1',
-        name: 'Customer Support Bot',
-        description: 'AI model trained to handle customer support queries and provide accurate responses',
-        modelType: 'gpt-4',
-        createdAt: '2024-03-15T10:00:00Z',
-        updatedAt: '2024-03-20T14:30:00Z'
-    },
-    {
-        id: '2',
-        name: 'Content Generator',
-        description: 'Specialized model for generating marketing content and blog posts',
-        modelType: 'gpt-3.5-turbo',
-        createdAt: '2024-02-28T09:15:00Z',
-        updatedAt: '2024-03-18T11:45:00Z'
-    },
-    {
-        id: '3',
-        name: 'Data Analysis Assistant',
-        description: 'Model designed to help with data analysis and visualization tasks',
-        modelType: 'claude-3',
-        createdAt: '2024-03-10T13:20:00Z',
-        updatedAt: '2024-03-19T16:10:00Z'
-    },
-    {
-        id: '4',
-        name: 'Code Review Bot',
-        description: 'AI assistant for reviewing and suggesting improvements to code',
-        modelType: 'claude-2',
-        createdAt: '2024-03-05T08:30:00Z',
-        updatedAt: '2024-03-17T15:20:00Z'
-    },
-    {
-        id: '5',
-        name: 'Document Summarizer',
-        description: 'Model specialized in summarizing long documents and extracting key points',
-        modelType: 'llama-2',
-        createdAt: '2024-03-01T11:45:00Z',
-        updatedAt: '2024-03-16T09:30:00Z'
-    },
-    {
-        id: '6',
-        name: 'Language Translator',
-        description: 'Advanced translation model supporting multiple languages',
-        modelType: 'gpt-4',
-        createdAt: '2024-02-25T14:15:00Z',
-        updatedAt: '2024-03-15T10:20:00Z'
-    },
-    {
-        id: '7',
-        name: 'Research Assistant',
-        description: 'AI model for conducting research and compiling information',
-        modelType: 'claude-3',
-        createdAt: '2024-03-08T16:30:00Z',
-        updatedAt: '2024-03-14T13:45:00Z'
-    },
-    {
-        id: '8',
-        name: 'Email Writer',
-        description: 'Model trained to write professional emails and communications',
-        modelType: 'gpt-3.5-turbo',
-        createdAt: '2024-02-20T09:00:00Z',
-        updatedAt: '2024-03-13T11:30:00Z'
-    },
-    {
-        id: '9',
-        name: 'Meeting Notes Generator',
-        description: 'AI assistant for generating meeting notes and action items',
-        modelType: 'claude-2',
-        createdAt: '2024-03-12T10:45:00Z',
-        updatedAt: '2024-03-12T10:45:00Z'
-    },
-    {
-        id: '10',
-        name: 'Social Media Manager',
-        description: 'Model for creating and managing social media content',
-        modelType: 'gpt-4',
-        createdAt: '2024-02-15T13:20:00Z',
-        updatedAt: '2024-03-11T14:15:00Z'
-    }
-];
+interface ModelType {
+    Id: string;
+    Name: string;
+    Description: string;
+}
 
 const ModelsPage: React.FC = () => {
     const navigate = useNavigate();
+    const { 
+        models, 
+        modelTypes, 
+        getAllModels, 
+        getAllModelTypes, 
+        createModel, 
+        updateModel, 
+        softDeleteModel 
+    } = useExplorerContext();
+    
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [models, setModels] = useState<Model[]>(dummyModels); // Using dummy data
     const [openModal, setOpenModal] = useState(false);
     const [editingModel, setEditingModel] = useState<Model | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [modelToDelete, setModelToDelete] = useState<Model | null>(null);
     const [formData, setFormData] = useState({
         name: '',
         description: '',
-        modelType: '',
+        modelConfig: '{}',
+        modelTypeId: '',
     });
+
+    useEffect(() => {
+        let mounted = true;
+        console.log('ModelsPage mounted');
+
+        const fetchData = async () => {
+            try {
+                console.log('Starting data fetch');
+                setLoading(true);
+                await getAllModels();
+                await getAllModelTypes();
+                console.log('Data fetch complete');
+                if (mounted) {
+                    setLoading(false);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                if (mounted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchData();
+
+        return () => {
+            console.log('ModelsPage cleanup');
+            mounted = false;
+        };
+    }, []); // Empty dependency array since we only want to fetch on mount
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name as string]: value
+            [name]: value
         }));
     };
 
@@ -159,16 +128,18 @@ const ModelsPage: React.FC = () => {
         if (model) {
             setEditingModel(model);
             setFormData({
-                name: model.name,
-                description: model.description,
-                modelType: model.modelType,
+                name: model.Name,
+                description: model.Description,
+                modelConfig: model.ModelConfig,
+                modelTypeId: model.ModelTypeId,
             });
         } else {
             setEditingModel(null);
             setFormData({
                 name: '',
                 description: '',
-                modelType: '',
+                modelConfig: '{}',
+                modelTypeId: '',
             });
         }
         setOpenModal(true);
@@ -180,15 +151,48 @@ const ModelsPage: React.FC = () => {
         setFormData({
             name: '',
             description: '',
-            modelType: '',
+            modelConfig: '{}',
+            modelTypeId: '',
         });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Add API integration when available
-        console.log('Form submitted:', formData);
+        if (editingModel) {
+            await updateModel({
+                id: editingModel.Id,
+                name: formData.name,
+                description: formData.description,
+                modelConfig: formData.modelConfig,
+                modelTypeId: formData.modelTypeId,
+            });
+        } else {
+            await createModel({
+                name: formData.name,
+                description: formData.description,
+                modelConfig: formData.modelConfig,
+                modelTypeId: formData.modelTypeId,
+            });
+        }
         handleCloseModal();
+    };
+
+    const handleDeleteClick = (model: Model) => {
+        setModelToDelete(model);
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (modelToDelete) {
+            await softDeleteModel(modelToDelete.Id);
+            setDeleteDialogOpen(false);
+            setModelToDelete(null);
+        }
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteDialogOpen(false);
+        setModelToDelete(null);
     };
 
     return (
@@ -231,50 +235,65 @@ const ModelsPage: React.FC = () => {
                                 </Button>
                             </Box>
                             <Divider />
-                            <TableContainer>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Name</TableCell>
-                                            <TableCell>Description</TableCell>
-                                            <TableCell>Model Type</TableCell>
-                                            <TableCell>Created At</TableCell>
-                                            <TableCell>Updated At</TableCell>
-                                            <TableCell>Actions</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {models
-                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map((model) => (
-                                                <TableRow key={model.id}>
-                                                    <TableCell>{model.name}</TableCell>
-                                                    <TableCell>{model.description}</TableCell>
-                                                    <TableCell>{model.modelType}</TableCell>
-                                                    <TableCell>{new Date(model.createdAt).toLocaleDateString()}</TableCell>
-                                                    <TableCell>{new Date(model.updatedAt).toLocaleDateString()}</TableCell>
-                                                    <TableCell>
-                                                        <IconButton
-                                                            size="small"
-                                                            onClick={() => handleOpenModal(model)}
-                                                        >
-                                                            <EditIcon />
-                                                        </IconButton>
-                                                    </TableCell>
+                            {loading ? (
+                                <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+                                    <CircularProgress />
+                                </Box>
+                            ) : models.length === 0 ? (
+                                <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+                                    <Typography>No models found. Create your first model!</Typography>
+                                </Box>
+                            ) : (
+                                <>
+                                    <TableContainer>
+                                        <Table>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>Name</TableCell>
+                                                    <TableCell>Description</TableCell>
+                                                    <TableCell>Model Type</TableCell>
+                                                    <TableCell>Actions</TableCell>
                                                 </TableRow>
-                                            ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 25]}
-                                component="div"
-                                count={models.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
+                                            </TableHead>
+                                            <TableBody>
+                                                {models
+                                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                    .map((model) => (
+                                                        <TableRow key={model.Id}>
+                                                            <TableCell>{model.Name}</TableCell>
+                                                            <TableCell>{model.Description}</TableCell>
+                                                            <TableCell>{model.ModelType}</TableCell>
+                                                            <TableCell>
+                                                                <IconButton
+                                                                    size="small"
+                                                                    onClick={() => handleOpenModal(model)}
+                                                                >
+                                                                    <EditIcon />
+                                                                </IconButton>
+                                                                <IconButton
+                                                                    size="small"
+                                                                    onClick={() => handleDeleteClick(model)}
+                                                                    sx={{ color: 'error.main' }}
+                                                                >
+                                                                    <DeleteIcon />
+                                                                </IconButton>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                    <TablePagination
+                                        rowsPerPageOptions={[5, 10, 25]}
+                                        component="div"
+                                        count={models.length}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        onPageChange={handleChangePage}
+                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                                    />
+                                </>
+                            )}
                         </Card>
                     </Grid>
                 </Grid>
@@ -314,16 +333,16 @@ const ModelsPage: React.FC = () => {
                                 <FormControl fullWidth required>
                                     <InputLabel>Model Type</InputLabel>
                                     <Select
-                                        name="modelType"
-                                        value={formData.modelType}
+                                        name="modelTypeId"
+                                        value={formData.modelTypeId}
                                         onChange={handleChange}
                                         label="Model Type"
                                     >
-                                        <MenuItem value="gpt-4">GPT-4</MenuItem>
-                                        <MenuItem value="gpt-3.5-turbo">GPT-3.5 Turbo</MenuItem>
-                                        <MenuItem value="claude-2">Claude 2</MenuItem>
-                                        <MenuItem value="claude-3">Claude 3</MenuItem>
-                                        <MenuItem value="llama-2">Llama 2</MenuItem>
+                                        {modelTypes.map((type) => (
+                                            <MenuItem key={type.Id} value={type.Id}>
+                                                {type.Name}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                 </FormControl>
                             </Grid>
@@ -341,6 +360,37 @@ const ModelsPage: React.FC = () => {
                         </Button>
                     </DialogActions>
                 </form>
+            </Dialog>
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog
+                open={deleteDialogOpen}
+                onClose={handleDeleteCancel}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle>Delete Model</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        Are you sure you want to delete "{modelToDelete?.Name}"? This action cannot be undone.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDeleteCancel}>Cancel</Button>
+                    <Button 
+                        onClick={handleDeleteConfirm} 
+                        variant="contained" 
+                        color="error"
+                        sx={{ 
+                            backgroundColor: "#ff4444",
+                            '&:hover': {
+                                backgroundColor: "#cc0000"
+                            }
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </DialogActions>
             </Dialog>
         </Box>
     );

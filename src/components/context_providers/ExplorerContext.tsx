@@ -103,6 +103,37 @@ interface UpdateReportRequest {
     jobFreqTypeId: string;
 }
 
+interface Model {
+    Id: string;
+    OrganizationId: string;
+    Name: string;
+    Description: string;
+    ModelConfig: string;
+    ModelType: string;
+    ModelTypeId: string;
+}
+
+interface ModelType {
+    Id: string;
+    Name: string;
+    Description: string;
+}
+
+interface CreateModelRequest {
+    name: string;
+    description: string;
+    modelConfig: string;
+    modelTypeId: string;
+}
+
+interface UpdateModelRequest {
+    id: string;
+    name: string;
+    description: string;
+    modelConfig: string;
+    modelTypeId: string;
+}
+
 interface ExplorerContextProps {
     startDate: Date | null;
     setStartDate: React.Dispatch<React.SetStateAction<Date | null>>;
@@ -139,6 +170,13 @@ interface ExplorerContextProps {
     getAllReportTypes: () => Promise<void>;
     softDeleteProject: (projectId: string) => Promise<boolean>;
     softDeleteReport: (reportId: string) => Promise<boolean>;
+    models: Model[];
+    modelTypes: ModelType[];
+    getAllModels: () => Promise<void>;
+    getAllModelTypes: () => Promise<void>;
+    createModel: (request: CreateModelRequest) => Promise<Model | null>;
+    updateModel: (request: UpdateModelRequest) => Promise<Model | null>;
+    softDeleteModel: (modelId: string) => Promise<boolean>;
 }
 
 interface DomainOptionsResults {
@@ -166,6 +204,8 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
     const [reports, setReports] = useState<ReportInfo[]>([]);
     const [jobFreqTypes, setJobFreqTypes] = useState<JobFreqTypeInfo[]>([]);
     const [reportTypes, setReportTypes] = useState<ReportTypeInfo[]>([]);
+    const [models, setModels] = useState<Model[]>([]);
+    const [modelTypes, setModelTypes] = useState<ModelType[]>([]);
 
     const {host, token} = useAuthContext();
 
@@ -523,6 +563,102 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
         }
     };
 
+    const getAllModels = async () => {
+        if (!token) {
+            console.error('Token is not available');
+            return;
+        }
+
+        try {
+            const response = await axios.get(`${host}/api/models/getAllModels`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            setModels(response.data);
+        } catch (error) {
+            console.error('Error fetching models:', error);
+        }
+    };
+
+    const getAllModelTypes = async () => {
+        if (!token) {
+            console.error('Token is not available');
+            return;
+        }
+
+        try {
+            const response = await axios.get(`${host}/api/models/getAllModelTypes`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            setModelTypes(response.data);
+        } catch (error) {
+            console.error('Error fetching model types:', error);
+        }
+    };
+
+    const createModel = async (request: CreateModelRequest): Promise<Model | null> => {
+        if (!token) {
+            console.error('Token is not available');
+            return null;
+        }
+
+        try {
+            const response = await axios.post(`${host}/api/models/create`, request, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            await getAllModels(); // Refresh the models list
+            return response.data;
+        } catch (error) {
+            console.error('Error creating model:', error);
+            return null;
+        }
+    };
+
+    const updateModel = async (request: UpdateModelRequest): Promise<Model | null> => {
+        if (!token) {
+            console.error('Token is not available');
+            return null;
+        }
+
+        try {
+            const response = await axios.post(`${host}/api/models/update`, request, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            await getAllModels(); // Refresh the models list
+            return response.data;
+        } catch (error) {
+            console.error('Error updating model:', error);
+            return null;
+        }
+    };
+
+    const softDeleteModel = async (modelId: string): Promise<boolean> => {
+        if (!token) {
+            console.error('Token is not available');
+            return false;
+        }
+
+        try {
+            const response = await axios.post(`${host}/api/models/${modelId}/softDeleteModel`, null, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            await getAllModels(); // Refresh the models list
+            return response.data;
+        } catch (error) {
+            console.error('Error deleting model:', error);
+            return false;
+        }
+    };
+
     return (
         <ExplorerContext.Provider
             value={{
@@ -561,6 +697,13 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
                 getAllReportTypes,
                 softDeleteProject,
                 softDeleteReport,
+                models,
+                modelTypes,
+                getAllModels,
+                getAllModelTypes,
+                createModel,
+                updateModel,
+                softDeleteModel,
             }}
         >
             {children}
