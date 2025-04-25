@@ -209,6 +209,7 @@ interface NewReportModalProps {
         description: string;
         projectId: string;
         reportTypeId: string;
+        modelId: string;
         jobFreqTypeId: string;
         datasetConfig: string;
     }) => void;
@@ -220,13 +221,15 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [reportTypeId, setReportTypeId] = useState('');
+    const [modelId, setModelId] = useState('');
     const [jobFreqTypeId, setJobFreqTypeId] = useState('');
     const [nameError, setNameError] = useState('');
     const [configValues, setConfigValues] = useState<{ [key: string]: string | string[] }>({});
-    const {jobFreqTypes, reportTypes} = useExplorerContext();
+    const {jobFreqTypes, reportTypes, models} = useExplorerContext();
 
     // Get current report type config
     const selectedReportType = reportTypes.find(type => type.Id === reportTypeId);
+    // const selectedModels = models.find(type => type.Id === modelId);
 
     // Reset config values when report type changes
     useEffect(() => {
@@ -251,6 +254,7 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                 description,
                 projectId,
                 reportTypeId,
+                modelId,
                 jobFreqTypeId,
                 datasetConfig: JSON.stringify(configValues)
             });
@@ -313,6 +317,23 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                         onChange={(e) => setReportTypeId(e.target.value)}
                     >
                         {reportTypes.map((type) => (
+                            <MenuItem key={type.Id} value={type.Id}>
+                                {type.Name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
+                <FormControl fullWidth margin="normal">
+                    <InputLabel id="report-type-label">Model</InputLabel>
+                    <Select
+                        labelId="llm-model-label"
+                        id="llm-model"
+                        value={modelId}
+                        label="Model"
+                        onChange={(e) => setModelId(e.target.value)}
+                    >
+                        {models.map((type) => (
                             <MenuItem key={type.Id} value={type.Id}>
                                 {type.Name}
                             </MenuItem>
@@ -483,6 +504,7 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
         description: string;
         projectId: string;
         reportTypeId: string;
+        modelId: string;
         jobFreqTypeId: string;
         datasetConfig: string;
     }) => {
@@ -864,6 +886,7 @@ interface EditReportModalProps {
         description: string;
         projectId: string;
         reportTypeId: string;
+        modelId: string;
         jobFreqTypeId: string;
         datasetConfig: string;
     }) => void;
@@ -875,10 +898,11 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
     const [name, setName] = useState(report?.Name || '');
     const [description, setDescription] = useState(report?.Description || '');
     const [reportTypeId, setReportTypeId] = useState(report?.ReportType?.Id || '');
+    const [modelId, setModelId] = useState(report?.ReportType?.Id || '');
     const [jobFreqTypeId, setJobFreqTypeId] = useState(report?.Job?.JobFreqType?.Id || '');
     const [nameError, setNameError] = useState('');
     const [configValues, setConfigValues] = useState<{ [key: string]: string | string[] }>({});
-    const {jobFreqTypes, reportTypes} = useExplorerContext();
+    const {jobFreqTypes, reportTypes, models} = useExplorerContext();
 
     // Get current report type config
     const selectedReportType = reportTypes.find(type => type.Id === reportTypeId);
@@ -1024,6 +1048,7 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                 description,
                 projectId: report.ProjectId,
                 reportTypeId,
+                modelId,
                 jobFreqTypeId,
                 datasetConfig: JSON.stringify(configValues)
             });
@@ -1086,6 +1111,23 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                         onChange={(e) => setReportTypeId(e.target.value)}
                     >
                         {reportTypes.map((type) => (
+                            <MenuItem key={type.Id} value={type.Id}>
+                                {type.Name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
+                <FormControl fullWidth margin="normal">
+                    <InputLabel id="llm-model-label">Model</InputLabel>
+                    <Select
+                        labelId="llm-model-label"
+                        id="llm-model"
+                        value={modelId}
+                        label="Model"
+                        onChange={(e) => setModelId(e.target.value)}
+                    >
+                        {models.map((type) => (
                             <MenuItem key={type.Id} value={type.Id}>
                                 {type.Name}
                             </MenuItem>
@@ -1177,6 +1219,7 @@ const Projects: React.FC = () => {
         description: string;
         projectId: string;
         reportTypeId: string;
+        modelId: string;
         jobFreqTypeId: string;
         datasetConfig: string;
     }) => {
@@ -1186,6 +1229,7 @@ const Projects: React.FC = () => {
                 description: report.description,
                 projectId: report.projectId,
                 reportTypeId: report.reportTypeId,
+                modelId: report.modelId,
                 jobFreqTypeId: report.jobFreqTypeId,
                 datasetConfig: report.datasetConfig
             });

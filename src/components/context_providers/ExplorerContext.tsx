@@ -90,6 +90,7 @@ interface CreateReportRequest {
     description: string;
     projectId: string;
     reportTypeId: string;
+    modelId: string;
     jobFreqTypeId: string;
     datasetConfig: string;
 }
@@ -100,6 +101,7 @@ interface UpdateReportRequest {
     description: string;
     projectId: string;
     reportTypeId: string;
+    modelId: string;
     jobFreqTypeId: string;
 }
 
@@ -509,6 +511,10 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
     // Initialize report types when context is created
     useEffect(() => {
         getAllReportTypes();
+    }, [token, host]);
+
+    useEffect(() => {
+        getAllModels();
     }, [token, host]);
 
     // Fetch datasets on component mount or when token changes
