@@ -663,6 +663,7 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
                                     <TableRow>
                                         <TableCell>Name</TableCell>
                                         <TableCell>Description</TableCell>
+                                        <TableCell>Model</TableCell>
                                         <TableCell>Report Type</TableCell>
                                         <TableCell>Last Run</TableCell>
                                         <TableCell>Job Frequency</TableCell>
@@ -702,6 +703,7 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
                                                     </Box>
                                                 </TableCell>
                                                 <TableCell>{report.Description}</TableCell>
+                                                <TableCell>{report.Model?.Name}</TableCell>
                                                 <TableCell>{report.ReportType.Name}</TableCell>
                                                 <TableCell>{formatDate(report.Job?.LastRunDate)}</TableCell>
                                                 <TableCell>{getJobFrequency(report.Job)}</TableCell>
