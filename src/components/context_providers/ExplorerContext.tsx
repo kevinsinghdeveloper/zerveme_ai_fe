@@ -48,6 +48,10 @@ interface ReportInfo {
     Name: string;
     Description: string;
     ProjectId: string;
+    Model: {
+        Id: string;
+        Name: string;
+    };
     ReportType: {
         Id: string;
         Name: string;
@@ -107,7 +111,6 @@ interface UpdateReportRequest {
 
 interface Model {
     Id: string;
-    OrganizationId: string;
     Name: string;
     Description: string;
     ModelConfig: string;

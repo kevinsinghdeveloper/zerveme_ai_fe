@@ -32,12 +32,11 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useNavigate } from 'react-router-dom';
-import { useExplorerContext } from '../../../context_providers/ExplorerContext';
+import {useNavigate} from 'react-router-dom';
+import {useExplorerContext} from '../../../context_providers/ExplorerContext';
 
 interface Model {
     Id: string;
-    OrganizationId: string;
     Name: string;
     Description: string;
     ModelConfig: string;
@@ -53,16 +52,16 @@ interface ModelType {
 
 const ModelsPage: React.FC = () => {
     const navigate = useNavigate();
-    const { 
-        models, 
-        modelTypes, 
-        getAllModels, 
-        getAllModelTypes, 
-        createModel, 
-        updateModel, 
-        softDeleteModel 
+    const {
+        models,
+        modelTypes,
+        getAllModels,
+        getAllModelTypes,
+        createModel,
+        updateModel,
+        softDeleteModel
     } = useExplorerContext();
-    
+
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [openModal, setOpenModal] = useState(false);
@@ -108,7 +107,7 @@ const ModelsPage: React.FC = () => {
     }, []); // Empty dependency array since we only want to fetch on mount
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -196,35 +195,35 @@ const ModelsPage: React.FC = () => {
     };
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: "#7b6df6" }}>
+        <Box sx={{flexGrow: 1}}>
+            <AppBar position="static" sx={{backgroundColor: "#7b6df6"}}>
                 <Toolbar>
                     <IconButton
                         edge="start"
                         color="inherit"
                         aria-label="back"
                         onClick={() => navigate(-1)}
-                        sx={{ mr: 2 }}
+                        sx={{mr: 2}}
                     >
-                        <ArrowBackIcon />
+                        <ArrowBackIcon/>
                     </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         LLM Models
                     </Typography>
                 </Toolbar>
             </AppBar>
 
-            <Box sx={{ p: 3 }}>
+            <Box sx={{p: 3}}>
                 <Grid container justifyContent="center">
                     <Grid item xs={12}>
                         <Card>
-                            <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Box sx={{p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                                 <Typography variant="h5">Models</Typography>
                                 <Button
                                     variant="contained"
-                                    startIcon={<AddIcon />}
+                                    startIcon={<AddIcon/>}
                                     onClick={() => handleOpenModal()}
-                                    sx={{ 
+                                    sx={{
                                         backgroundColor: "#7b6df6",
                                         '&:hover': {
                                             backgroundColor: "#6a5de5"
@@ -234,13 +233,13 @@ const ModelsPage: React.FC = () => {
                                     New Model
                                 </Button>
                             </Box>
-                            <Divider />
+                            <Divider/>
                             {loading ? (
-                                <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
-                                    <CircularProgress />
+                                <Box sx={{display: 'flex', justifyContent: 'center', p: 3}}>
+                                    <CircularProgress/>
                                 </Box>
                             ) : models.length === 0 ? (
-                                <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+                                <Box sx={{display: 'flex', justifyContent: 'center', p: 3}}>
                                     <Typography>No models found. Create your first model!</Typography>
                                 </Box>
                             ) : (
@@ -268,14 +267,14 @@ const ModelsPage: React.FC = () => {
                                                                     size="small"
                                                                     onClick={() => handleOpenModal(model)}
                                                                 >
-                                                                    <EditIcon />
+                                                                    <EditIcon/>
                                                                 </IconButton>
                                                                 <IconButton
                                                                     size="small"
                                                                     onClick={() => handleDeleteClick(model)}
-                                                                    sx={{ color: 'error.main' }}
+                                                                    sx={{color: 'error.main'}}
                                                                 >
-                                                                    <DeleteIcon />
+                                                                    <DeleteIcon/>
                                                                 </IconButton>
                                                             </TableCell>
                                                         </TableRow>
@@ -350,7 +349,7 @@ const ModelsPage: React.FC = () => {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleCloseModal}>Cancel</Button>
-                        <Button type="submit" variant="contained" sx={{ 
+                        <Button type="submit" variant="contained" sx={{
                             backgroundColor: "#7b6df6",
                             '&:hover': {
                                 backgroundColor: "#6a5de5"
@@ -377,11 +376,11 @@ const ModelsPage: React.FC = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleDeleteCancel}>Cancel</Button>
-                    <Button 
-                        onClick={handleDeleteConfirm} 
-                        variant="contained" 
+                    <Button
+                        onClick={handleDeleteConfirm}
+                        variant="contained"
                         color="error"
-                        sx={{ 
+                        sx={{
                             backgroundColor: "#ff4444",
                             '&:hover': {
                                 backgroundColor: "#cc0000"

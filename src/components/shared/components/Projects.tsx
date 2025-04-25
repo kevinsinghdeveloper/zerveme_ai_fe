@@ -70,6 +70,10 @@ interface Report {
     Name: string;
     Description: string;
     ProjectId: string;
+    Model: {
+        Id: string;
+        Name: string;
+    };
     ReportType: {
         Id: string;
         Name: string;
@@ -999,6 +1003,7 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
             setDescription(report.Description);
             setReportTypeId(report.ReportType.Id);
             setJobFreqTypeId(report.Job?.JobFreqType?.Id || '');
+            setModelId(report.Model?.Id);
 
             // Parse datasetConfig if it exists
             if (report.DatasetConfig) {
