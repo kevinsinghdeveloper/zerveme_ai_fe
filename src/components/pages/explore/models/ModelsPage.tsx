@@ -345,6 +345,20 @@ const ModelsPage: React.FC = () => {
                                     </Select>
                                 </FormControl>
                             </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    required
+                                    label="Config (JSON)"
+                                    name="modelConfig"
+                                    value={formData.modelConfig}
+                                    onChange={handleChange}
+                                    multiline
+                                    rows={10}
+                                    variant="outlined"
+                                    inputProps={{style: {fontFamily: 'monospace'}}}
+                                />
+                            </Grid>
                         </Grid>
                     </DialogContent>
                     <DialogActions>
