@@ -1,27 +1,33 @@
 import './App.css';
 import {BrowserRouter, Navigate, Outlet, Route, Routes} from 'react-router-dom';
 import {ErrorBoundary} from 'react-error-boundary';
+import {ThemeProvider} from '@mui/material/styles';
+import {CssBaseline} from '@mui/material';
 import LandingPage from "./components/pages/landing/LandingPage";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {ExplorerContextProvider} from "./components/context_providers/ExplorerContext";
 import {AuthContextProvider, useAuthContext} from "./components/context_providers/AuthContext";
 import {UserContextProvider} from "./components/context_providers/UserContext";
+import theme from './theme/theme';
 
 export default function App() {
     return (
-        <ErrorBoundary FallbackComponent={AppFallback}>
-            <AuthContextProvider>
-                <UserContextProvider>
-                    <ExplorerContextProvider>
-                        <BrowserRouter basename="/">
-                            <Routes>
-                                <Route path="*" element={<LandingPage/>}/>
-                            </Routes>
-                        </BrowserRouter>
-                    </ExplorerContextProvider>
-                </UserContextProvider>
-            </AuthContextProvider>
-        </ErrorBoundary>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <ErrorBoundary FallbackComponent={AppFallback}>
+                <AuthContextProvider>
+                    <UserContextProvider>
+                        <ExplorerContextProvider>
+                            <BrowserRouter basename="/">
+                                <Routes>
+                                    <Route path="*" element={<LandingPage/>}/>
+                                </Routes>
+                            </BrowserRouter>
+                        </ExplorerContextProvider>
+                    </UserContextProvider>
+                </AuthContextProvider>
+            </ErrorBoundary>
+        </ThemeProvider>
     );
 }
 

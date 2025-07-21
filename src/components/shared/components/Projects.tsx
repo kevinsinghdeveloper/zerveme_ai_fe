@@ -27,7 +27,7 @@ import {
     MenuItem,
     DialogContentText,
     Alert,
-    Snackbar, Checkbox, ListItemText
+    Snackbar, Checkbox, ListItemText, Chip
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -36,6 +36,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Modal from '../Modal';
 import {useExplorerContext} from '../../context_providers/ExplorerContext';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
+import CancelIcon from '@mui/icons-material/Cancel';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 interface JobInfo {
     Id: string;
@@ -103,6 +108,16 @@ interface Report {
     } | null;
     ReportConfigurationId: string;
     DatasetConfig: string | null; // JSON string containing field values
+    DatasetData: {
+        Id?: string;
+        Name?: string;
+        DomainData?: any;
+        Updated?: string | null;
+        Created?: string | null;
+        Deleted?: string | null;
+        DWHId?: string | null;
+        DataRefreshedDate?: string | null;
+    } | null;
 }
 
 interface Project {
@@ -240,6 +255,22 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
         setConfigValues({});
     }, [reportTypeId]);
 
+    useEffect(() => {
+      if (selectedReportType?.ReportConfig?.Fields) {
+        setConfigValues(prev => {
+          const normalized: { [key: string]: string[] } = {};
+          selectedReportType.ReportConfig.Fields.forEach(field => {
+            if (field.is_multi) {
+              normalized[field.FieldName] = Array.isArray(prev[field.FieldName])
+                ? prev[field.FieldName] as string[]
+                : [];
+            }
+          });
+          return { ...normalized, ...prev };
+        });
+      }
+    }, [selectedReportType]);
+
     const validateForm = () => {
         let isValid = true;
         if (!name.trim()) {
@@ -320,7 +351,7 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                         label="Report Type"
                         onChange={(e) => setReportTypeId(e.target.value)}
                     >
-                        {reportTypes.map((type) => (
+                        {reportTypes.filter(rt => rt.ReportConfig != null).map((type) => (
                             <MenuItem key={type.Id} value={type.Id}>
                                 {type.Name}
                             </MenuItem>
@@ -346,97 +377,102 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
                 </FormControl>
 
                 {/* Dynamic Config Fields */}
-                {useMemo(() => selectedReportType?.ReportConfig.Fields.map((field) => {
-                    // Ensure is_multi is a boolean and default to false if undefined
-                    const isMulti = field.is_multi === true;
+                {useMemo(() => {
+                    if (!selectedReportType?.ReportConfig || !Array.isArray(selectedReportType.ReportConfig.Fields)) {
+                        return null;
+                    }
+                    return selectedReportType.ReportConfig.Fields.map((field) => {
+                        // Ensure is_multi is a boolean and default to false if undefined
+                        const isMulti = field.is_multi === true;
 
-                    console.log(`Rendering field ${field.FieldName}:`, {
-                        ...field,
-                        is_multi: isMulti,
-                        value: configValues[field.FieldName]
-                    });
+                        console.log(`Rendering field ${field.FieldName}:`, {
+                            ...field,
+                            is_multi: isMulti,
+                            value: configValues[field.FieldName]
+                        });
 
-                    return (
-                        <FormControl fullWidth margin="normal" key={field.FieldName}>
-                            {field.FieldType === 0 ? (
-                                // Dropdown field (FieldType 0)
-                                <>
-                                    <InputLabel id={`${field.FieldName}-label`}>{field.FieldName}</InputLabel>
-                                    {isMulti ? (
-                                        <Select
-                                            labelId={`${field.FieldName}-label`}
-                                            label={field.FieldName}
-                                            multiple={field.is_multi}
-                                            value={
-                                                field.is_multi
-                                                    ? Array.isArray(configValues[field.FieldName])
-                                                        ? configValues[field.FieldName] as string[]
-                                                        : []
-                                                    : configValues[field.FieldName] || ''
-                                            }
-                                            onChange={(e) => {
-                                                const value = e.target.value;
-                                                console.log(`${field.is_multi ? 'Multi' : 'Single'}-select change for ${field.FieldName}:`, value);
-                                                handleConfigChange(field.FieldName, value);
-                                            }}
-                                            renderValue={
-                                                field.is_multi
-                                                    ? (selected) => (selected as string[]).join(', ')
-                                                    : undefined
-                                            }
-                                        >
-                                            {field.PossibleOptions.map((option) => (
-                                                <MenuItem key={option} value={option}>
-                                                    {field.is_multi && (
-                                                        <Checkbox
-                                                            checked={configValues[field.FieldName]?.includes(option)}/>
-                                                    )}
-                                                    <ListItemText primary={option}/>
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    ) : (
-                                        <Select
-                                            labelId={`${field.FieldName}-label`}
-                                            label={field.FieldName}
-                                            value={configValues[field.FieldName] || ''}
-                                            onChange={(e) => {
-                                                console.log(`Single-select change for ${field.FieldName}:`, e.target.value);
+                        return (
+                            <FormControl fullWidth margin="normal" key={field.FieldName}>
+                                {field.FieldType === 0 ? (
+                                    // Dropdown field (FieldType 0)
+                                    <>
+                                        <InputLabel id={`${field.FieldName}-label`}>{field.FieldName}</InputLabel>
+                                        {isMulti ? (
+                                            <Select
+                                                labelId={`${field.FieldName}-label`}
+                                                label={field.FieldName}
+                                                multiple={field.is_multi}
+                                                value={
+                                                    field.is_multi
+                                                        ? Array.isArray(configValues[field.FieldName])
+                                                            ? configValues[field.FieldName] as string[]
+                                                            : []
+                                                        : configValues[field.FieldName] || ''
+                                                }
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    console.log(`${field.is_multi ? 'Multi' : 'Single'}-select change for ${field.FieldName}:`, value);
+                                                    handleConfigChange(field.FieldName, value);
+                                                }}
+                                                renderValue={
+                                                    field.is_multi
+                                                        ? (selected) => (selected as string[]).join(', ')
+                                                        : undefined
+                                                }
+                                            >
+                                                {Array.isArray(field.PossibleOptions) ? field.PossibleOptions.map((option: string) => (
+                                                    <MenuItem key={option} value={option}>
+                                                        {field.is_multi && (
+                                                            <Checkbox
+                                                                checked={configValues[field.FieldName]?.includes(option)}/>
+                                                        )}
+                                                        <ListItemText primary={option}/>
+                                                    </MenuItem>
+                                                )) : null}
+                                            </Select>
+                                        ) : (
+                                            <Select
+                                                labelId={`${field.FieldName}-label`}
+                                                label={field.FieldName}
+                                                value={configValues[field.FieldName] || ''}
+                                                onChange={(e) => {
+                                                    console.log(`Single-select change for ${field.FieldName}:`, e.target.value);
+                                                    handleConfigChange(field.FieldName, e.target.value);
+                                                }}
+                                            >
+                                                {Array.isArray(field.PossibleOptions) ? field.PossibleOptions.map((option: string) => (
+                                                    <MenuItem key={option} value={option}>
+                                                        {option}
+                                                    </MenuItem>
+                                                )) : null}
+                                            </Select>
+                                        )}
+                                    </>
+                                ) : (
+                                    // Text input field (FieldType 1)
+                                    <TextField
+                                        label={field.FieldName}
+                                        value={Array.isArray(configValues[field.FieldName])
+                                            ? (configValues[field.FieldName] as string[]).join('\n')
+                                            : configValues[field.FieldName] || ''}
+                                        onChange={(e) => {
+                                            if (isMulti) {
+                                                // For multi-line text input, split by newlines and filter empty lines
+                                                const values = e.target.value.split('\n').filter(v => v.trim());
+                                                handleConfigChange(field.FieldName, values);
+                                            } else {
                                                 handleConfigChange(field.FieldName, e.target.value);
-                                            }}
-                                        >
-                                            {field.PossibleOptions.map((option) => (
-                                                <MenuItem key={option} value={option}>
-                                                    {option}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    )}
-                                </>
-                            ) : (
-                                // Text input field (FieldType 1)
-                                <TextField
-                                    label={field.FieldName}
-                                    value={Array.isArray(configValues[field.FieldName])
-                                        ? (configValues[field.FieldName] as string[]).join('\n')
-                                        : configValues[field.FieldName] || ''}
-                                    onChange={(e) => {
-                                        if (isMulti) {
-                                            // For multi-line text input, split by newlines and filter empty lines
-                                            const values = e.target.value.split('\n').filter(v => v.trim());
-                                            handleConfigChange(field.FieldName, values);
-                                        } else {
-                                            handleConfigChange(field.FieldName, e.target.value);
-                                        }
-                                    }}
-                                    multiline={isMulti}
-                                    rows={isMulti ? 4 : 1}
-                                    placeholder={isMulti ? "Enter multiple values (one per line)" : ""}
-                                />
-                            )}
-                        </FormControl>
-                    );
-                }), [selectedReportType, configValues])}
+                                            }
+                                        }}
+                                        multiline={isMulti}
+                                        rows={isMulti ? 4 : 1}
+                                        placeholder={isMulti ? "Enter multiple values (one per line)" : ""}
+                                    />
+                                )}
+                            </FormControl>
+                        );
+                    });
+                }, [selectedReportType, configValues])}
 
                 <FormControl fullWidth margin="normal">
                     <InputLabel id="job-freq-type-label">Job Frequency</InputLabel>
@@ -466,9 +502,10 @@ const NewReportModal: React.FC<NewReportModalProps> = ({open, onClose, onSave, p
 interface ProjectRowProps {
     project: Project;
     onAddReport: (projectId: string, projectName: string) => void;
+    setActiveItem: (item: string) => void;
 }
 
-const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
+const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport, setActiveItem}) => {
     const [open, setOpen] = useState(false);
     const [editProjectModalOpen, setEditProjectModalOpen] = useState(false);
     const [editReportModalOpen, setEditReportModalOpen] = useState(false);
@@ -488,8 +525,10 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
     const handleFocusReport = (report: Report) => {
         setFocusedReport({
             Id: report.Id,
-            Name: report.Name
+            Name: report.Name,
+            DatasetId: report?.DatasetData?.Id ?? null
         });
+        setActiveItem('Dashboard');
     };
 
     const handleEditProject = async (updatedProject: {
@@ -609,6 +648,25 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
         }
     };
 
+    const getJobStatusIcon = (status: string) => {
+        switch (status) {
+            case 'Queued':
+                return <HourglassEmptyIcon sx={{ color: 'warning.main', mr: 1 }} fontSize="small" />;
+            case 'Running':
+                return <PlayCircleFilledWhiteIcon sx={{ color: 'info.main', mr: 1 }} fontSize="small" />;
+            case 'Completed':
+                return <CheckCircleIcon sx={{ color: 'success.main', mr: 1 }} fontSize="small" />;
+            case 'Cancelled':
+                return <CancelIcon sx={{ color: 'error.main', mr: 1 }} fontSize="small" />;
+            case 'Not Started':
+                return <RemoveCircleOutlineIcon sx={{ color: 'grey.500', mr: 1 }} fontSize="small" />;
+            case 'No job configured':
+                return <RemoveCircleOutlineIcon sx={{ color: 'grey.400', mr: 1 }} fontSize="small" />;
+            default:
+                return <RemoveCircleOutlineIcon sx={{ color: 'grey.400', mr: 1 }} fontSize="small" />;
+        }
+    };
+
     return (
         <React.Fragment>
             <TableRow sx={{'& > *': {borderBottom: 'unset'}}}>
@@ -707,13 +765,39 @@ const ProjectRow: React.FC<ProjectRowProps> = ({project, onAddReport}) => {
                                                 <TableCell>{report.ReportType.Name}</TableCell>
                                                 <TableCell>{formatDate(report.Job?.LastRunDate)}</TableCell>
                                                 <TableCell>{getJobFrequency(report.Job)}</TableCell>
-                                                <TableCell
-                                                    className={`px-4 py-2 rounded ${getStatusClass(getJobStatus(report.Job))}`}>{getJobStatus(report.Job)}</TableCell>
+                                                <TableCell>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                        <Chip
+                                                            icon={getJobStatusIcon(getJobStatus(report.Job))}
+                                                            label={getJobStatus(report.Job)}
+                                                            size="small"
+                                                            sx={{
+                                                                fontWeight: 500,
+                                                                bgcolor: (() => {
+                                                                    switch (getJobStatus(report.Job)) {
+                                                                        case 'Queued': return 'warning.light';
+                                                                        case 'Running': return 'info.light';
+                                                                        case 'Completed': return 'success.light';
+                                                                        case 'Cancelled': return 'error.light';
+                                                                        case 'Not Started': return 'grey.100';
+                                                                        case 'No job configured': return 'grey.50';
+                                                                        default: return 'grey.100';
+                                                                    }
+                                                                })(),
+                                                                color: 'text.primary',
+                                                                px: 1.5,
+                                                                minWidth: 120,
+                                                            }}
+                                                        />
+                                                    </Box>
+                                                </TableCell>
                                                 <TableCell>
                                                     <Button
                                                         variant="outlined"
                                                         size="small"
                                                         onClick={() => handleFocusReport(report)}
+                                                        disabled={!report.DatasetData?.Id}
+                                                        title={!report.DatasetData?.Id ? "No dataset available for this report" : "Focus on this report"}
                                                     >
                                                         Focus
                                                     </Button>
@@ -947,11 +1031,14 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                                     multiple
                                     renderValue={(selected) => (selected as string[]).join(', ')}
                                 >
-                                    {field.PossibleOptions.map((option) => (
+                                    {Array.isArray(field.PossibleOptions) ? field.PossibleOptions.map((option: string) => (
                                         <MenuItem key={option} value={option}>
-                                            {option}
+                                            <Checkbox
+                                                checked={Array.isArray(configValues[field.FieldName]) && (configValues[field.FieldName] as string[]).includes(option)}
+                                            />
+                                            <ListItemText primary={option}/>
                                         </MenuItem>
-                                    ))}
+                                    )) : null}
                                 </Select>
                             ) : (
                                 <Select
@@ -963,11 +1050,11 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                                         handleConfigChange(field.FieldName, e.target.value);
                                     }}
                                 >
-                                    {field.PossibleOptions.map((option) => (
+                                    {Array.isArray(field.PossibleOptions) ? field.PossibleOptions.map((option: string) => (
                                         <MenuItem key={option} value={option}>
                                             {option}
                                         </MenuItem>
-                                    ))}
+                                    )) : null}
                                 </Select>
                             )}
                         </>
@@ -1117,7 +1204,7 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
                         label="Report Type"
                         onChange={(e) => setReportTypeId(e.target.value)}
                     >
-                        {reportTypes.map((type) => (
+                        {reportTypes.filter(rt => rt.ReportConfig != null).map((type) => (
                             <MenuItem key={type.Id} value={type.Id}>
                                 {type.Name}
                             </MenuItem>
@@ -1170,7 +1257,11 @@ const EditReportModal: React.FC<EditReportModalProps> = ({open, onClose, onSave,
     );
 };
 
-const Projects: React.FC = () => {
+interface ProjectsProps {
+  setActiveItem: (item: string) => void;
+}
+
+const Projects: React.FC<ProjectsProps> = ({ setActiveItem }) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [newProjectModalOpen, setNewProjectModalOpen] = useState(false);
@@ -1293,6 +1384,7 @@ const Projects: React.FC = () => {
                                                 key={project.Id}
                                                 project={project}
                                                 onAddReport={handleAddReport}
+                                                setActiveItem={setActiveItem}
                                             />
                                         ))}
                                 </TableBody>

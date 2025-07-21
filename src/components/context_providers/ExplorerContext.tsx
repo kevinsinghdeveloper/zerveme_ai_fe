@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useState, PropsWithChildren, useEffect} from 'react';
 import {useAuthContext} from "./AuthContext";
 import axios from "axios";
+import { ReportTemplate, ReportData } from '../../types/reportTemplates';
 
 type OptionType = { value: string; label: string };
 
@@ -66,6 +67,16 @@ interface ReportInfo {
     Job: JobInfo | null;
     ReportConfigurationId: string;
     DatasetConfig: string | null;
+    DatasetData: {
+        Id?: string;
+        Name?: string;
+        DomainData?: any;
+        Updated?: string | null;
+        Created?: string | null;
+        Deleted?: string | null;
+        DWHId?: string | null;
+        DataRefreshedDate?: string | null;
+    } | null;
 }
 
 interface ProjectInfo {
@@ -155,10 +166,10 @@ interface ExplorerContextProps {
     datasets: any[];
     fetchedData: any;
     selectedDatasetId: string | null;
-    selectedDatasetDomainOptions: any;
+    selectedDatasetDomainOptions: DatasetDomainResponse | null;
     setSelectedDatasetId: React.Dispatch<React.SetStateAction<string | null>>;
     getDatasetPreview: () => Promise<void>;
-    getDatasetDomainOptions: () => Promise<void>;
+    getDatasetDomainOptions: (datasetId: string) => Promise<void>;
     projects: ProjectInfo[];
     reports: ReportInfo[];
     getAllProjects: () => Promise<void>;
@@ -167,8 +178,12 @@ interface ExplorerContextProps {
     updateProject: (request: UpdateProjectRequest) => Promise<ProjectInfo | null>;
     createReport: (request: CreateReportRequest) => Promise<ReportInfo | null>;
     updateReport: (request: UpdateReportRequest) => Promise<ReportInfo | null>;
-    focusedReport: { Id: string; Name: string } | null;
-    setFocusedReport: React.Dispatch<React.SetStateAction<{ Id: string; Name: string } | null>>;
+    focusedReport: { Id: string; Name: string; DatasetId: string | null } | null;
+    setFocusedReport: React.Dispatch<React.SetStateAction<{
+        Id: string;
+        Name: string;
+        DatasetId: string | null
+    } | null>>;
     jobFreqTypes: JobFreqTypeInfo[];
     getAllJobFreqTypes: () => Promise<void>;
     reportTypes: ReportTypeInfo[];
@@ -182,6 +197,13 @@ interface ExplorerContextProps {
     createModel: (request: CreateModelRequest) => Promise<Model | null>;
     updateModel: (request: UpdateModelRequest) => Promise<Model | null>;
     softDeleteModel: (modelId: string) => Promise<boolean>;
+    dashboardTemplate: ReportTemplate | null;
+    setDashboardTemplate: React.Dispatch<React.SetStateAction<ReportTemplate | null>>;
+    dashboardData: ReportData | null;
+    setDashboardData: React.Dispatch<React.SetStateAction<ReportData | null>>;
+    dashboardLoading: boolean;
+    dashboardError: string | null;
+    fetchDashboardForReport: (reportId: string) => Promise<void>;
 }
 
 interface DomainOptionsResults {
@@ -190,6 +212,30 @@ interface DomainOptionsResults {
     period_start: string | null;
     period_end: string | null;
     num_rows: number | null;
+}
+
+interface DatasetDomainColumn {
+    ColumnName: string;
+    ColumnType: number;  // 0 for attribute, 1 for KPI, 2 for date
+    AggregationType: number;
+}
+
+interface DatasetDomainData {
+    KpiCols: DatasetDomainColumn[];
+    AttrCols: DatasetDomainColumn[];
+    CustomSql: string | null;
+    TableName: string;
+}
+
+interface DatasetDomainResponse {
+    Id: string;
+    Name: string;
+    DomainData: DatasetDomainData;
+    Updated: string | null;
+    Created: string;
+    Deleted: string | null;
+    DataRefreshedDate: string | null;
+    DWHId: string | null;
 }
 
 const ExplorerContext = createContext<ExplorerContextProps | undefined>(undefined);
@@ -201,16 +247,24 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
     const [selectedKPIs, setSelectedKpis] = useState<OptionType[]>([]);
     const [selectedVisualization, setSelectedVisualization] = useState<string>('');
     const [selectedDatasetId, setSelectedDatasetId] = useState<string | null>(null);
-    const [selectedDatasetDomainOptions, setSelectedDatasetDomainOptions] = useState<DomainOptionsResults | null>(null);
+    const [selectedDatasetDomainOptions, setSelectedDatasetDomainOptions] = useState<DatasetDomainResponse | null>(null);
     const [datasets, setDatasets] = useState<any[]>([]);
     const [fetchedData, setFetchedData] = useState<any>(null);
-    const [focusedReport, setFocusedReport] = useState<{ Id: string; Name: string } | null>(null);
+    const [focusedReport, setFocusedReport] = useState<{
+        Id: string;
+        Name: string;
+        DatasetId: string | null;
+    } | null>(null);
     const [projects, setProjects] = useState<ProjectInfo[]>([]);
     const [reports, setReports] = useState<ReportInfo[]>([]);
     const [jobFreqTypes, setJobFreqTypes] = useState<JobFreqTypeInfo[]>([]);
     const [reportTypes, setReportTypes] = useState<ReportTypeInfo[]>([]);
     const [models, setModels] = useState<Model[]>([]);
     const [modelTypes, setModelTypes] = useState<ModelType[]>([]);
+    const [dashboardTemplate, setDashboardTemplate] = useState<ReportTemplate | null>(null);
+    const [dashboardData, setDashboardData] = useState<ReportData | null>(null);
+    const [dashboardLoading, setDashboardLoading] = useState(false);
+    const [dashboardError, setDashboardError] = useState<string | null>(null);
 
     const {host, token} = useAuthContext();
 
@@ -300,39 +354,22 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
         }
     };
 
-    const getDatasetDomainOptions = async () => {
-        if (!token) {
-            // Handle case where token is not available
-            console.error('Token is not available');
-            return; // Return undefined or nothing if token is not available
-        }
-
-        if (!selectedDatasetId) {
-            console.error('No dataset selected');
-            return; // Return undefined or nothing if no dataset is selected
+    const getDatasetDomainOptions = async (datasetId: string) => {
+        if (!token || !datasetId) {
+            console.error('Token or dataset ID is missing');
+            return;
         }
 
         try {
-            const response = await axios.get(`${host}/api/datasets/getDatasetDomainOptions?id=${selectedDatasetId}`, {
+            const response = await axios.get<DatasetDomainResponse>(`${host}/api/datasets/getDatasetDomainOptions?id=${datasetId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-            const parsedData = response.data.domainData;
-
-            setSelectedDatasetDomainOptions(prevOptions => ({
-                ...prevOptions,
-                kpi_cols: parsedData.kpi_cols,
-                attr_cols: parsedData.attr_cols,
-                period_start: parsedData.period_start,
-                period_end: parsedData.period_end,
-                num_rows: parsedData.num_rows
-            }));
-
-
+            setSelectedDatasetDomainOptions(response.data);
         } catch (error) {
-            console.error('Data fetch failed:', error);
-            return; // Return undefined or nothing if data fetch fails
+            console.error('Failed to fetch dataset domain options:', error);
+            setSelectedDatasetDomainOptions(null);
         }
     };
 
@@ -500,7 +537,14 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            setReportTypes(response.data);
+            // Ensure every report type has a ReportConfig property (null if missing)
+            const normalizedData = Array.isArray(response.data)
+                ? response.data.map((rt: any) => ({
+                    ...rt,
+                    ReportConfig: rt.ReportConfig !== undefined ? rt.ReportConfig : null
+                }))
+                : [];
+            setReportTypes(normalizedData);
         } catch (error) {
             console.error('Failed to fetch report types:', error);
         }
@@ -668,6 +712,37 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
         }
     };
 
+    // Fetch dashboard template and data for a focused report
+    const fetchDashboardForReport = async (reportId: string) => {
+        setDashboardLoading(true);
+        setDashboardError(null);
+        setDashboardTemplate(null);
+        setDashboardData(null);
+        try {
+            // Use POST with JSON body
+            const response = await axios.post(
+                `${host}/api/datasets/getvizdata`,
+                { reportid: reportId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            if (response.data && response.data.vizResponseTemplate && response.data.vizResponseData) {
+                setDashboardTemplate(JSON.parse(response.data.vizResponseTemplate));
+                setDashboardData(JSON.parse(response.data.vizResponseData));
+            } else {
+                throw new Error('Failed to fetch dashboard data');
+            }
+        } catch (err: any) {
+            setDashboardError(err.message || 'Unknown error');
+        } finally {
+            setDashboardLoading(false);
+        }
+    };
+
     return (
         <ExplorerContext.Provider
             value={{
@@ -713,6 +788,13 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
                 createModel,
                 updateModel,
                 softDeleteModel,
+                dashboardTemplate,
+                setDashboardTemplate,
+                dashboardData,
+                setDashboardData,
+                dashboardLoading,
+                dashboardError,
+                fetchDashboardForReport,
             }}
         >
             {children}
