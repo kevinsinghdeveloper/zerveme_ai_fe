@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useState, PropsWithChildren, useEffect} from 'react';
 import {useAuthContext} from "./AuthContext";
 import axios from "axios";
-import { ReportTemplate, ReportData } from '../../types/reportTemplates';
+import {ReportTemplate, ReportData} from '../../types/reportTemplates';
 
 type OptionType = { value: string; label: string };
 
@@ -532,7 +532,7 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
         }
 
         try {
-            const response = await axios.get(`${host}/api/report/getAllReportTypes`, {
+            const response = await axios.get(`${host}/api/reportdataset/getAllReportTypes`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -722,7 +722,7 @@ export const ExplorerContextProvider = ({children}: PropsWithChildren<{}>) => {
             // Use POST with JSON body
             const response = await axios.post(
                 `${host}/api/datasets/getvizdata`,
-                { reportid: reportId },
+                {reportid: reportId},
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
